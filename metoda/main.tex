@@ -1,0 +1,225 @@
+% Can be compied with XelaTeX from:
+% * TL 2011 - a patched distro version
+% * TL 2013 - vanilla
+\documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
+%\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
+
+\def \documentversion {2.4} % increment and don't forget to update history.tex
+\tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
+\emergencystretch=3cm
+
+% A switch to change between document rendering options
+\usepackage{etoolbox}
+\newtoggle{webpaper}
+\toggletrue{webpaper}
+%\togglefalse{webpaper}
+\newtoggle{hasquiz} % An option to add quizes at the end of each chapter.
+\togglefalse{hasquiz}
+\toggletrue{hasquiz}
+
+\newtoggle{showanswers} % An option to show answers in quizes.
+\togglefalse{showanswers}
+%\toggletrue{showanswers}
+
+\newtoggle{inappendix} % we are now in appendix
+\togglefalse{inappendix} % ... but not yet
+
+\usepackage[top=2.0cm, bottom=2.0cm, left=1.84cm, right=1.5cm, footskip=1cm]{geometry}
+\usepackage{fontspec}
+%\usepackage[utf8]{inputenc} % uncomment for latex2rtf 
+
+\usepackage{xunicode} % some extra unicode support
+\usepackage{xltxtra}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{csquotes}
+
+\usepackage{polyglossia}
+\setdefaultlanguage[spelling=modern]{russian} % for polyglossia
+\setotherlanguage{english} % for polyglossia
+\defaultfontfeatures{Scale=MatchLowercase, Mapping=tex-text}
+
+\newfontfamily\russianfont{Garamond Premier Pro}
+\setromanfont{Garamond Premier Pro}
+
+% \newfontfamily\russianfont{CMU Serif}
+% \setromanfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+\newcommand{\abbr}{\textit{англ.}\ }
+\newcommand{\todo}{{\color{red}TODO}\ }
+\usepackage{graphicx}
+\graphicspath{..}
+\graphicspath{../..}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, filecolor=black, citecolor=black, urlcolor=black , pdfauthor=Grigory Rechistov <grigory.rechistov@phystech.edu>, pdftitle=Основы программного моделирования ЭВМ}
+
+\usepackage{footnpag}
+\usepackage{indentfirst}
+\usepackage{underscore}
+\usepackage{url}
+
+\usepackage{listings}
+\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true, keepspaces=true }
+
+\usepackage{appendix}
+\renewcommand{\appendixname}{Приложения}
+\renewcommand{\appendixtocname}{Приложения}
+\renewcommand{\appendixpagename}{Приложения}
+\let\plainappendixpage\appendixpage
+\makeatletter
+\renewcommand{\appendixpage}{% Delete page number in appendixpage
+  \begingroup
+  \let\ps@plain\ps@empty
+  \plainappendixpage
+  \endgroup}
+\makeatother
+
+\iftoggle{webpaper}{
+	% \usepackage[duplicate]{chapterbib}
+	% A hack to mimic biblatex macro for bibtex
+	% \newcommand{\printbibliography}[1][none]{\bibliographystyle{ugost2008s}{}\bibliography{./../phd,./../mine,../collection}}
+
+    \usepackage[language=auto, bibencoding=inputenc, style=gost-numeric, backend=biber, maxnames=4, refsection=chapter]{biblatex}
+    \addbibresource{./../phd.bib}
+    \addbibresource{./../mine.bib}
+    \addbibresource{./../../collection.bib}
+    \renewcommand*{\multicitedelim}{\addcomma\space} % grouped cites separated by commas not semicolons
+} {}	% Bibliography to be added at the end, not per chapter
+
+\usepackage{nameref}
+\usepackage{amsthm}
+\usepackage{enumitem} % continue enumeration 
+\usepackage{subfigure}
+\renewcommand*{\thesubfigure}{\alph{subfigure})} % only one bracket in subfigures
+\usepackage{mdwlist} % compact itemize lists environment
+\renewcommand{\labelitemi}{--}  % Use endash for itemized lists
+\renewcommand{\dictumwidth}{0.5\textwidth}
+\newcommand{\dictumtext}{\normalfont\normalcolor\sffamily\tiny}
+\renewcommand{\dictumauthorformat}[1]{#1}
+\setcounter{tocdepth}{2}
+
+\usepackage{listings}
+\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true, keepspaces=true}
+
+\usepackage[hang,flushmargin]{footmisc} % correct indent for footnotes
+\usepackage{verbatim}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing,chains, snakes}
+
+\renewcommand{\chapterheadstartvskip}{\vspace *{-\baselineskip }} % Move chapter titles higher
+\setcapindent{0pt} % make multi-line captions to be not indented, save some space with this
+\renewcommand{\captionformat}{~} % do not put colon after figures numbers
+\newtheorem*{digression}{Замечание}
+
+\usepackage[subfigure, titles]{tocloft}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % Dots to TOC chapter titles
+%\setlength{\cftaftertoctitleskip}{20pt}
+
+\title{Основы программного моделирования ЭВМ}
+\date{\today}
+
+\addtokomafont{caption}{\small}
+
+\typeout{Copyright 2011, 2012, 2013 Grigory Rechistov and the contributors.}
+\let\cleardoublepage\clearpage % do not start from even page
+\setkomafont{pageheadfoot}{% Enforce header and footer to be correct.
+	\normalfont\normalcolor\itshape\small\rmfamily
+}
+\setkomafont{pagenumber}{\normalfont\rmfamily} % fix KOMA bug when footer/header inherits font settings from main text.
+
+\iftoggle{hasquiz}{\input{examp-dummy}}{}
+\pagestyle{plain} % no headers, page numbers in footers
+
+\begin{document}
+
+% Change bibliography format from "[1]" to "1." for bibtex
+\makeatletter\renewcommand\@biblabel[1]{#1.}\makeatother
+
+\iftoggle{webpaper}{
+	\include{title}
+} {
+	\include{title-print}
+	\include{backside}
+}
+
+\iftoggle{webpaper}{
+	\tableofcontents
+} {
+    % Put TOC to the end.
+}
+
+\begin{verbatim}
+    
+
+\include{contrib}
+
+\include{overview}
+
+\include{chapter01}
+
+\include{chapter03}
+
+ \end{verbatim} 
+\include{chapter04}
+
+    \include{todo}
+\end{document}
+
+  
+\include{chapter05}
+ 
+\include{chapter07}
+
+\include{chapter08}
+
+\include{chapter09}
+
+\include{chapter10}
+
+\include{chapter11}
+
+\include{chapter12}
+
+\include{chapter13}
+
+\include{chapter14}
+
+\include{afterword}
+
+\iftoggle{hasquiz}{
+    \toggletrue{inappendix}
+    \appendix
+    \appendixpage
+    \toggletrue{showanswers}
+    \input{examp-dummy}
+    \include{appendix-answers}
+
+    \include{chapter06} 	% Chapter 6 has been demoted to an appendix
+}{
+    % No appendix if no quiz.
+}
+
+\iftoggle{webpaper}{
+    % Changelog here
+    \input{history.tex}
+}{} % Nothing for printed version
+
+
+
+\iftoggle{webpaper}{
+    % No bibliography for the web version
+    % Per chapter entries are already in place
+    \include{todo}
+    \phantomsection\label{page:lastpage}
+} {
+    \include{literature}
+	\tableofcontents
+    \include{lastpage}
+}
+\end{document}

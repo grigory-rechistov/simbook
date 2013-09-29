@@ -1,0 +1,15 @@
+Build requirements:
+
+1) TeXLive 2013 installed with support of Russian language, XeLaTeX, Tikz, biblatex, biber.
+2) Both Windows and Linux hosts should be able to build
+
+Build sequence:
+
+1) cd metoda
+2) xelatex main.tex
+3) biber main
+4) xelatex main.tex
+5) xelatex main.tex
+
+The result is in main.pdf.
+

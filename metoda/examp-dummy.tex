@@ -1,0 +1,27 @@
+% This file defines several commands originally present in 'exam' class.
+% The definitions are quite dumb but are enough to make it possible to copy-paste between 
+% a quiz document and this book.
+% Generally it just maps stuff to enumerated lists.
+
+% For appendix, we renew commands to show answers unconditionally. This all is done in a lame way.
+
+\iftoggle{inappendix}{
+    \renewenvironment{solution}[1][0]{\textbf{Решение.}\ }{}
+    \renewcommand{\correctchoice}{\item \textbf{Решение.}\ }
+    \renewcommand{\Questions}{Ответы\ }
+}{
+    \newcommand{\question}[1][0]{\item}
+    \newenvironment{questions}{\begin{enumerate*}}{\end{enumerate*}}
+    \newenvironment{choices}{\begin{enumerate*}}{\end{enumerate*}}
+    \newcommand{\choice}{\item}
+
+    \iftoggle{showanswers}{ % show answers
+        \newenvironment{solution}[1][0]{\textbf{Решение.}\ }{}
+        \newcommand{\correctchoice}{\item  \textbf{Решение.}\ }
+    }{% do not show answers
+        \let\solution=\comment
+        \let\endsolution=\endcomment
+        \newcommand{\correctchoice}{\item }
+        \newcommand{\Questions}{Вопросы\ }
+    }
+}

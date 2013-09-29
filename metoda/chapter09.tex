@@ -1,0 +1,395 @@
+\chapter{Потактовая симуляция}\label{chapter09}
+
+\dictum[Враги --- Танго]{Вот эту руку --- сюда, эту --- сюда, \\ Ногу вот так. \\ Вот эту голову так, смотри на меня, \\ Двигайся в такт.}
+
+\section[Мотивация]{Мотивация к созданию ещё одного подхода к моделированию систем}
+
+В предыдущих главах мы рассмотрели сценарии моделирования, которые условно можно классифицировать по соотношению количества независимых агентов в системе и частоте возникновения событий.
+
+\begin{enumerate}
+    \item Одно устройство; события на каждом шаге симуляции. Характерная ситуация для моделирования процессора.
+    \item Много устройств; события возникают редко (значительно реже, чем на каждом такте). Ситуация возникает при симуляции дискретных событий (DES).
+    \item Мало устройств; мало событий. При использовании аналитических методов (QSP) мы имеем максимально простую модель системы, не требующую компьютерной симуляции.
+\end{enumerate}
+
+В данной классификации не хватает последней, четвёртой, возможности.
+
+\begin{enumerate}[resume] % NOT Do not use starred version (enumerate*) here - it won't work.
+    \item Много устройств; события на каждом такте.
+\end{enumerate}
+
+В действительности такая ситуация возникает в системах, созданных для потактового моделирования  цифровых схем. Они наиболее точно отражают процессы, происходящие в аппаратуре, и потому каждый внутренний блок некоторого кристалла имеет своё отображение на часть модели. Принципиально ничто не мешает использовать схему DES и здесь --- она будет корректно работать, однако не будет давать наилучшую визуализацию процессов, происходящих в системе, --- симулятор вынужден постоянно обрабатывать длинные очереди сообщений, привязанных к одному симулируемому такту (рис.~\ref{fig:qsp-long}), тогда как чаще всего от такой модели требуется выдавать информацию о потоках данных между узлами, детали их коммуникаций. Кроме того, в этом случае DES не позволяет построить эффективный симулятор с точки зрения скорости исполнения.
+
+\begin{figure}[htbp]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{./qsp-long-crop.pdf}
+    \begin{tikzpicture}[>=latex, node distance=0cm]
+    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время};
+    \foreach \x in { 1, 2, 3, 4 } { 
+        \draw (\x*2,-0.15) -- (\x*2,0.15) node (tick\x) {};
+    };
+    
+    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (2, -1) {$T_{sim}$};
+    
+    \node[shape=dart, draw, , shape border rotate=270, above=of tick1.center] (ev11) {};
+    \node[shape=dart, draw, , shape border rotate=270, above=of ev11.north] (ev12) {};
+    \node[shape=dart, draw, , shape border rotate=270, above=of ev12.north] (ev13) {};
+    \node[shape=dart, draw, , shape border rotate=270, above=of ev13.north] (ev14) {};
+    
+    \node[shape=dart, draw, , shape border rotate=270, above=of tick2.center] (ev21) {};
+    \node[shape=dart, draw, , shape border rotate=270, above=of ev21.north] (ev22) {};
+    \node[shape=dart, draw, , shape border rotate=270, above=of ev22.north] (ev23) {};
+    \node[shape=dart, draw, , shape border rotate=270, above=of ev23.north] (ev24) {};
+    
+    \node[shape=dart, draw, , shape border rotate=270, above=of tick3.center] (ev31) {};
+    
+    \draw[->] (ev14) -- (ev24);
+    
+    \end{tikzpicture}
+    \caption[Потактовая симуляция с DES]{Потактовая симуляция с DES. Длинные цепочки событий, ожидающих обработки на каждом такте, замедляют симуляцию. Кроме того, это усложняет понимание связей между происходящими в системе процессами}
+    \label{fig:qsp-long}
+\end{figure}
+
+Современные цифровые схемы являются синхронными --- темп вычислений задаётся единым тактовым генератором. Состояния всех субъединиц изменяются одновременно по его сигналу. Кроме того, результаты вычислений с текущего такта работы некоторого узла не будут переданы/доступны получателю до наступления следующего такта. Необходимо отразить эти факты при моделировании.
+
+\section{Сложности моделирования}
+
+При проектировании схемы работы симулятора необходимо учесть ряд дополнительных усложняющих факторов (рис.~\ref{fig:features}).
+
+\begin{itemize*}
+    \item Узлы реальной схемы работают параллельно, тогда как симулятор должен допускать последовательную реализацию, в которой одновременные события будут обрабатываться в некотором порядке.
+    \item Субмодули могут иметь много входов и выходов, соединённых сложным образом.
+    \item Выдаваемые узлом данные часто меняют состояние не только последующих за ним, но и предыдущих узлов (и даже самого себя, как будет показано далее).
+    \item Вычисление некоторых операций может составлять несколько тактов; результат их вычислений выдаётся с задержкой по отношению к моменту прибытия входных данных.
+    \item Узлы часто состоят из более мелких единиц, которые потребуется симулировать на поздних стадиях исследования при  уточнении модели.
+\end{itemize*}
+
+
+\begin{figure}[htbp]
+    \centering
+% \includegraphics[width=0.8\textwidth]{./features-crop.pdf}
+    \begin{tikzpicture}[>=latex, text width=0.5cm, text badly centered, inner ysep=0.5cm, inner xsep=0cm, node distance=2cm, font=\tiny]
+    
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}] (u11) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u11] (u12) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u12] (u13) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u13] (u14) {};
+    \node[text width=1cm, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below=of u11.west] (u21) {};
+    \node[text width=1cm, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below =of u14.east] (u22) {};
+    
+    \draw[->] (u11.east) -| ([xshift=-0.5cm] u12.160) -- (u12.160) coordinate[pos=0.5] (e1);
+    \draw[->] (u12.east) -- (u13.west);
+    \draw[->] (u13.30) |- (u14.160) coordinate[pos=0.75] (e3);;
+    \draw[->] (u13.-30) -|  coordinate[pos=0.4] (e4) ([xshift=-0.4cm] u22.west) -- (u22.west);
+    \draw[->] (u21.east) -|  ([xshift=-0.5cm] u12.200) -- (u12.200) coordinate[pos=0.5] (e2);
+    \draw[->] (u22.east) -|  ([xshift=0.5cm, yshift=-1cm] u22.east) -| ([xshift=-0.5cm] u21.west) coordinate[pos=0.25] (e5) -- (u21.west);
+    \draw[->] (u14.east) -|  ([xshift=0.5cm, yshift=1cm] u14.east) -| ([xshift=-0.5cm] u11.west) -- (u11.west);
+    
+    \node[below of=u12, inner sep=0cm, text width=1cm] (multi-inputs) {Множественные входы};
+    \node[below of=u13, inner sep=0cm, text width=1cm] (multi-outputs) {Множественные выходы};
+    \node[above of=e5, node distance = 0.5cm,  inner sep=0cm, text width=2cm] (back-edges) {Обратные дуги передачи сигналов};
+    \node[below of=u14, node distance = 1.25cm,  inner sep=0cm, text width=2cm, xshift=1cm] (delay) {Различная длительность операций};
+    
+    \draw[dotted] (e1) -- (multi-inputs);
+    \draw[dotted] (e2) -- (multi-inputs);
+    
+    \draw[dotted] (e3) -- (multi-outputs);
+    \draw[dotted] (e4) -- (multi-outputs);
+    
+    \draw[dotted] (e5) -- (back-edges);
+    
+    \draw[dotted] (u14) -- (delay);
+    \draw[dotted] (u22) -- (delay);
+    
+	\end{tikzpicture}
+    \caption[Пример соединения узлов]{Пример соединения узлов в некоторой синхронной цифровой схеме}
+    \label{fig:features}
+\end{figure}
+
+Основная проблема здесь --- как обеспечить изоляцию данных между тактами? При непосредственном соединении модулей то, какие данные будут на входе устройства, зависит от того, отработал ли предыдущий в цепочке соединения узел свой текущий такт, и на его выходе уже новое значение, или нет, и тогда значения относятся к предыдущему такту. Корректность можно обеспечить установкой порядка вызова, но при больших масштабах и частых изменениях модели за этим становится сложно следить, что приводит к существенным сложностям поддержки модели и массе трудноуловимых ошибок.
+
+\section{Схема симуляции}
+
+Необходим масштабируемый и достаточно простой подход. Решение заключается в изначальном отделении временных аспектов от функциональных, а также вынесения состояния системы контролируемым и иерархическим образом. 
+
+\begin{itemize*}
+    \item Функции узлов являются функциями в математическом смысле --- они дают результат мгновенно, без побочных эффектов, и результат зависит только от входных данных (рис.~\ref{fig:pure-function}. При наличии у узла множественных входов или выходов они объединяются в один логический с соответствующей суммарной шириной в битах. 
+    \item Время, затрачиваемое на выполнение операции, представлено в виде устройства линии задержки с фиксированной длиной и пропускной способностью (рис.~\ref{fig:delay-line}.
+    \item Состояние узлов не хранится внутри блоков (подробнее --- в секции~\ref{sec:state}).
+\end{itemize*}
+
+\begin{figure}[htbp]
+\centering
+\subfigure[Функциональный блок]{
+% \includegraphics[width=0.45\textwidth]{./pure-function-crop.pdf}
+    \begin{tikzpicture}[>=latex, scale=0.6, font=\small]
+    
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, inner ysep=0.7cm, inner xsep=1pt] (fx) {$F(x)$};
+    
+    \draw[->] ([xshift=-1cm] fx.160) -- (fx.160);
+    \draw[->] ([xshift=-1cm] fx.200) -- (fx.200);
+    \draw[decorate, decoration={brace, amplitude=6pt}] ([xshift=-1.cm] fx.220) -- ([xshift=-1.cm] fx.140) node[midway, xshift=-0.7cm] {Вход};
+    
+    \draw[->] (fx.20) -- ([xshift=1cm] fx.20);
+    \draw[->] (fx.0) -- ([xshift=1cm] fx.0);
+    \draw[->] (fx.340) -- ([xshift=1cm] fx.340);
+    
+    \draw[decorate, decoration={brace, amplitude=6pt}] ([xshift=1.cm] fx.30) -- ([xshift=1.cm] fx.330) node[midway, xshift=0.8cm] {Выход};
+    
+    \end{tikzpicture}
+    \label{fig:pure-function}
+}
+\subfigure[Порт --- линия задержки]{
+% \includegraphics[width=0.45\textwidth]{./delay-line-crop.pdf}
+    \begin{tikzpicture}[>=latex, font=\small]
+    
+    \node[draw, inner ysep=5pt] (cell) {\begin{tikzpicture}\draw[|-|] (-0.25cm,0) -- (0.25cm,0);\end{tikzpicture} };
+    
+    \draw[->] ([xshift=-1cm] cell.west) -- (cell.west);
+    
+    \draw[->] (cell.east) -- ([xshift=1cm]  cell.east);
+    
+    \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=-0.1cm] cell.south east) -- ([yshift=-0.1cm] cell.south west) node[midway, yshift=-0.5cm] {1 такт};
+    
+    \node[above of= cell, node distance=0.5cm] {Данные $N$ бит};
+    
+    \end{tikzpicture}
+    \label{fig:delay-line}
+}
+\caption{Два класса элементов, используемых при тактовой симуляции}
+\end{figure}
+
+
+Моделирование в потактовых моделях ненулевой длительности передачи сигналов линиями задержки широко принято, эта абстракция имеет название \textit{порты}~\cite{asim}.
+
+\subsection{Алгоритм работы}
+
+Главное правило соединения двух типов элементов состоит в том, что нельзя напрямую соединять два функциональных элемента --- между ними должен находиться как минимум один порт. Каждый такт симуляции состоит из двух стадий, в течение которых изменяется состояние только одного класса объектов. Таким образом, они изолированы друг от друга.
+
+
+\paragraph{Вычисление функций.} Вычисляются все функциональные блоки (рис.~\ref{fig:cycle-phase1}. Результаты вычислений помещаются на их выходы. Порядок обхода блоков и вызова их функций неважен, т.к. на этой стадии каждый из них отделён от результатов работы остальных с помощью портов.
+
+\paragraph{Передача данных.} Активны объекты портов. При этом каждый переносит значение со своего входа на свой выход (рис.~\ref{fig:cycle-phase2}. Как и для первой стадии, порядок обхода неважен из-за взаимной изоляции портов.
+
+\begin{figure}[htbp]
+\centering
+\subfigure[Вычисление функциональных блоков]{
+% \includegraphics[width=0.45\textwidth]{./cycle-phase1-crop.pdf}
+\scalebox{0.6}{
+    % FIXME This picture is drawn in a so lame way that it makes me cry. Someone please do something about it.
+    \begin{tikzpicture}[>=latex, text width=0.5cm, text badly centered, inner ysep=0.5cm, inner xsep=0cm, node distance=2cm, font=\tiny]
+    
+    \def\delayport{node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, midway]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};}
+    \def\doubledelayport{node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, pos=0.25]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}} node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, pos=0.75]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};}
+    
+    \node[very thick, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}] (u11) {};
+    \node[very thick, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u11] (u12) {};
+    \node[very thick, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u12] (u13) {};
+    \node[very thick, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u13] (u14) {};
+    \node[very thick, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below=of u11.west] (u21) {};
+    \node[very thick, draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below =of u14.east] (u22) {};
+    
+    \draw[->] ([yshift=0.25cm] u11.east) -- ([yshift=0.25cm] u12.west) \delayport;
+    \draw[->] (u12.east) -- (u13.west) \delayport;
+    \draw[->] ([yshift=0.25cm] u13.east) -- ([yshift=0.25cm] u14.west) \delayport;
+    \draw[->] (u13.-30) -| ([xshift=-1.2cm] u22.west) -- (u22.west) \delayport;
+    \draw[-] (u21.east) -|  ([xshift=-1.1cm] u12.220) \delayport;
+        \draw ([xshift=-1.1cm] u12.220) -- (u12.220) \delayport;
+    \draw[-] (u22.east) -|  ([xshift=0.5cm, yshift=-1cm] u22.east);
+        \draw[-] ([xshift=0.5cm, yshift=-1cm] u22.east) -- ([xshift=-0.5cm, yshift=-1cm] u21.west) \doubledelayport;
+        \draw[->] ([xshift=-0.5cm, yshift=-1cm] u21.west) |- (u21.west);
+    
+    \draw[-] (u14.east) -|  ([xshift=0.5cm, yshift=1cm] u14.east);
+        \draw[-] ([xshift=0.5cm, yshift=1cm] u14.east) -- ([xshift=-0.5cm, yshift=1cm] u11.west) \doubledelayport;
+        \draw[->] ([xshift=-0.5cm, yshift=1cm] u11.west) |- (u11.west);   
+	\end{tikzpicture}
+} % scalebox
+    \label{fig:cycle-phase1}
+}
+\subfigure[Передача данных портами]{
+% \includegraphics[width=0.45\textwidth]{./cycle-phase2-crop.pdf}
+\scalebox{0.6}{
+    % FIXME This picture is drawn in a so lame way that it makes me cry. Someone please do something about it.
+    \begin{tikzpicture}[>=latex, text width=0.5cm, text badly centered, inner ysep=0.5cm, inner xsep=0cm, node distance=2cm, font=\tiny]
+    
+    \def\delayport{node[very thick, draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, midway]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};}
+    \def\doubledelayport{node[very thick, draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, pos=0.25]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}} node[very thick, draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, pos=0.75]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};}
+    
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}] (u11) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u11] (u12) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u12] (u13) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u13] (u14) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below=of u11.west] (u21) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below =of u14.east] (u22) {};
+    
+    \draw[->] ([yshift=0.25cm] u11.east) -- ([yshift=0.25cm] u12.west) \delayport;
+    \draw[->] (u12.east) -- (u13.west) \delayport;
+    \draw[->] ([yshift=0.25cm] u13.east) -- ([yshift=0.25cm] u14.west) \delayport;
+    \draw[->] (u13.-30) -| ([xshift=-1.2cm] u22.west) -- (u22.west) \delayport;
+    \draw[-] (u21.east) -|  ([xshift=-1.1cm] u12.220) \delayport;
+        \draw ([xshift=-1.1cm] u12.220) -- (u12.220) \delayport;
+    \draw[-] (u22.east) -|  ([xshift=0.5cm, yshift=-1cm] u22.east);
+        \draw[-] ([xshift=0.5cm, yshift=-1cm] u22.east) -- ([xshift=-0.5cm, yshift=-1cm] u21.west) \doubledelayport;
+        \draw[->] ([xshift=-0.5cm, yshift=-1cm] u21.west) |- (u21.west);
+    
+    \draw[-] (u14.east) -|  ([xshift=0.5cm, yshift=1cm] u14.east);
+        \draw[-] ([xshift=0.5cm, yshift=1cm] u14.east) -- ([xshift=-0.5cm, yshift=1cm] u11.west) \doubledelayport;
+        \draw[->] ([xshift=-0.5cm, yshift=1cm] u11.west) |- (u11.west);   
+	\end{tikzpicture}
+} % scalebox
+    \label{fig:cycle-phase2}
+}
+\caption[Две фазы работы потактовой симуляции с использованием портов]{Две фазы работы симуляции с использованием портов для одного симулируемого такта}
+% Тёмными точками показано положение новых данных, созданных или передаваемых в течение текущего такта. Светлым кружком показаны данные, находящиеся в транзите с предыдущего такта 
+\end{figure}
+
+
+\section{Замечания к реализации схемы}
+
+Обозначенный в этой главе подход является достаточно универсальным, чтобы быть использованным для построения потактовых моделей. Рассмотрим теперь  некоторые дополнительные детали, полезные для практической реализации.
+
+\subsection{Готовность данных}
+
+Как уже было отмечено, длительность операций может превышать один такт; в таком случае на выходе соответствующего порта не должно быть выходного результата в течение некоторого времени. Тем не менее каждый порт читает значение на своём входе и передаёт его на выход на каждом такте, не анализируя, корректно ли значение. Для унификации указанных двух ситуаций к входным и выходным данным добавляется ещё один бит <<данные валидны>> (рис.~\ref{fig:valid}). Функциональные блоки имеют доступ к этому биту и могут помечать выходное значение как правильное или как пустое в зависимости от реализуемой в них логики.
+
+\begin{figure}[htbp]
+    \centering
+% \includegraphics[width=0.4\textwidth]{./valid-crop.pdf}
+\begin{tikzpicture}[inner xsep=1pt, inner ysep=0.2cm, node distance=0cm, font=\small, scale=0.8]
+    \node[draw, text width = 1cm, fill=black!10] (valid-bit) {};
+    \node[draw, text width = 1cm, below of=valid-bit, node distance = 0.75cm] (data1) {};
+    \node[draw, text width = 1cm, below =of data1.south] (data2) {};
+    \node[draw, text width = 1cm, below =of data2.south] (data3) {};
+    \node[draw, text width = 1cm, below =of data3.south] (data4) {};
+    \node[draw, text width = 1cm, below =of data4.south] (data5) {};
+    \node[draw, text width = 1cm, below =of data5.south] (data6) {};
+    \node[draw, text width = 1cm, below =of data6.south] (data7) {};
+    \node[draw, text width = 1cm, below =of data7.south] (data8) {};
+    \draw[decorate, decoration={brace, amplitude=3pt}] ([xshift=0.2cm] data1.north east) -- ([xshift=0.2cm] data8.south east) node[midway, auto, xshift=0.5cm] {Данные: $N$ бит};
+    \draw[decorate, decoration={brace, amplitude=3pt}] ([xshift=0.2cm] valid-bit.north east) -- ([xshift=0.2cm] valid-bit.south east) node[midway, auto, xshift=0.5cm] {Валидность: 1 бит};
+\end{tikzpicture}
+    \caption[Бит валидности]{Бит валидности. Если он равен нулю, значение, передаваемое в поле данных, не имеет смысла}
+    \label{fig:valid}
+\end{figure}
+
+Отметим, что такой подход напоминает реализацию, используемую в реальной аппаратуре, например, при обращении к медленной памяти: после подачи запроса на шину адреса считывание результата с шины данных не будет производиться до тех пор, пока на отдельном контакте готовности не появится соответствующий сигнал.
+
+\subsection{Латентность и пропускная способность портов}
+
+На рис.~\ref{fig:latency-bandwidth} показано, как выражаются понятия латентности $\lambda$ (такт) и пропускной способности $X$ (бит/такт) некоторого узла в модели, использующей порты. Обработка одного блока информации целиком требует количество тактов, равное числу последовательных узлов. Однако одновременно в обработке на разных стадиях может находиться более одного такого блока, и за каждый такт количество выдаваемых данных определяется шириной портов.
+
+\begin{figure}[htbp]
+    \centering
+% \includegraphics[width=0.7\textwidth]{./latency-bandwidth-crop.pdf}
+    \begin{tikzpicture}[text badly centered, inner ysep=0.5cm, inner xsep=0cm, font=\small, node distance= 0.8cm]
+    \def\dline{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}}
+    
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm] (cell1) {\dline};
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, right of=cell1] (cell2) {\dline};
+    \node[draw,fill=black!10, inner xsep= 2pt, inner ysep=0.15cm, right of=cell2] (cell3) {\dline};
+    \node[draw,fill=black!10, inner xsep= 2pt, inner ysep=0.15cm, right of=cell3] (cell4) {\dline};
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, right of=cell4] (cell5) {\dline};
+    
+    \draw[decorate, decoration={brace, amplitude=3pt}] ([xshift=0.2cm] cell5.north east) -- ([xshift=0.2cm] cell5.south east) node[midway, auto, xshift=0.5cm] {32 бит};
+    
+    \draw[decorate, decoration={brace, amplitude=3pt}] ([yshift=-0.2cm] cell5.south east) -- ([yshift=-0.2cm] cell1.south west) node[midway, auto, xshift=0.5cm] {L = 5 тактов};
+    \end{tikzpicture}    
+    \caption[Латентность и пропускная способность порта]{Различие между латентностью и пропускной способностью порта. Тёмными блоками обозначены валидные данные. В одной линии задержки могут одновременно находиться несколько транзакций на различных стадиях своего пути от отправителя к получателю}
+    \label{fig:latency-bandwidth}
+\end{figure}
+
+Используя порты, конструкторы новых систем могут изучать изменения в производительности моделируемого устройства в зависимости от длин задержек, для этого им достаточно варьировать параметры соответствующих линий.
+
+Однако возникает проблема: корректно ли соединять порты непосредственно друг с другом? Ведь это нарушает принцип изолированности стадий симуляции. 
+Можно предложить три способа решения данной проблемы.
+
+\begin{enumerate*}
+    \item Разделять однотактовые порты простыми функциональными устройствами --- повторителями сигнала. В данном случае мы запрещаем непосредственное соединение портов так же, как это сделано для функциональных элементов.
+    \item В отличие от функциональных элементов, порты всегда имеют ровно один вход и выход и потому могут быть относительно легко упорядочены внутри группы при последовательном соединении и соответсвенно симулироваться в порядке, приводящем к правильному потоку данных.
+    \item Можно обеспечивать длинные задержки не однотактными портами, а реализовать многотактный вариант, имеющий внутреннее состояние и самостоятельно следящий за всеми транзакциями, находящимися внутри него.
+\end{enumerate*}
+
+\begin{digression}%{Философское отступление}
+
+В физике для описания волновых процессов~\cite{sivukhin-vol5} существуют понятия <<фазовой скорости>> для движения фазового фронта (поверхности постоянной фазы) и <<групповой скорости>> для максимума амплитудной огибающей квазимонохроматического волнового пакета. Оба они характеризуют один периодический процесс, однако относятся к разным типам возмущения. Проводя аналогию между этими понятиями и пропускной способностью с латентностью\footnote{Точнее, с величиной, обратной латентности --- $\frac{1}{\lambda}$, имеющей размерность частоты.} некоторой системы, можно сказать, что первая величина характеризует темп обработки в установившемся, непрерывном режиме подачи данных на вход, тогда как вторая характеризует реакцию системы на внезапное изменение внешних условий.
+\end{digression}
+
+
+\subsection{Композиция узлов}
+
+На рис.~\ref{fig:ports-compose} показано, каким образом можно скрывать части симулируемой системы внутри одного блока на примере последовательного соединения. Если для нас не представляют интереса внутренние процессы, мы можем заменить несколько мелких блоков одним, выполняющим их функцию. При этом его задержка будет равна суммарной длине цепочки портов исходной системы.
+
+\begin{figure}[htbp]
+    \centering
+% \includegraphics[width=0.7\textwidth]{./ports-compose-crop.pdf}
+\begin{tikzpicture}[node distance=0.2cm, font=\small]
+    \def\dline{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}}
+
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}] (f1) {$F_1(x)$};
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, right =of f1] (port1) {\dline};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right =of port1.east] (f2) {$F_2(x)$};
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, right =of f2] (port2) {\dline};
+    \node[draw, dashed, fit= (f1) (port2) ] (border) {};
+    
+    \node[right=of border.east] (equiv) {$\Leftrightarrow$};
+    
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right =of equiv] (f2f1) {$F_2\left(F_1(x)\right)$};
+    
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, xscale=2, right =of f2f1] (port3) {\dline};
+
+    \draw (f1) -- (port1);
+    \draw (port1) -- (f2);
+    \draw (f2) -- (port2);
+    \draw (f2f1) -- (port3);
+    
+\end{tikzpicture}
+    \caption[Использование композиции устройств в модели]{Использование композиции устройств в потактовой модели, построенной с помощью портов. Два последовательно соединённых узла можно заменить одним, совмещающим функции обоих. Порты заменяются одним с задержкой, равной сумме исходных}
+    \label{fig:ports-compose}
+\end{figure}
+
+
+\subsection[Хранение состояния узлов]{Хранение состояния узлов}\label{sec:state}
+
+В предложенном ранее дизайне функционального элемента не предусмотрена возможность хранения им внутреннего состояния. Однако оно необходимо для моделирования многих устройств, например триггеров, регистров, кэшей. Изящное решение заключается в вынесении внутреннего состояния на текущем такте как части выходного результата и передачи его на вход того же устройства через порт на следующий такт (рис.~\ref{fig:state-storing}).
+
+\begin{figure}[htbp]
+    \centering
+% \includegraphics[width=0.4\textwidth]{./state-storing-crop.pdf}
+    \begin{tikzpicture}[>=latex, node distance=2cm, font=\small]
+        \node (input) {Вход};
+        \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=input] (f1) {$F(x)$};
+        \node[right of=f1] (output) {Выход};
+        \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, below of= f1, node distance=1cm] (port) {\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};
+        \node[below of=output, node distance=1cm ] (memory) {Память узла};
+        \draw[>-] (input) -- (f1);
+        \draw[->] (f1) -- (output);
+        \draw[->] (f1.340) -- +(0.2,0) |- (port.east);
+        \draw[->] (port.west) -- +(-0.8,0) |- (f1.200);
+    \end{tikzpicture}
+    \caption[Хранение состояния узла]{Хранение состояния узла с помощью задержки на один такт}
+    \label{fig:state-storing}
+\end{figure}
+
+\section{Реализация потактовых моделей на~микросхемах FPGA}
+
+Из-за необходимости симулирования в потактовых моделях большого числа деталей поведения реальной системы скорость работы программной реализации на классических ЭВМ крайне низка --- замедление относительно прямого исполнения может достигать сотен тысяч раз. Поэтому довольно популярным является решение, при котором модель переносится на специальный ускоритель --- вычислительное устройство на основе FPGA\footnote{\textit{англ.} Field Programmable Gate Array, что приблизительно соответствует понятию ПЛИС --- программируемые логические интегральные схемы.}. Их особенностью является высокая частота внутреннего тактового генератора и возможность реализации модели с высокой степенью параллельности --- как уже было описано ранее, внутри своей фазы симуляции отдельные функциональные узлы и порты могут исполняться независимо друг от друга. Недостатком метода является относительная сложность программирования этих устройств, а также их высокая цена. Кроме того, масштабы моделей некоторых устройств могут оказаться таковы, что их затруднительно разместить целиком на одной плате с FPGA-чипом; при этом приходится идти на всевозможные ухищрения.
+
+Примеры использования FPGA для потактовых моделей можно найти в работах~\cite{a-ports, hasim}.
+
+\section{Взаимодействие функциональной и~потактовой моделей}
+
+Создание потактового симулятора некоторого устройства часто начинается после того, как в наличии имеется его рабочий функциональный вариант модели. При этом желательно переиспользовать часть функциональности для того, чтобы уменьшить объём работы,  а также избавиться от необходимости его отлаживать. Поэтому разумным решением является написание потактовой части как \emph{модели задержек} (\textit{англ.} timing model), отвечающей лишь за определение того, сколько времени займёт на аппаратуре тот или иной процесс, например исполнение очередной инструкции. Тем, какая это будет инструкция и какие связанные с ней архитектурные эффекты будут наблюдаться, т.е. декодирование и исполнение, занимается функциональная модель. 
+
+
+\section{Заключительные замечания}
+
+Пример открытой реализации симулятора, использующего концепцию портов, можно найти на странице учебно-исследовательского проекта MDSP~\cite{mdsp-ports-2011}.
+
+\iftoggle{hasquiz}{
+	\input{chapter09-questions}
+}{}
+
+\iftoggle{webpaper}{
+    \printbibliography[title={Литература}]
+}{}
+
