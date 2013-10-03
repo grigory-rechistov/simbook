@@ -80,16 +80,16 @@
 \makeatother
 
 \iftoggle{webpaper}{
-	% \usepackage[duplicate]{chapterbib}
-	% A hack to mimic biblatex macro for bibtex
-	% \newcommand{\printbibliography}[1][none]{\bibliographystyle{ugost2008s}{}\bibliography{./../phd,./../mine,../collection}}
+    % \usepackage[duplicate]{chapterbib}
+    % A hack to mimic biblatex macro for bibtex
+    % \newcommand{\printbibliography}[1][none]{\bibliographystyle{ugost2008s}{}\bibliography{./../phd,./../mine,../collection}}
 
     \usepackage[language=auto, bibencoding=inputenc, style=gost-numeric, backend=biber, maxnames=4, refsection=chapter]{biblatex}
     \addbibresource{./../phd.bib}
     \addbibresource{./../mine.bib}
     \addbibresource{./../../collection.bib}
     \renewcommand*{\multicitedelim}{\addcomma\space} % grouped cites separated by commas not semicolons
-} {}	% Bibliography to be added at the end, not per chapter
+} {}    % Bibliography to be added at the end, not per chapter
 
 \usepackage{nameref}
 \usepackage{amsthm}
@@ -129,7 +129,7 @@
 \typeout{Copyright 2011, 2012, 2013 Grigory Rechistov and the contributors.}
 \let\cleardoublepage\clearpage % do not start from even page
 \setkomafont{pageheadfoot}{% Enforce header and footer to be correct.
-	\normalfont\normalcolor\itshape\small\rmfamily
+    \normalfont\normalcolor\itshape\small\rmfamily
 }
 \setkomafont{pagenumber}{\normalfont\rmfamily} % fix KOMA bug when footer/header inherits font settings from main text.
 
@@ -142,14 +142,14 @@
 \makeatletter\renewcommand\@biblabel[1]{#1.}\makeatother
 
 \iftoggle{webpaper}{
-	\include{title}
+    \include{title}
 } {
-	\include{title-print}
-	\include{backside}
+    \include{title-print}
+    \include{backside}
 }
 
 \iftoggle{webpaper}{
-	\tableofcontents
+    \tableofcontents
 } {
     % Put TOC to the end.
 }
@@ -219,7 +219,7 @@
     \phantomsection\label{page:lastpage}
 } {
     \include{literature}
-	\tableofcontents
+    \tableofcontents
     \include{lastpage}
 }
 \end{document}
