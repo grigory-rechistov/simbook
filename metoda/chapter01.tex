@@ -24,18 +24,18 @@
     %\includegraphics[width=\textwidth]{./error-cost-crop.pdf}
     \begin{tikzpicture}[scale=0.9, >=latex]
         \draw[->] (0,0) -- (0,6)  node[very near end, right, text width = 3cm, text badly ragged] {\small{Стоимость исправления ошибки}};
-		\draw[->] (0,0) -- (11,0) node[very near end, below] {\small Время};
-		\path (0, 1) node[left] {$10 \$$};
-		\path (0, 5) node[left] {$10^6 \$$};
-		%\draw[style=help lines] (7.5,0) -- (7.5,6);
-		
-		\path (1.7, 0.5) node[ellipse, draw] {\footnotesize Концепция};
-		\path (2.5, 1.5) node[ellipse, draw, text width = 2.3cm, text centered] {\footnotesize Функциональный прототип};
-		\path (3.5, 2.5) node[ellipse, draw, text width = 2cm, text centered] {\footnotesize Потактовый прототип};
-		\path (4.5, 3.5) node[ellipse, draw] {\footnotesize  RTL-модель};
-		\path (5.5, 4.5) node[ellipse, draw, text width = 2.8cm, text badly centered, inner sep=0] {\scriptsize Экс\-пе\-ри\-мен\-таль\-ные образцы};
-		
-		\path (8.5, 5.5) node[starburst, draw] {\footnotesize{Выпуск на рынок}};
+        \draw[->] (0,0) -- (11,0) node[very near end, below] {\small Время};
+        \path (0, 1) node[left] {$10 \$$};
+        \path (0, 5) node[left] {$10^6 \$$};
+        %\draw[style=help lines] (7.5,0) -- (7.5,6);
+
+        \path (1.7, 0.5) node[ellipse, draw] {\footnotesize Концепция};
+        \path (2.5, 1.5) node[ellipse, draw, text width = 2.3cm, text centered] {\footnotesize Функциональный прототип};
+        \path (3.5, 2.5) node[ellipse, draw, text width = 2cm, text centered] {\footnotesize Потактовый прототип};
+        \path (4.5, 3.5) node[ellipse, draw] {\footnotesize  RTL-модель};
+        \path (5.5, 4.5) node[ellipse, draw, text width = 2.8cm, text badly centered, inner sep=0] {\scriptsize Экс\-пе\-ри\-мен\-таль\-ные образцы};
+
+        \path (8.5, 5.5) node[starburst, draw] {\footnotesize{Выпуск на рынок}};
     \end{tikzpicture}
 
     \caption[Рост стоимости исправления ошибки с фазой проектирования устройства]{Рост стоимости исправления ошибки с фазой проектирования устройства. Различные этапы проектирования могут перекрываться во времени, однако каждый из них подразумевает всё большие вложения ресурсов. Ошибки в уже выпущенном продукте могут повлечь за собой существенные финансовые и имиджевые потери для допустившей их компании}
@@ -54,8 +54,8 @@
 \begin{tikzpicture}[>=latex, font=\small, minimum height = 2cm, minimum width=2cm]
     \node[draw] (node1) {Подсистема};
     \node[draw, right=3cm of node1, font=\huge, align=center] (node2) {?};
-	\draw[->] ([yshift=0.5cm] node1.east) -- ([yshift=0.5cm] node2.west) node[midway, above,minimum height = 0.5cm] {Запрос};
-	\draw[->] ([yshift=-0.5cm] node2.west) -- ([yshift=-0.5cm] node1.east) node[midway, above,minimum height = 0.5cm] {Ответ};
+    \draw[->] ([yshift=0.5cm] node1.east) -- ([yshift=0.5cm] node2.west) node[midway, above,minimum height = 0.5cm] {Запрос};
+    \draw[->] ([yshift=-0.5cm] node2.west) -- ([yshift=-0.5cm] node1.east) node[midway, above,minimum height = 0.5cm] {Ответ};
 \end{tikzpicture}
 \caption[Соединение компонент сложной системы через интерфейсы]{Соединение компонент сложной системы через интерфейсы, определяющие форматы запроса и отклика, но не специфицирующие детали реализации необходимой функциональности. Это позволяет заменять некоторые или даже все части такой системы на программные модели}\label{fig:interface}
 \end{figure}
@@ -105,45 +105,45 @@
     %\includegraphics[width=0.6\textwidth]{./vm-type1-crop.pdf}
     \begin{tikzpicture}
     \path (-0.5,0) node[below left] (app-win) {Приложения Windows}; \path (0.5,0) node[below right] (app-lin) {Приложения Linux}; 
-	\path (-0.5,-1) node[below left, text width=2cm] (win) {Windows};           \path (0.5,-1) node[below right, text width=2cm] (lin) {Linux};
-	
-	\path (0,-2) node[below] (mon) {Монитор виртуальных машин};
-	\path (0,-3) node (hw) {Аппаратура IA-32};
-	
-	\draw	(node cs:name=app-win, anchor=north west) -- (node cs:name=app-win, anchor=north east) |-
-			(0, -2) ; 
-	\draw	(node cs:name=app-lin, anchor=north east) -- (node cs:name=app-lin, anchor=north west) |-
-			(0, -2) ; 
-	
-	\draw	(node cs:name=win, anchor=north east) -- (node cs:name=win, anchor=north west) -- 
-			(node cs:name=win, anchor=south west);
-			
-	\draw	(node cs:name=lin, anchor=north west) -- (node cs:name=lin, anchor=north east) -- 
-			(node cs:name=lin, anchor=south east);
-			
-	\draw [snake=snake] (node cs:name=win, anchor=south east) --  
-			(perpendicular cs:
-			vertical line through  ={(app-win.west)},
-			horizontal line through={(win.south east)} 
-			);
-	\draw [snake=snake] (node cs:name=lin, anchor=south west) --  
-			(perpendicular cs:
-			vertical line through  ={(app-lin.east)},
-			horizontal line through={(lin.south west)} 
-			);
-			
-	\draw[snake=snake] %(node cs:name=hw,anchor=north west) -- (node cs:name=hw,anchor=north east);
-	(perpendicular cs:
-			vertical line through  ={(app-lin.east)},
-			horizontal line through={(hw.north)} 
-			) --
-	(perpendicular cs:
-			vertical line through  ={(app-win.west)},
-			horizontal line through={(hw.north)} 
-			);
-	
-	\draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-win, anchor=north west);
-	\draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-lin, anchor=north east);
+    \path (-0.5,-1) node[below left, text width=2cm] (win) {Windows};           \path (0.5,-1) node[below right, text width=2cm] (lin) {Linux};
+
+    \path (0,-2) node[below] (mon) {Монитор виртуальных машин};
+    \path (0,-3) node (hw) {Аппаратура IA-32};
+
+    \draw   (node cs:name=app-win, anchor=north west) -- (node cs:name=app-win, anchor=north east) |-
+            (0, -2) ; 
+    \draw   (node cs:name=app-lin, anchor=north east) -- (node cs:name=app-lin, anchor=north west) |-
+            (0, -2) ; 
+
+    \draw   (node cs:name=win, anchor=north east) -- (node cs:name=win, anchor=north west) -- 
+            (node cs:name=win, anchor=south west);
+
+    \draw   (node cs:name=lin, anchor=north west) -- (node cs:name=lin, anchor=north east) -- 
+            (node cs:name=lin, anchor=south east);
+
+    \draw [snake=snake] (node cs:name=win, anchor=south east) --  
+            (perpendicular cs:
+            vertical line through  ={(app-win.west)},
+            horizontal line through={(win.south east)} 
+            );
+    \draw [snake=snake] (node cs:name=lin, anchor=south west) --  
+            (perpendicular cs:
+            vertical line through  ={(app-lin.east)},
+            horizontal line through={(lin.south west)} 
+            );
+
+    \draw[snake=snake] %(node cs:name=hw,anchor=north west) -- (node cs:name=hw,anchor=north east);
+    (perpendicular cs:
+            vertical line through  ={(app-lin.east)},
+            horizontal line through={(hw.north)} 
+            ) --
+    (perpendicular cs:
+            vertical line through  ={(app-win.west)},
+            horizontal line through={(hw.north)} 
+            );
+
+    \draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-win, anchor=north west);
+    \draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-lin, anchor=north east);
     \end{tikzpicture}
 
     \caption[Гипервизор первого типа]{Пример использования гипервизора первого типа для одновременного запуска приложений двух различных операционных систем}\label{fig:vm-type1}
@@ -158,46 +158,44 @@
 %    \includegraphics[width=0.6\textwidth]{./vm-type2-crop.pdf}
     \begin{tikzpicture}
     \path (-0.5,0) node[below left] (app-win) {Приложения Windows};
-	
-	\path (-0.5,-1) node[below left] (win) {Windows};
-	
-	\path (-0.5,-2) node[below left] (mon) {Монитор виртуальных машин};  \path (0.5,-2) node[below right] (app-lin) {Приложения Linux};
-	\path (0,-3) node[below] (lin) {Linux};
-	\path (0,-4) node (hw) {Аппаратура IA-32};
-	
-	\draw (0, -3) -|
-		  (node cs:name=mon, anchor=south east) -| (node cs:name=app-win,anchor=north east) -|
-		  (node cs:name=mon, anchor=south west);
-	
-	\draw (node cs:name=win, anchor=south west) |- (node cs:name=app-win,anchor=south east);
 
- 	\draw	(node cs:name=app-lin, anchor=north east) -- (node cs:name=app-lin, anchor=north west) |-
- 			(0, -3) ; 
-	
- 	\draw   (node cs:name=hw, anchor=south) -| (node cs:name=mon, anchor=north west);
- 	\draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-lin, anchor=north east);
+    \path (-0.5,-1) node[below left] (win) {Windows};
 
-		
-	\draw [snake=zigzag] (node cs:name=win, anchor=south east) --  
-			(perpendicular cs:
-			vertical line through  ={(mon.west)},
-			horizontal line through={(win.south east)} 
-			);
-	\draw [snake=snake] (node cs:name=mon, anchor=south west) --  
-						(node cs:name=mon, anchor=south east) ;
-	\draw [snake=snake] (node cs:name=app-lin, anchor=south west) --  
-						(node cs:name=app-lin, anchor=south east) ;
-						
-						
-	\draw[snake=saw]
-	(perpendicular cs:
-			vertical line through  ={(app-lin.east)},
-			horizontal line through={(hw.north)} 
-			) --
-	(perpendicular cs:
-			vertical line through  ={(mon.west)},
-			horizontal line through={(hw.north)} 
-			);
+    \path (-0.5,-2) node[below left] (mon) {Монитор виртуальных машин};  \path (0.5,-2) node[below right] (app-lin) {Приложения Linux};
+    \path (0,-3) node[below] (lin) {Linux};
+    \path (0,-4) node (hw) {Аппаратура IA-32};
+
+    \draw (0, -3) -|
+        (node cs:name=mon, anchor=south east) -| (node cs:name=app-win,anchor=north east) -|
+        (node cs:name=mon, anchor=south west);
+
+    \draw (node cs:name=win, anchor=south west) |- (node cs:name=app-win,anchor=south east);
+
+    \draw   (node cs:name=app-lin, anchor=north east) -- (node cs:name=app-lin, anchor=north west) |-
+            (0, -3) ; 
+
+    \draw   (node cs:name=hw, anchor=south) -| (node cs:name=mon, anchor=north west);
+    \draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-lin, anchor=north east);
+
+    \draw [snake=zigzag] (node cs:name=win, anchor=south east) --  
+            (perpendicular cs:
+            vertical line through  ={(mon.west)},
+            horizontal line through={(win.south east)} 
+            );
+    \draw [snake=snake] (node cs:name=mon, anchor=south west) --  
+                        (node cs:name=mon, anchor=south east) ;
+    \draw [snake=snake] (node cs:name=app-lin, anchor=south west) --  
+                        (node cs:name=app-lin, anchor=south east) ;
+
+    \draw[snake=saw]
+    (perpendicular cs:
+            vertical line through  ={(app-lin.east)},
+            horizontal line through={(hw.north)} 
+            ) --
+    (perpendicular cs:
+            vertical line through  ={(mon.west)},
+            horizontal line through={(hw.north)} 
+            );
     \end{tikzpicture}
     \caption[Гипервизор второго типа]{Пример использования гипервизора второго типа для запуска приложений второй операционной системы при уже загруженной основной}\label{fig:vm-type2}
 \end{figure}
@@ -223,21 +221,21 @@
 %     \includegraphics[width=0.7\textwidth]{./simulation-levels-crop.pdf}
     \begin{tikzpicture}
     \coordinate (A) at (-4,-4) {};
-	\coordinate (B) at ( 4,-4) {};
-	\coordinate (C) at ( 0, 0) {};
-	\draw (A) -- ($(A)!5/6!(C)$);
-	\draw (B) -- ($(B)!5/6!(C)$);
-	\draw ($(A)!5/6!(C)$) -- ($(B)!5/6!(C)$);
+    \coordinate (B) at ( 4,-4) {};
+    \coordinate (C) at ( 0, 0) {};
+    \draw (A) -- ($(A)!5/6!(C)$);
+    \draw (B) -- ($(B)!5/6!(C)$);
+    \draw ($(A)!5/6!(C)$) -- ($(B)!5/6!(C)$);
         \foreach \y/\A/\S in {0/{Логические элементы}/{RTL-модели},
-						   1/Микроархитектура/{Потактовые симуляторы},
-						   2/Инструкции/{Функциональные симуляторы},
-						   3/API/{Симуляторы уровня приложения},
-						   4/Поведение/{Аналитические методы}
-						   } {
-			\draw ($(A)!\y/6!(C)$) -- ($(B)!\y/6!(C)$)
-			node[midway,above] {\small\A}
-			node[above right = 0.25cm, draw, rectangle callout, callout relative pointer={(185:0.5cm)}] {\scriptsize\S};
-		}
+                            1/Микроархитектура/{Потактовые симуляторы},
+                            2/Инструкции/{Функциональные симуляторы},
+                            3/API/{Симуляторы уровня приложения},
+                            4/Поведение/{Аналитические методы}
+                            } {
+            \draw ($(A)!\y/6!(C)$) -- ($(B)!\y/6!(C)$)
+            node[midway,above] {\small\A}
+            node[above right = 0.25cm, draw, rectangle callout, callout relative pointer={(185:0.5cm)}] {\scriptsize\S};
+        }
     \end{tikzpicture}
     \caption[Место различных типов симуляции]{Место различных типов симуляции в стеке существующих интерфейсов вычислительных систем}
     \label{fig:simulation-levels}
@@ -258,40 +256,40 @@
 \begin{figure}[htb]
     \centering
 %     \includegraphics[width=\textwidth]{./multiplexing-crop.pdf}
-	% The first pyramid, three steps
-	\begin{tikzpicture}[scale=0.9]
-	\coordinate (A) at (-3.5,-3) {};
-	\coordinate (B) at ( 3.5,-3) {};
-	\coordinate (C) at ( 0, 0) {};
-	\draw (A) -- ($(A)!3/4!(C)$);
-	\draw (B) -- ($(B)!3/4!(C)$);
-	\draw ($(A)!3/4!(C)$) -- ($(B)!3/4!(C)$);
+    % The first pyramid, three steps
+    \begin{tikzpicture}[scale=0.9]
+    \coordinate (A) at (-3.5,-3) {};
+    \coordinate (B) at ( 3.5,-3) {};
+    \coordinate (C) at ( 0, 0) {};
+    \draw (A) -- ($(A)!3/4!(C)$);
+    \draw (B) -- ($(B)!3/4!(C)$);
+    \draw ($(A)!3/4!(C)$) -- ($(B)!3/4!(C)$);
         \foreach \y/\A in {0/{Аппаратные ресурсы},
-						   1/{Инструкции},
-						   2/{\scriptsize Вирт. машина 1}
-						   } {
-			\draw ($(A)!\y/4!(C)$) -- ($(B)!\y/4!(C)$)
-			node[midway,above] {\footnotesize\A};
-		};
+                           1/{Инструкции},
+                           2/{\scriptsize Вирт. машина 1}
+                           } {
+            \draw ($(A)!\y/4!(C)$) -- ($(B)!\y/4!(C)$)
+            node[midway,above] {\footnotesize\A};
+        };
 
-	% The second pyramid, only one step
-	% Copy-pasted from the first one and shifted
-	\coordinate (D) at (7-3.5,-3) {};
-	\coordinate (E) at (7+3.5,-3) {};
-	\coordinate (F) at (7,     0) {};
-	\draw ($(D)!2/4!(F)$) -- ($(D)!3/4!(F)$);
-	\draw ($(E)!2/4!(F)$) -- ($(E)!3/4!(F)$);
-	\draw ($(D)!3/4!(F)$) -- ($(E)!3/4!(F)$);
+    % The second pyramid, only one step
+    % Copy-pasted from the first one and shifted
+    \coordinate (D) at (7-3.5,-3) {};
+    \coordinate (E) at (7+3.5,-3) {};
+    \coordinate (F) at (7,     0) {};
+    \draw ($(D)!2/4!(F)$) -- ($(D)!3/4!(F)$);
+    \draw ($(E)!2/4!(F)$) -- ($(E)!3/4!(F)$);
+    \draw ($(D)!3/4!(F)$) -- ($(E)!3/4!(F)$);
         \foreach \y/\A in {2/{\scriptsize Вирт. машина 2}
-						   } {
-			\draw ($(D)!\y/4!(F)$) -- ($(E)!\y/4!(F)$)
-			node[midway,above] {\footnotesize\A};
-		}
-	
-	% The multiplexing "arrow"
-	\node [ arrow box, draw, arrow box arrows={east:.25cm, west:0.25cm}] at (3.5,-1.1) {\scriptsize Мультиплексирование}; 
-		
-	\end{tikzpicture}
+                           } {
+            \draw ($(D)!\y/4!(F)$) -- ($(E)!\y/4!(F)$)
+            node[midway,above] {\footnotesize\A};
+        }
+
+    % The multiplexing "arrow"
+    \node [ arrow box, draw, arrow box arrows={east:.25cm, west:0.25cm}] at (3.5,-1.1) {\scriptsize Мультиплексирование}; 
+
+    \end{tikzpicture}
     \caption[Виртуализация как сочетание изоляции и разделения ресурсов]{Виртуализация как сочетание изоляции виртуальных машин и разделения хозяйских ресурсов между ними. Под мультиплексированием понимается временн\'{o}е разделение выполнения нескольких виртуальных процессоров на одном хозяйском}
     \label{fig:multiplexing}
 \end{figure}
@@ -383,7 +381,7 @@
 
 
 \iftoggle{hasquiz}{
-	\input{chapter01-questions}
+    \input{chapter01-questions}
 }{}
 
 \iftoggle{webpaper}{
