@@ -35,21 +35,21 @@ typedef struct {
     \centering
     %\includegraphics[width=0.7\textwidth]{./interp-cycle-expanded-crop}
     \begin{tikzpicture}[font=\footnotesize, >=latex]
-		% five circles
+        % five circles
         \foreach \A/\T in    { 90/{Извлечь инструкцию},
-							   18/{Декодировать},
-							  306/{Исполнить},
-							  234/{Запись в память},
-							  162/{Продвинуть \texttt{PC}}
-			} {
-			\node[draw, circle, text width = 2cm, text badly centered](stage\A) at (\A:2.5cm) {\small\T};
-			}
-			% arrows, dumb way
-			\draw[->, ] (stage90) -- (stage18);
-			\draw[->, ] (stage18) -- (stage306);
-			\draw[->, ] (stage306) -- (stage234);
-			\draw[->, ] (stage234) -- (stage162);
-			\draw[->, ] (stage162) -- (stage90);
+                               18/{Декодировать},
+                              306/{Исполнить},
+                              234/{Запись в память},
+                              162/{Продвинуть \texttt{PC}}
+            } {
+            \node[draw, circle, text width = 2cm, text badly centered](stage\A) at (\A:2.5cm) {\small\T};
+            }
+            % arrows, dumb way
+            \draw[->, ] (stage90) -- (stage18);
+            \draw[->, ] (stage18) -- (stage306);
+            \draw[->, ] (stage306) -- (stage234);
+            \draw[->, ] (stage234) -- (stage162);
+            \draw[->, ] (stage162) -- (stage90);
     \end{tikzpicture}
     \caption{Рабочий цикл интерпретатора}
     \label{fig:interp-cycle-expanded}
@@ -611,7 +611,7 @@ void Execute(struct DecodedInstr DecInstr) {
 Проект Bochs~\cite{bochs} является хорошим примером зрелого интерпретатора, содержащего сложную модель процессора для существующей архитектуры IA-32. В технических заметках к программе~\cite{bochs-under-hood} её авторы описывают множество полезных приёмов, применимых как к организации модели-интерпретатора для процессора любой архитектуры, так и специфичных для архитектуры IA-32, являющейся одной из сложнейших в реализации.
 
 \iftoggle{hasquiz}{
-	\input{chapter03-questions}
+    \input{chapter03-questions}
 }{}
 
 

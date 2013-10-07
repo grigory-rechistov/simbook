@@ -171,12 +171,12 @@ $$(M_1,P_1,R_1,E_1) \overset{i}\mapsto (M_2,P_2,R_2,E_2).$$
 \begin{tikzpicture}[>=latex, font=\scriptsize, scale=0.8]
     \foreach \x in {0,1} 
     {\foreach \y in {0,1,2,3,4,5,8,9,10,11,12,13} { % vertical offsets of two groups
-			\node[draw, minimum width=1.2cm, minimum height=0.4cm, inner sep=0pt] at (\x*3.5cm, -\y * 0.6 cm) (vpage-\x-\y) {};
+            \node[draw, minimum width=1.2cm, minimum height=0.4cm, inner sep=0pt] at (\x*3.5cm, -\y * 0.6 cm) (vpage-\x-\y) {};
       };
     };
     
     \foreach \y in {0,1,2,3,4,5,6,7,8,9,10,11} {
-			\node[draw, minimum width=1.2cm, minimum height=0.4cm, inner sep=0pt] at (7cm, -0.6cm -\y * 0.6 cm) (ppage-\y) {};
+            \node[draw, minimum width=1.2cm, minimum height=0.4cm, inner sep=0pt] at (7cm, -0.6cm -\y * 0.6 cm) (ppage-\y) {};
     };
 
     \node[draw, dashed, inner sep=0pt, fit=(vpage-0-0) (vpage-1-5) ]  (vm1-border) {} ;
@@ -403,7 +403,7 @@ Sandy Bridge & 1 кв. 2011 & 784 \\\hline
 Существуют предложения об интерфейсах между вложенными уровнями виртуализации~\cite{recursive-virt-poon}, которые позволили бы эффективно поддерживать вложенность нескольких мониторов ВМ. Однако на практике не было анонсировано реализации подобной или аналогичной технологии в продукции. Современные процессоры аппаратно поддерживают максимум один монитор ВМ.
 
 \iftoggle{hasquiz}{
-	\input{chapter14-questions}
+    \input{chapter14-questions}
 }{}
 
 \iftoggle{webpaper}{

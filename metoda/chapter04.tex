@@ -64,7 +64,7 @@
 
 \begin{figure}[htb]
     \centering
-	% \includegraphics[width=0.95\textwidth]{./capsule-crop}
+    % \includegraphics[width=0.95\textwidth]{./capsule-crop}
     \begin{tikzpicture}[font=\scriptsize, >=latex]
     \node[draw] (guest-inst) {\texttt{addq (\%rbx), \%rax}};
     \matrix[draw, right=2cm of guest-inst, anchor=west] (capsule) {
@@ -125,11 +125,11 @@
     
     \item[Контроль управления.] В этот класс включаются инструкции, изменяющие значение указателя текущей команды \texttt{PC}, т.е. условные и безусловные переходы, вызовы процедур и возвращения из них, программного прерывания и т.д. В разных архитектурах они отличаются очень сильно. Поэтому чаще всего их капсулы получаются достаточно длинными. Общая задача симулятора при их обработке --- вычисление точки входа в новый блок трансляции, соответствующий гостевому адресу перехода. При этом приходится учитывать возможность ситуации, в которой она отсутствует или некорректна. %Более подробно вопрос обработки переходов в гостевом коде рассматривается в секции~\ref{sec:linking}
     
-	\item[Привилегированные инструкции.] В большинстве архитектур некоторая часть команд может исполняться, только если процессор находится в специальном режиме, иначе они вызывают исключение. В этом режиме работает операционная система, имеющая неограниченный доступ ко всем ресурсам системы. Привилегированные инструкции специфичны для каждой системы и обычно семантически нагружены, поэтому их симуляция требует длинных капсул.
-	
-	Ситуация не улучшается даже при полном совпадение архитектур гостя и хоязина. Так как исполнение привилегированных команд в непривилегированном режиме, в котором обычно работает сама программа-симулятор, невозможно, их приходится заменять последовательностью разрешённых инструкций. Более подробно этот вопрос разбирается в главе~\ref{chapter14}.
+    \item[Привилегированные инструкции.] В большинстве архитектур некоторая часть команд может исполняться, только если процессор находится в специальном режиме, иначе они вызывают исключение. В этом режиме работает операционная система, имеющая неограниченный доступ ко всем ресурсам системы. Привилегированные инструкции специфичны для каждой системы и обычно семантически нагружены, поэтому их симуляция требует длинных капсул.
+    
+    Ситуация не улучшается даже при полном совпадение архитектур гостя и хоязина. Так как исполнение привилегированных команд в непривилегированном режиме, в котором обычно работает сама программа-симулятор, невозможно, их приходится заменять последовательностью разрешённых инструкций. Более подробно этот вопрос разбирается в главе~\ref{chapter14}.
 
-	\item[Прочие.] Существует достаточно много инструкций различных ISA, не подпадающих под данную выше классификацию или имеющих специфику, требующую особого внимания при симуляции. Это могут быть строковые, предикатные, длинные инструкций, слоты задержки у переходов и т.п.
+    \item[Прочие.] Существует достаточно много инструкций различных ISA, не подпадающих под данную выше классификацию или имеющих специфику, требующую особого внимания при симуляции. Это могут быть строковые, предикатные, длинные инструкций, слоты задержки у переходов и т.п.
 \end{description*}
 
 
@@ -189,9 +189,9 @@
     \draw[->] (translation) -- (storage);
     \draw[->] (execution) -- (current-page);
     
-	\node[draw, dashed, fit = (bt) (translation) (storage)] {};
-	\node[draw, dashed, fit = (sim) (execution) (current-page)] {};
-	
+    \node[draw, dashed, fit = (bt) (translation) (storage)] {};
+    \node[draw, dashed, fit = (sim) (execution) (current-page)] {};
+    
     \end{tikzpicture}
     \caption[Динамическая ДТ]{Динамическая ДТ. Фаза симуляции, использующая сгенерированный код, периодически сменяется фазой трансляции, хранящей уже существующие  и создающей новые секции хозяйского кода из гостевого}
     \label{fig:dynamic-bt}
@@ -228,7 +228,7 @@
     
     \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte0.north west) -- ([yshift=0.05cm] byte4.north east);
     \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte5.north west) -- ([yshift=0.05cm] byte6.north east);
-	
+    
     \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte2.south east) -- ([yshift=0.05cm] byte1.south west);
     \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte3.south east) -- ([yshift=0.05cm] byte3.south west);
     \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte5.south east) -- ([yshift=0.05cm] byte4.south west);
@@ -382,13 +382,13 @@ add \$5, PC_OFF(\%r14) \\
 <branch>
         };
         
-	\node[font=\scriptsize, above=0.3cm  of guest.north, anchor = south] (guest-lbl) {Гостевой код};
-	\node[font=\scriptsize, above=0.3cm  of orig.north, anchor = south] (orig-lbl) {ДТ};
-	\node[font=\scriptsize, above=0.3cm  of opt.north, anchor = south] (opt-lbl) {Оптимизация ДТ};
+    \node[font=\scriptsize, above=0.3cm  of guest.north, anchor = south] (guest-lbl) {Гостевой код};
+    \node[font=\scriptsize, above=0.3cm  of orig.north, anchor = south] (orig-lbl) {ДТ};
+    \node[font=\scriptsize, above=0.3cm  of opt.north, anchor = south] (opt-lbl) {Оптимизация ДТ};
     
-	\draw[->] (guest-lbl) -- (orig-lbl);
+    \draw[->] (guest-lbl) -- (orig-lbl);
     \draw[->] (orig-lbl) -- (opt-lbl);
-	
+    
     \end{tikzpicture}
     \caption[Оптимизация при ДТ]{Пример простой оптимизации кода блока трансляции. Инструкции \texttt{inc} продвижения регистра \texttt{PC} после каждой капсулы заменены одним сложением \texttt{add} в конце блока}
     \label{fig:optimization}
@@ -419,16 +419,16 @@ add \$5, PC_OFF(\%r14) \\
     \centering
 \begin{tikzpicture}[>=latex, font=\small]
     \draw[->] (2,0) -- (3,0);
-	\draw[->] (3.5,-1.5) -- (5, -1.5);
-	\draw[->] (5.5, 0) -- (7, 0);
-	\draw[->] (7.5,-1.5) -- (9, -1.5);
-	
-	\draw[->, dashed] (3,0) -- (3.5, -1.5);
-	\draw[->, dashed] (5,-1.5) -- (5.5, 0);
+    \draw[->] (3.5,-1.5) -- (5, -1.5);
+    \draw[->] (5.5, 0) -- (7, 0);
+    \draw[->] (7.5,-1.5) -- (9, -1.5);
+    
+    \draw[->, dashed] (3,0) -- (3.5, -1.5);
+    \draw[->, dashed] (5,-1.5) -- (5.5, 0);
     \draw[->, dashed] (7,0) -- (7.5, -1.5);
-	
-	\node[anchor= west, text width = 2cm] at (-0.2,0) {Двоичная трансляция};	
-	\node[anchor= west] at (-0.2,-1.5) {Симуляция};
+    
+    \node[anchor= west, text width = 2cm] at (-0.2,0) {Двоичная трансляция};    
+    \node[anchor= west] at (-0.2,-1.5) {Симуляция};
 \end{tikzpicture}
     \caption{ДТ и симуляция выполняются последовательно}
     \label{fig:serial-bt}
@@ -438,18 +438,18 @@ add \$5, PC_OFF(\%r14) \\
     \centering
 \begin{tikzpicture}[>=latex, font=\small]
     \draw[->] (2,0) -- (3.5,0);
-	\draw[->] (4, 0) -- (8, 0);
-	
-	\draw[->] (2,-1.5) -- (3.5, -1.5);
-	\draw[->] (4,-1.5) -- (8, -1.5);
-	
-	\draw[->, dashed] (3.5,   0) -- (4, -1.5);
-	\draw[->, dashed] (3.5,-1.5) -- (4,    0);
+    \draw[->] (4, 0) -- (8, 0);
+    
+    \draw[->] (2,-1.5) -- (3.5, -1.5);
+    \draw[->] (4,-1.5) -- (8, -1.5);
+    
+    \draw[->, dashed] (3.5,   0) -- (4, -1.5);
+    \draw[->, dashed] (3.5,-1.5) -- (4,    0);
     \draw[->, dashed] (8,0   ) -- (8.5, -1.5);
-	\draw[->, dashed] (8,-1.5) -- (8.5,    0);
-	
-	\node[anchor= west, text width = 2cm] at (-0.2,0) {Двоичная трансляция};
-	\node[anchor= west] at (-0.2,-1.5) {Симуляция};
+    \draw[->, dashed] (8,-1.5) -- (8.5,    0);
+    
+    \node[anchor= west, text width = 2cm] at (-0.2,0) {Двоичная трансляция};
+    \node[anchor= west] at (-0.2,-1.5) {Симуляция};
 \end{tikzpicture}
     \caption{ДТ вынесена в отдельный поток}
     \label{fig:parallel-bt}
@@ -619,22 +619,22 @@ xchgl (locked), %eax
     \centering
     \begin{tikzpicture}[>=latex, font=\small, align=center, inner sep=2pt]
 
-	\node[draw, text width = 2.5cm, minimum height = 1.2cm] (interp) {Интерпретатор};
-	
-	\node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of interp] (bt) {Двоичный транслятор};
-	
-	\node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of bt] (dex) {Прямое исполнение};
+    \node[draw, text width = 2.5cm, minimum height = 1.2cm] (interp) {Интерпретатор};
     
-	\begin{scope}[auto, text width = 3cm]
-	\draw[->] (interp.north) to[bend left] node {Горячий код} ([xshift=-0.2cm] bt.north);
-	\draw[->] (bt.north) to[bend left] node {Горячий код + возможность DEX} (dex.north);
-	
-	\draw[->] ([xshift=-0.2cm] bt.south) to[bend left] node {SMC} (interp.south);
-	\draw[->] (dex.south) to[bend left] node {Частые выходы в монитор} (bt.south);
-	
-	\end{scope}
-	\draw[->] ([xshift=0.75cm] dex.south) to[bend left=60] node[auto] {Неподдерживаемый режим/инструкции} ([xshift=-0.75cm] interp.south);
-	
+    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of interp] (bt) {Двоичный транслятор};
+    
+    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of bt] (dex) {Прямое исполнение};
+    
+    \begin{scope}[auto, text width = 3cm]
+    \draw[->] (interp.north) to[bend left] node {Горячий код} ([xshift=-0.2cm] bt.north);
+    \draw[->] (bt.north) to[bend left] node {Горячий код + возможность DEX} (dex.north);
+    
+    \draw[->] ([xshift=-0.2cm] bt.south) to[bend left] node {SMC} (interp.south);
+    \draw[->] (dex.south) to[bend left] node {Частые выходы в монитор} (bt.south);
+    
+    \end{scope}
+    \draw[->] ([xshift=0.75cm] dex.south) to[bend left=60] node[auto] {Неподдерживаемый режим/инструкции} ([xshift=-0.75cm] interp.south);
+    
     \end{tikzpicture}
     \caption[Динамическое переключение режимов симуляции]{Динамическое переключение режимов симуляции}
     \label{fig:gearbox}
@@ -841,7 +841,7 @@ v:0x00000000000111f8 p:0x00000000000111f8 je 0x11332
 \end{lstlisting}
 
 \iftoggle{hasquiz}{
-	\input{chapter04-questions}
+    \input{chapter04-questions}
 }{}
 
 \iftoggle{webpaper}{

@@ -174,24 +174,24 @@ register lcr {
 %     \includegraphics[width=0.5\textwidth]{./lisa-crop.pdf}
 \begin{tikzpicture}[>=latex, font=\small]
 \def\gear{
-	\begin{tikzpicture}
-	\draw[scale=1]
-	\foreach \i in {1,2,...,10} {% draw the gear
-		[rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
-	};
-	\end{tikzpicture}
+    \begin{tikzpicture}
+    \draw[scale=1]
+    \foreach \i in {1,2,...,10} {% draw the gear
+        [rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
+    };
+    \end{tikzpicture}
 }
     \node[draw, tape] (src) {Исходное описание}
     [level distance=2cm, sibling distance=2.5cm, edge from parent/.style={draw, ->}]
     child {node[] {\gear}
-		child {node {Дизассемблер}}
-	}
+        child {node {Дизассемблер}}
+    }
     child {node[] {\gear}
-		child {node {Симулятор}}
-	}
-	child {node[] {\gear}
-		child {node {Документация}}
-	};
+        child {node {Симулятор}}
+    }
+    child {node[] {\gear}
+        child {node {Документация}}
+    };
 \end{tikzpicture}
     \caption{Генерация инструментов разработки из общего описания архитектуры}
     \label{fig:lisa}
@@ -209,12 +209,12 @@ register lcr {
 %     \includegraphics[width=0.75\textwidth]{./capsules-crop.pdf}
 \begin{tikzpicture}[>=latex, font=\small]
 \def\gear{
-	\begin{tikzpicture}
-	\draw[scale=1]
-	\foreach \i in {1,2,...,10} {% draw the gear
-		[rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
-	};
-	\end{tikzpicture}
+    \begin{tikzpicture}
+    \draw[scale=1]
+    \foreach \i in {1,2,...,10} {% draw the gear
+        [rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
+    };
+    \end{tikzpicture}
 }
 \node[draw, tape, text width=9cm, align=left, font=\footnotesize\ttfamily] (src){
 NJU(U32 @Curr_IP, U32 @op_size, X128 @ireg_dst)\\
@@ -314,7 +314,7 @@ end process;
 \end{lstlisting} 
 
 \iftoggle{hasquiz}{
-	\input{chapter12-questions}
+    \input{chapter12-questions}
 }{}
 
 \iftoggle{webpaper}{

@@ -31,7 +31,7 @@
 Обрисуем достаточно общий и одновременно важнейший с практической точки зрения сценарий симуляции, требующий параллельного исполнения. На рис.~\ref{fig:parsim-overview} приведена общая схема распределения модели SMP-системы на несколько потоков. Каждый из них содержит группу моделируемых устройств, включая процессоры и периферию, имеет собственную очередь сообщений для хранения информации о запланированных событиях и может взаимодействовать с другими потоками (пока что не будем специфицировать точный механизм коммуникаций). Особое место в этой картине занимает моделируемая память --- она общая для всей симуляции, чтение и запись её может происходить из любого моделируемого процессора или устройства.
 
 \begin{figure}[htbp]
-	\centering
+    \centering
     \begin{tikzpicture}[>=latex, font=\scriptsize]
     \node[matrix, column sep={0.5cm}, row sep={0.1cm}, nodes={text width = 2.3cm, align=center, inner sep=3pt}] (separate)
     {
@@ -49,8 +49,8 @@
     \draw[dashed] ([yshift=0.5cm] barycentric cs:t2=0.5,t3=0.5) -- ([yshift=-0.5cm] barycentric cs:z2=0.5,z3=0.5);
     
     \end{tikzpicture}
-	\caption[Общая схема распределения симуляции на несколько потоков]{Общая схема распределения симуляции на несколько потоков. Устройства и процессоры содержатся целиком внутри одного потока, тогда как модель памяти необходимо сделать доступной для всех}
-	\label{fig:parsim-overview}
+    \caption[Общая схема распределения симуляции на несколько потоков]{Общая схема распределения симуляции на несколько потоков. Устройства и процессоры содержатся целиком внутри одного потока, тогда как модель памяти необходимо сделать доступной для всех}
+    \label{fig:parsim-overview}
 \end{figure}
 
 \paragraph{Симуляция многопроцессорной системы.} Отдельные потоки в этом случае содержат один или более гостевой процессор и исполняют его инструкции, модифицирующие память и вызывающие методы периферийных устройств, разделяемых с остальными гостевыми процессорами, заключёнными в своих потоках. Каждый поток исполнения при этом самостоятельно ведёт счёт исполненных шагов симуляции, т.е. количества завершённых инструкций.
@@ -113,8 +113,8 @@
 % На рис.~\ref{fig:two-queues-1} два потока производят коммуникации, посылая друг другу сообщения в виде событий, помещаемых в очередь и запланированных на исполнение в некоторые моменты в будущем относительно симулируемого времени отправителя. Предположим, что в некоторый момент физического времени по каким-то причинам поток-отправитель имеет симулируемое время $T_2$ большее, чем первый $T_1$ (например, события в нём происходят реже, и потому он продвигается быстрее).
 % 
 % \begin{figure}[htbp]
-% 	\centering
-% 	%\includegraphics[width=\textwidth]{./two-queues-1-crop.pdf}
+%     \centering
+%     %\includegraphics[width=\textwidth]{./two-queues-1-crop.pdf}
 %     \begin{tikzpicture}[>=latex, font=\scriptsize]
 %     
 %     \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время};
@@ -140,8 +140,8 @@
 %     
 %     
 %     \end{tikzpicture}
-% 	\caption{Нарушение корректности симуляции. Случай $T_2 > T_1$. Штрихами показано правильное положение создаваемого события, сплошной линией --- некорректное}
-% 	\label{fig:two-queues-1}
+%     \caption{Нарушение корректности симуляции. Случай $T_2 > T_1$. Штрихами показано правильное положение создаваемого события, сплошной линией --- некорректное}
+%     \label{fig:two-queues-1}
 % \end{figure}
 
 % Тогда при помещении события в очередь оно окажется дальше в будущем, чем должно было бы быть. 
@@ -149,8 +149,8 @@
 На рис.~\ref{fig:two-queues-2} два потока взаимодействуют, посылая друг другу сообщения в виде событий, помещаемых в очередь и запланированных на исполнение в некоторые моменты в будущем. При некотором соотношении текущих симулируемых времён $T_1$ и $T_2$ может случится так, что добавляемое из другой очереди событие окажется в прошлом для получателя.
 
 \begin{figure}[htbp]
-	\centering
-	%\includegraphics[width=\textwidth]{./two-queues-2-crop.pdf}
+    \centering
+    %\includegraphics[width=\textwidth]{./two-queues-2-crop.pdf}
     \begin{tikzpicture}[>=latex, font=\scriptsize]
     
     \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время};
@@ -158,24 +158,24 @@
         \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
     };
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (5, -1) {$T_1$};
-	\node[shape=dart, draw, shape border rotate=270 ] at (5, 0.5) {};
-	
+    \node[shape=dart, draw, shape border rotate=270 ] at (5, 0.5) {};
+    
 %     \node[dashed, shape=dart, draw, shape border rotate=270 ] at (7, 0.5) {};
     
     \node[fill=black!10, shape=dart, draw, shape border rotate=270 ] at (3, 0.5) (ev2) {};
-	
+    
     \draw[->] (0,-2) -- (10,-2) node[pos=0.9, below] (sim-time2) {Время};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-2.15) -- (\x,-1.85) node (tick\x) {};
     };
     
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (1, -3) {$T_2$};
-	\node[shape=dart, draw, shape border rotate=270 ] at (1, -1.5) (ev1) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (1, -1.5) (ev1) {};
     
     \draw[->] (ev1.east) .. controls +(3,0) and +(-2,0) .. (ev2.west);
     \end{tikzpicture}
-	\caption[Нарушение корректности относительного положения событий]{Нарушение корректности относительного положения событий в случае $T_2 < T_1$. Новое событие оказалось в прошлом и не может быть обработано}
-	\label{fig:two-queues-2}
+    \caption[Нарушение корректности относительного положения событий]{Нарушение корректности относительного положения событий в случае $T_2 < T_1$. Новое событие оказалось в прошлом и не может быть обработано}
+    \label{fig:two-queues-2}
 \end{figure}
 
 В реальной системе новое событие в обоих случаях получило бы строго одно и то же положение и относительный порядок во времени; при наивной параллельной симуляции возникают каузальные ошибки (нарушение причинно-следственной связи событий).
@@ -187,8 +187,8 @@
 Что же делать? Прежде всего, достаточно легко сформулировать, как распознавать ситуацию нарушения каузальности и корректировать её для первого случая $T_2 > T_1$. Достаточно к сообщениям об обращении к разделяемому состоянию добавлять метку времени того события, которое производит доступ. Поток, получающий сообщение (или использующий модифицированные  данные), сравнивает значение этой метки со своим локальным временем, корректирует момент обработки события, а при обнаружении логического несоответствия (например, если новое событие оказывается в прошлом) сигнализирует о проблеме (рис.~\ref{fig:timestamps}). Конечно, этот метод не позволяет разрешать возникшее затруднение, но только обнаруживать его. 
 
 \begin{figure}[htbp]
-	\centering
-	%\includegraphics[width=\textwidth]{./timestamps-crop.pdf}
+    \centering
+    %\includegraphics[width=\textwidth]{./timestamps-crop.pdf}
     \begin{tikzpicture}[>=latex, font=\scriptsize]
     
     \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время};
@@ -197,7 +197,7 @@
     };
     
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (4, -1) {$T_1$};
-	\node[shape=dart, draw, shape border rotate=270 ] at (4, 0.5) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (4, 0.5) {};
     
     \draw[->] (0,-3) -- (10,-3) node[pos=0.9, below] (sim-time2) {Время};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
@@ -205,22 +205,22 @@
     };
     
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (2, -4) {$T_2$};
-	\node[shape=dart, draw, shape border rotate=270 ] at (2, -2.5) (ev1) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (2, -2.5) (ev1) {};
     
-	\node[shape=dart, draw, shape border rotate=270 ] at (5, -1) (ev2) {};
-	\node[above =0cm of ev2] {$T_{event}$};
-		
+    \node[shape=dart, draw, shape border rotate=270 ] at (5, -1) (ev2) {};
+    \node[above =0cm of ev2] {$T_{event}$};
+        
     \draw[->] (ev1.east) .. controls +(3,0) and +(0,-0.5) .. (ev2.south);
 
-	\node[dashed, shape=dart, draw, shape border rotate=270 ] at (7, 0.5)  (ev-correct) {};
-	\node[align = center, text width = 2cm, above =0cm of ev-correct] {Скорректированное событие};
+    \node[dashed, shape=dart, draw, shape border rotate=270 ] at (7, 0.5)  (ev-correct) {};
+    \node[align = center, text width = 2cm, above =0cm of ev-correct] {Скорректированное событие};
     
     \draw[->] (ev2.west) .. controls +(-1,1) and +(-1,+0) .. (ev-correct.west);
     
     \end{tikzpicture}
 
-	\caption[Пересылка меток времени создания событий вместе с самим событием]{Пересылка меток времени создания событий вместе с самим событием. Поток-приёмник корректирует положение события и принимает решение о том, соответствует ли ситуация условиям корректной симуляции}
-	\label{fig:timestamps}
+    \caption[Пересылка меток времени создания событий вместе с самим событием]{Пересылка меток времени создания событий вместе с самим событием. Поток-приёмник корректирует положение события и принимает решение о том, соответствует ли ситуация условиям корректной симуляции}
+    \label{fig:timestamps}
 \end{figure}
 
 \paragraph{Пути решения проблемы нарушения каузальности}
@@ -237,8 +237,8 @@
 Мы хотим исключить возможность возникновения ситуаций, когда сообщение от потока, отставшего в симулируемом времени, приходит другому потоку «в прошлое». Предлагаемое решение --- придержать (блокировать) исполнение отправителя сообщения до тех пор, пока приёмник сам не продвинется в симулируемом времени до точки приёма~\cite{Misra86distributeddiscrete-event}. Пример такой ситуации изображён на рис.~\ref{fig:send-and-block}. Очевидно, что блокировать процесс следует, если он посылает новое событие в чужую очередь, но не в собственную --- в этом случае порядок нарушиться не может. Описанная схема позволяет добиться корректности с помощью того, что потоки, вырывающиеся вперёд, вынуждены впоследствии ожидать более медленных.
 
 \begin{figure}[htbp]
-	\centering
-	% \includegraphics[width=\textwidth]{./send-and-block-crop.pdf}
+    \centering
+    % \includegraphics[width=\textwidth]{./send-and-block-crop.pdf}
     \begin{tikzpicture}[>=latex, font=\scriptsize]
     
     \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время} node[pos=0., below] {Поток 1};
@@ -248,36 +248,36 @@
     
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (2, -1) {$T_1$};
 %     \node[draw, arrow box, arrow box arrows={south:.6cm}, text width = 0.6cm] at (2, 1) {};
-	\node[shape=dart, draw, shape border rotate=270 ] at (2, 0.5)  {};
-	
-	\node[shape=dart, draw, shape border rotate=270 ] at (7, 0.5) (ev-unlock) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (2, 0.5)  {};
+    
+    \node[shape=dart, draw, shape border rotate=270 ] at (7, 0.5) (ev-unlock) {};
     \node[above=0cm of ev-unlock, text width=3.cm, inner sep=0.2cm] {
             \begin{enumerate*}
                 \item Обработать событие 
                 \item Разблокировать поток 2
             \end{enumerate*}
     };
-	
+    
     \draw[->] (0,-3) -- (10,-3) node[pos=0.9, below] (sim-time2) {Время} node[pos=0., below] {Поток 2};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-3.15) -- (\x,-2.85) node (tick\x) {};
     };
     
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (4, -4) {$T_2$};
-	
-	\node[shape=dart, draw, shape border rotate=270 ] at (4, -2.5) (ev-lock) {};
+    
+    \node[shape=dart, draw, shape border rotate=270 ] at (4, -2.5) (ev-lock) {};
     \node[text width=3.2cm, inner sep=0.2cm, above of=ev-lock] {
         \begin{enumerate*}
             \item Послать сообщение
             \item Заблокироваться
         \end{enumerate*}
     };
-	
+    
     \draw[->] (ev-lock.east) .. controls +(3,0) and +(-1,0) .. (ev-unlock.west);
     \end{tikzpicture}
 
-	\caption[Консервативный сценарий параллельной симуляции]{Консервативный сценарий параллельной симуляции. Поток, желающий добавить событие в очередь другого потока, блокируется до момента обработки этого события}
-	\label{fig:send-and-block}
+    \caption[Консервативный сценарий параллельной симуляции]{Консервативный сценарий параллельной симуляции. Поток, желающий добавить событие в очередь другого потока, блокируется до момента обработки этого события}
+    \label{fig:send-and-block}
 \end{figure}
 
 
@@ -290,41 +290,41 @@
 К сожалению, такая схема совсем не гарантирует, что сообщения в системе будут передаваться и симуляция будет прогрессировать~\cite{Misra86distributeddiscrete-event} --- возможна ситуация взаимоблокировки (\abbr deadlock). На рис.~\ref{fig:deadlock} приведён пример такой ситуации.
 
 \begin{figure}[htbp]
-	\centering
-	% \includegraphics[width=\textwidth]{./deadlock-crop.pdf}
+    \centering
+    % \includegraphics[width=\textwidth]{./deadlock-crop.pdf}
     \begin{tikzpicture}[>=latex, font=\scriptsize]
     \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время} node[pos=0., below] {Поток 1};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
     };
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (1, -1) {$T_1$};
-	\node[shape=dart, draw, shape border rotate=270 ] at (1, 0.5)  (ev11) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (1, 0.5)  (ev11) {};
     
     \draw[->] (0,-2) -- (10,-2) node[pos=0.9, below] (sim-time2) {Время} node[pos=0., below] {Поток 2};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-2.15) -- (\x,-1.85) node (tick\x) {};
     };
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (3, -3) {$T_2$};
-	\node[shape=dart, draw, shape border rotate=270 ] at (3, -1.5)  (ev21) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (3, -1.5)  (ev21) {};
    
     \draw[->] (0,-4) -- (10,-4) node[pos=0.9, below] (sim-time3) {Время} node[pos=0., below] {Поток 3};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-4.15) -- (\x,-3.85) node (tick\x) {};
     };
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (5, -5) {$T_3$};
-	\node[shape=dart, draw, shape border rotate=270 ] at (5, -3.5)  (ev31) {};
-	
-	\node[shape=dart, draw, shape border rotate=270 ] at (9, 0.5)  (ev12) {};
-	\node[shape=dart, draw, shape border rotate=270 ] at (6, -1.5)  (ev22) {};
-	\node[shape=dart, draw, shape border rotate=270 ] at (7, -3.5)  (ev32) {};
-	
+    \node[shape=dart, draw, shape border rotate=270 ] at (5, -3.5)  (ev31) {};
+    
+    \node[shape=dart, draw, shape border rotate=270 ] at (9, 0.5)  (ev12) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (6, -1.5)  (ev22) {};
+    \node[shape=dart, draw, shape border rotate=270 ] at (7, -3.5)  (ev32) {};
+    
     \draw[->] (ev11.east) .. controls +(1,0) and +(-1,0) .. (ev22.west);
     \draw[->] (ev21.east) .. controls +(1,0) and +(-1,0) .. (ev32.west);
     \draw[->] (ev31.east) .. controls +(1,0) and +(-1,0) .. (ev12.west);
     
     \end{tikzpicture}
-	\caption[Ситуация взаимной блокировки в системе с тремя потоками]{Ситуация взаимной блокировки в системе с тремя потоками. Каждый процесс ожидает сигнала окончания блокировки от какого-либо другого потока}
-	\label{fig:deadlock}
+    \caption[Ситуация взаимной блокировки в системе с тремя потоками]{Ситуация взаимной блокировки в системе с тремя потоками. Каждый процесс ожидает сигнала окончания блокировки от какого-либо другого потока}
+    \label{fig:deadlock}
 \end{figure}
 
 В случае большого числа потоков в симуляции взаимоблокировка может затронуть только часть из них, при этом остальные будут продолжать исполняться до тех пор, пока не посылают сообщения к заблокированной группе. Как разрешать сложившуюся ситуацию? Если уметь обнаруживать взаимоблокировку, то возможно принудительно освободить один из участвующих в ней поток, разрешив ему исполняться. Это не нарушит условий корректности симуляции. Для определённости освобождать будем тот процесс, который имеет наименьшее значение текущего симулируемого времени.  На рис.~\ref{fig:deadlock} им будет поток номер 1. Его разблокировка также оправдана с точки зрения выдерживания наименьшего разброса значений времён в разных потоках. Продвижение освобождённого потока в конечном счёте активирует и другие процессы, избавив их от блокировок, и симуляция продолжится в полном объёме.
@@ -360,8 +360,8 @@
 Во-вторых, позволим параллельной симуляции исполняться без блокировок потоков. При этом возможны нарушения каузальности, поэтому необходимо при передаче сообщений проверять метки их времени. Что же делать, если такое нарушение было обнаружено? В этому случае состояние модели восстанавливатеся из одной из точек сохранения, про которую известно, что на момент её создания нарушений обнаружено не было. Затем симуляция «опасного» участка производится повторно оптимистичным образом или с использованием других описанных ранее схем, см. рис.~\ref{fig:checkpoints}.
 
 \begin{figure}[htbp]
-	\centering
-	% \includegraphics[width=0.95\textwidth]{./checkpoints-crop.pdf}
+    \centering
+    % \includegraphics[width=0.95\textwidth]{./checkpoints-crop.pdf}
     \begin{tikzpicture}[>=latex, font=\scriptsize]
     
     \node (thread1) {Поток 1};
@@ -400,8 +400,8 @@
     \node[right of=chkpt2-restored, node distance = 3.cm] {Повторное исполнение};
     
     \end{tikzpicture}
-	\caption[Симуляция с периодическими точками сохранения]{Симуляция с периодическими точками сохранения. Штрихами показана часть симуляции, приведшая к нарушению корректности и откату к ближайшему сохранённому состоянию}
-	\label{fig:checkpoints}
+    \caption[Симуляция с периодическими точками сохранения]{Симуляция с периодическими точками сохранения. Штрихами показана часть симуляции, приведшая к нарушению корректности и откату к ближайшему сохранённому состоянию}
+    \label{fig:checkpoints}
     % \begin{tikzpicture}[>=latex]
     % \def\arrow{ % taken from http://www.texample.net/tikz/examples/overlapping-arrows/
       % (10.75:1.1) -- (6.5:0.8) arc (6.25:120:0.8)  --
@@ -451,44 +451,44 @@
 \centering
     \begin{tikzpicture}[>=latex, font=\scriptsize, node distance=0pt, scale=0.85]
 
-	\draw[->] (0,0) -- (10,0) coordinate[pos=0.2] (c11) coordinate[pos=0.3] (c12) coordinate[pos=0.5] (c13) coordinate[pos=0.6] (c14) coordinate[pos=0.9] (c15);
-	\draw[->] (0,-2) -- (10,-2) coordinate[pos=0.1] (c21) coordinate[pos=0.4] (c22) coordinate[pos=0.7] (c23) coordinate[pos=0.8] (c24);
-	\draw[->] (0,-4) -- (10,-4) coordinate[pos=0.05] (c31) coordinate[pos=0.5] (c32) coordinate[pos=0.8] (c33) coordinate[pos=0.9] (c34) coordinate[pos=0.6] (c3s);
-	
-	\node[dotted, shape=dart, draw, shape border rotate=270, above=of c11] (ev11) {};
-	\node[dotted, shape=dart, draw, shape border rotate=270, above=of c12] (ev12) {};
-	\node[dashed, shape=dart, draw, shape border rotate=270, above=of c13] (ev13) {};
-	\node[thick, shape=dart, draw, shape border rotate=270, above=of c14] (ev14) {};
+    \draw[->] (0,0) -- (10,0) coordinate[pos=0.2] (c11) coordinate[pos=0.3] (c12) coordinate[pos=0.5] (c13) coordinate[pos=0.6] (c14) coordinate[pos=0.9] (c15);
+    \draw[->] (0,-2) -- (10,-2) coordinate[pos=0.1] (c21) coordinate[pos=0.4] (c22) coordinate[pos=0.7] (c23) coordinate[pos=0.8] (c24);
+    \draw[->] (0,-4) -- (10,-4) coordinate[pos=0.05] (c31) coordinate[pos=0.5] (c32) coordinate[pos=0.8] (c33) coordinate[pos=0.9] (c34) coordinate[pos=0.6] (c3s);
+    
+    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c11] (ev11) {};
+    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c12] (ev12) {};
+    \node[dashed, shape=dart, draw, shape border rotate=270, above=of c13] (ev13) {};
+    \node[thick, shape=dart, draw, shape border rotate=270, above=of c14] (ev14) {};
 
-	\node[shape=dart, draw, shape border rotate=270, above=of c15] (ev15) {};
-	
-	\node[dotted, shape=dart, draw, shape border rotate=270, above=of c21] (ev21) {};
-	\node[thick, shape=dart, draw, shape border rotate=270, above=of c22] (ev22) {};
-	\node[shape=dart, draw, shape border rotate=270, above=of c23] (ev23) {};
-	\node[shape=dart, draw, shape border rotate=270, above=of c24] (ev24) {};
-	
-	\node[double, shape=dart, draw, shape border rotate=270, above=of ev23] (ev23anti) {};
+    \node[shape=dart, draw, shape border rotate=270, above=of c15] (ev15) {};
+    
+    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c21] (ev21) {};
+    \node[thick, shape=dart, draw, shape border rotate=270, above=of c22] (ev22) {};
+    \node[shape=dart, draw, shape border rotate=270, above=of c23] (ev23) {};
+    \node[shape=dart, draw, shape border rotate=270, above=of c24] (ev24) {};
+    
+    \node[double, shape=dart, draw, shape border rotate=270, above=of ev23] (ev23anti) {};
 
-	\node[dotted, shape=dart, draw, shape border rotate=270, above=of c31] (ev31) {};
-	\node[dashed, shape=dart, draw, shape border rotate=270, above=of c32] (ev32) {};
-	\node[thick, shape=dart, draw, shape border rotate=270, above=of c33] (ev33) {};
-	\node[shape=dart, draw, shape border rotate=270, above=of c34] (ev34) {};
-	
-	\node[fill=black!10, shape=dart, draw, shape border rotate=270, above=of c3s] (ev3s) {};
-	
-	\draw[dashed] (4,1) -- (4,-4.5) node {$GVT$};
-	
-	\node[below=of ev14] {$LVT_1$};
-	\node[below=of ev22] {$LVT_2$};
-	\node[below=of ev33] {$LVT_3$};
-	
-	\draw[->] (ev22) to[bend left=45] node[auto, sloped] {Нарушение} (ev3s) ;
-	\draw[->] (ev15) to[bend right=45] node[auto, swap] (rollback) {Откат} (ev14) ;
-	\draw[->] (rollback) -- (ev23anti);
-	
+    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c31] (ev31) {};
+    \node[dashed, shape=dart, draw, shape border rotate=270, above=of c32] (ev32) {};
+    \node[thick, shape=dart, draw, shape border rotate=270, above=of c33] (ev33) {};
+    \node[shape=dart, draw, shape border rotate=270, above=of c34] (ev34) {};
+    
+    \node[fill=black!10, shape=dart, draw, shape border rotate=270, above=of c3s] (ev3s) {};
+    
+    \draw[dashed] (4,1) -- (4,-4.5) node {$GVT$};
+    
+    \node[below=of ev14] {$LVT_1$};
+    \node[below=of ev22] {$LVT_2$};
+    \node[below=of ev33] {$LVT_3$};
+    
+    \draw[->] (ev22) to[bend left=45] node[auto, sloped] {Нарушение} (ev3s) ;
+    \draw[->] (ev15) to[bend right=45] node[auto, swap] (rollback) {Откат} (ev14) ;
+    \draw[->] (rollback) -- (ev23anti);
+    
     \end{tikzpicture}
-	\caption[Симуляция Time Warp]{Оптимистичная симуляция Time Warp. Точками обозначены события, подлежащие процессу сборки окаменелостей, штриховыми линиями --- уже обработанные, к которым симуляция потенциально может откатиться, жирным --- текущее событие, тонкой линией --- запланированные в будущем. Серым фоном выделено отставшее сообщение, а двойной линией --- антисообщение}
-	\label{fig:time-warp}
+    \caption[Симуляция Time Warp]{Оптимистичная симуляция Time Warp. Точками обозначены события, подлежащие процессу сборки окаменелостей, штриховыми линиями --- уже обработанные, к которым симуляция потенциально может откатиться, жирным --- текущее событие, тонкой линией --- запланированные в будущем. Серым фоном выделено отставшее сообщение, а двойной линией --- антисообщение}
+    \label{fig:time-warp}
 \end{figure}
 
 \begin{itemize*}
@@ -510,22 +510,22 @@
 
 % (рис.~\ref{fig:dsm}).
 % \begin{figure}[htbp]
-% 	\centering
+%     \centering
 %     \begin{tikzpicture}[>=latex, font=\small]
-% 	\node[align=center] (n1e) {Узел 1};
-% 	\node[align=center, below=0.25cm of n1e] (n1sm) {Локальная память};
-% 	
-% 	\coordinate[below=0.5cm of n1sm.west] (a1);
-% 	\coordinate[below=1cm of n1sm.east] (b1);
-% % 	\coordinate[]
-% 	
-% 	\draw (a1) rectangle (b1);
-% 	
-% 	\node[dashed, draw, fit = (n1e) (n1sm) (a1) (b1)] {};
+%     \node[align=center] (n1e) {Узел 1};
+%     \node[align=center, below=0.25cm of n1e] (n1sm) {Локальная память};
+%     
+%     \coordinate[below=0.5cm of n1sm.west] (a1);
+%     \coordinate[below=1cm of n1sm.east] (b1);
+% %     \coordinate[]
+%     
+%     \draw (a1) rectangle (b1);
+%     
+%     \node[dashed, draw, fit = (n1e) (n1sm) (a1) (b1)] {};
 % 
 %     \end{tikzpicture}
-% 	\caption[Распределённая общая память]{Распределённая общая память}
-% 	\label{fig:dsm}
+%     \caption[Распределённая общая память]{Распределённая общая память}
+%     \label{fig:dsm}
 % \end{figure}
 
 \begin{itemize*}
@@ -564,7 +564,7 @@
 \end{enumerate*}
 
 \begin{figure}[htbp]
-	\centering
+    \centering
     \begin{tikzpicture}[>=latex, font=\scriptsize, scale=0.8]
     
     \node[align=right, anchor=east] at (0, 0) {Поток 1};
@@ -608,8 +608,8 @@
     \draw[dashdotted] (5+5,-4) -- (5+5,1) node[sloped,midway, above] {Барьер};
     
     \end{tikzpicture}
-	\caption[Симуляция с барьерной синхронизацией]{Симуляция с барьерной синхронизацией. Жирными сплошными линиями показаны активные участки симуляции, штриховыми --- ожидание остальных потоков без выполнения полезной работы}
-	\label{fig:domains}
+    \caption[Симуляция с барьерной синхронизацией]{Симуляция с барьерной синхронизацией. Жирными сплошными линиями показаны активные участки симуляции, штриховыми --- ожидание остальных потоков без выполнения полезной работы}
+    \label{fig:domains}
 \end{figure}
 
 \section{Детерминизм параллельных моделей}
@@ -643,7 +643,7 @@
 Для параллельной симуляции ситуация несколько сложнее. Три сформулированные выше условия должны выполняться для каждого участвующего в ней потока. Возникает новой источник неопределённости --- события с одинаковой меткой времени могут приходить с сообщениями от других потоков, при этом из-за различий в скоростях их исполнения в разных запусках порядок создания может быть различным (рис.~\ref{fig:same-time-stamp}). 
 
 \begin{figure}[htbp]
-	\centering
+    \centering
     \begin{tikzpicture}[>=latex, font=\small]
     
     \draw[->] (0,0) -- (10,0) node[above, pos = 0] {Запуск 1};
@@ -653,7 +653,7 @@
     
     \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of tick5] (ev11) {1};
     \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of ev11]  (ev12) {2};
-	
+    
     \coordinate [above=2cm of tick1] (src11);     
     \coordinate [above=2cm of tick3] (src12);     
     
@@ -668,7 +668,7 @@
     
     \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of tick5] (ev22) {2};
     \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of ev22]  (ev21) {1};
-	
+    
     \coordinate [above=2cm of tick1] (src22);     
     \coordinate [above=2cm of tick3] (src21);     
     
@@ -676,8 +676,8 @@
     \draw[->] (src22) to[bend right = 30] (ev22);
     
     \end{tikzpicture}
-	\caption[Различный порядок получения сообщений от внешних потоков]{Различный порядок получения сообщений от внешних потоков}
-	\label{fig:same-time-stamp}
+    \caption[Различный порядок получения сообщений от внешних потоков]{Различный порядок получения сообщений от внешних потоков}
+    \label{fig:same-time-stamp}
 \end{figure}
 
 Каким образом можно детерминистичным образом упорядочить обработку событий в данных условиях?
@@ -746,7 +746,7 @@
 \paragraph{Потолок ускорения от параллелизма.} Верхнюю границу значения ускорения, получаемого в случае использования параллельного симулятора вместо последовательного, устанавливает степень параллелизма, проявляемого гостевым приложением. Никакой параллельный симулятор не будет в состоянии ускорить код, каждый этап исполнения которого зависит от предыдущего. Поэтому, прежде чем вкладывать усилия в трудоёмкий процесс написания параллельных моделей, необходимо определить, способен ли целевой класс гостевых приложений использовать весь создаваемый потенциал.
 
 \iftoggle{hasquiz}{
-	\input{chapter08-questions}
+    \input{chapter08-questions}
 }{}
 
 \iftoggle{webpaper}{
