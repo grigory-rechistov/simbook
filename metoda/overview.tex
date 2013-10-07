@@ -13,11 +13,11 @@
     % \includegraphics[width=\textwidth]{./idea-crop.pdf}
     \begin{tikzpicture}
       
-        \node[inner sep=0pt] (rack-system) {\includegraphics[width=2.5cm]{./rack-system.png}};
+        \node[inner sep=0pt] (rack-system) {\includegraphics[width=2.5cm]{rack-system.png}};
         \node[above=0cm of rack-system, font=\footnotesize] {Модель};
         \node[cloud, draw, aspect=1.5, text width=3.2cm] at (rack-system) (cloud) {};
         
-        \node[right=2cm of rack-system, yshift=-1cm] (laptop) {\includegraphics[width=2.2cm]{./laptop.png}};
+        \node[right=2cm of rack-system, yshift=-1cm] (laptop) {\includegraphics[width=2.2cm]{laptop.png}};
         \node[color=white, anchor=base, font=\footnotesize, yshift=0.2cm] at (laptop) {\textbf{Симулятор}};
         
         \path[] (cloud) -- (laptop) node[draw, pos=0.6, sloped, single arrow, text width=0.4cm] {};

@@ -4,7 +4,7 @@
 \documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
 %\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
 
-\def \documentversion {2.4} % increment and don't forget to update history.tex
+\def \documentversion {2.6} % increment and don't forget to update history.tex
 \tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
 \emergencystretch=3cm
 
@@ -50,13 +50,11 @@
 \setmonofont{CMU Typewriter Text}
 
 \newcommand{\abbr}{\textit{англ.}\ }
-\newcommand{\todo}{{\color{red}TODO}\ }
+\newcommand{\todo}[1][]{\textcolor{red}{TODO #1}}
 \usepackage{graphicx}
-\graphicspath{..}
-\graphicspath{../..}
 
 \usepackage{hyperref}
-\hypersetup{colorlinks=true, linkcolor=black, filecolor=black, citecolor=black, urlcolor=black , pdfauthor=Grigory Rechistov <grigory.rechistov@phystech.edu>, pdftitle=Основы программного моделирования ЭВМ}
+\hypersetup{colorlinks=true, linkcolor=black, filecolor=black, citecolor=black, urlcolor=black , pdfauthor=Grigory Rechistov <grigory.rechistov@phystech.edu>, pdftitle=Программное моделирование вычислительных систем}
 
 \usepackage{footnpag}
 \usepackage{indentfirst}
@@ -111,6 +109,7 @@
 
 \usepackage{tikz}
 \usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing,chains, snakes}
+\usepackage{bytefield}
 
 \renewcommand{\chapterheadstartvskip}{\vspace *{-\baselineskip }} % Move chapter titles higher
 \setcapindent{0pt} % make multi-line captions to be not indented, save some space with this
@@ -121,7 +120,7 @@
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % Dots to TOC chapter titles
 %\setlength{\cftaftertoctitleskip}{20pt}
 
-\title{Основы программного моделирования ЭВМ}
+\title{Программное моделирование вычислительных систем}
 \date{\today}
 
 \addtokomafont{caption}{\small}
@@ -209,8 +208,6 @@
     % Changelog here
     \input{history.tex}
 }{} % Nothing for printed version
-
-
 
 \iftoggle{webpaper}{
     % No bibliography for the web version
