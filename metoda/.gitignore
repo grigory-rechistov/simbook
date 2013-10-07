@@ -8,3 +8,6 @@
 *.toc
 *.blg
 *.bbl
+*.synctex.gz
+*.backup
+
