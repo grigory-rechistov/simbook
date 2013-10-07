@@ -344,18 +344,20 @@ typedef struct decode_result {
 
 Каждое логическое поле инструкции, такое как номер регистра, может зависеть от нескольких битовых полей, а также режима процессора. Например, в последних поколениях IA-32 номер одного из векторных регистров ZMM (шириной 5 бит) в 64-битном режиме процессора  определяется как комбинация следующих битовых полей : 3 бита \texttt{ModRM.Reg}, 1 бит \texttt{REX.R} и 1 бит \texttt{EVEX.\={R}}, причём последний из них следует инвертировать.
 
-% \subsection{Дерево}
-% 
-% На рис.~\ref{fig:decode-tree}
-% 
-% \begin{figure}[htb]
-%     \centering
-%     \begin{tikzpicture}[>=latex,font=\small]
-%         \node {\todo{Дерево}};
-%     \end{tikzpicture}
-%     \caption{Дерево декодирования}
-%     \label{fig:decode-tree}
-% \end{figure}
+\subsection{Оптимизация процесса декодирования}
+
+Число шаблонов, с которыми необходимо сравнивать декодируемый массив, может быть огромно. \todo
+
+На рис.~\ref{fig:decode-tree}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}[>=latex,font=\small]
+        \node {\todo{Дерево}};
+    \end{tikzpicture}
+    \caption{Дерево декодирования}
+    \label{fig:decode-tree}
+\end{figure}
 
 % \section[Преимущества и недостатки интерпретатора]{Преимущества и недостатки интерпретатора}
 % 
@@ -415,6 +417,16 @@ typedef struct decode_result {
     \centering
     \begin{tikzpicture}[>=latex,font=\small]
         \node {\todo{Две блок-схемы}};
+        
+        \node[draw] (switch) {\texttt{switch}};
+        
+        \node[minimum width = 1.5cm, draw, below=of switch.south east] (ssr1) {SR1};
+        \node[minimum width = 1.5cm, draw, below=0.2cm of ssr1] (ssr2) {SR2};
+        \node[minimum width = 1.5cm, draw, below=0.2cm of ssr2] (ssr3) {SR3};
+        \node[minimum width = 1.5cm, draw, below=0.2cm of ssr3] (ssr4) {SR4};
+        
+        
+        
     \end{tikzpicture}
     \caption{Сравнение методов переключаемой и сцепленной интерпретаций}
     \label{fig:threaded-interp}
