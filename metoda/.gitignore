@@ -10,4 +10,4 @@
 *.bbl
 *.synctex.gz
 *.backup
-
+.*.kate-swp
