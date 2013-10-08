@@ -67,14 +67,14 @@ typedef struct {
 
 \item Исполнение (\abbr execute) состоит из непосредственной симуляции функции только что декодированной инструкции. Как правило, это вычисление результата арифметической или логической операции, изменение режима модели процессора или передача контроля управления в другую секцию алгоритма.
 
-В модели каждому коду машинной операции (\textit{опкоду}) должна соответствовать моделирующая процедура. Выбор нужной процедуры производится по опкоду:
+Каждому коду машинной операции (\textit{опкоду}) в модели должна соответствовать одна моделирующая процедура (\abbr service routine). В самой простой схеме интерпретатора выбор процедуры по опкоду производится с помощью конструкции множественного выбора --- переключателя --- используемого языка программирования. В языке Си это оператор \texttt{switch}, поэтому данная схема имеет название \textit{переключаемая} (\abbr switched):
 
 \begin{lstlisting}
 switch (opcode) {
-    case OPERATION1: ...
-    case OPERATION2: ...
+    case OPERATION1: ... // процедура 1
+    case OPERATION2: ... // процедура 2
     ...
-    default: ... // unknown command
+    default: ... // неизвестная инструкция
 }
 \end{lstlisting}
 
@@ -342,7 +342,7 @@ typedef struct decode_result {
 
 \subsubsection{Связь битовых и логических полей инструкции}
 
-Каждое логическое поле инструкции, такое как номер регистра, может зависеть от нескольких битовых полей, а также режима процессора. Например, в последних поколениях IA-32 номер одного из векторных регистров ZMM (шириной 5 бит) в 64-битном режиме процессора  определяется как комбинация следующих битовых полей : 3 бита \texttt{ModRM.Reg}, 1 бит \texttt{REX.R} и 1 бит \texttt{EVEX.\={R}}, причём последний из них следует инвертировать.
+Каждое логическое поле инструкции, такое как номер регистра, может зависеть от нескольких битовых полей, а также режима процессора. Например, в последних поколениях архитектуры IA-32 номер одного операнда --- векторного регистра ZMM --- в 64-битном режиме процессора определяется как комбинация следующих битовых полей : 3 бита \texttt{ModRM.Reg}, 1 бит \texttt{REX.R} и 1 бит \texttt{EVEX.\={R}}, причём последний из них следует инвертировать.
 
 \subsection{Оптимизация процесса декодирования}
 
@@ -415,20 +415,42 @@ typedef struct decode_result {
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[>=latex,font=\small]
-        \node {\todo{Две блок-схемы}};
-        
-        \node[draw] (switch) {\texttt{switch}};
-        
-        \node[minimum width = 1.5cm, draw, below=of switch.south east] (ssr1) {SR1};
-        \node[minimum width = 1.5cm, draw, below=0.2cm of ssr1] (ssr2) {SR2};
-        \node[minimum width = 1.5cm, draw, below=0.2cm of ssr2] (ssr3) {SR3};
-        \node[minimum width = 1.5cm, draw, below=0.2cm of ssr3] (ssr4) {SR4};
-        
-        
-        
-    \end{tikzpicture}
-    \caption{Сравнение методов переключаемой и сцепленной интерпретаций}
+    \subfigure[Переключаемый интерпретатор]{
+        \begin{tikzpicture}[>=latex,font=\small]
+            \clip[] (-0.8,1.7) rectangle (4,-3.5); % This is an ugly hack
+            
+            \node[draw] (switch) {\texttt{switch}};
+            \node[minimum width = 1.2cm, draw, below=0.5cm of switch.south east, anchor=west] (ssr1) {SR1};
+            \node[minimum width = 1.2cm, draw, below=0.2cm of ssr1] (ssr2) {SR2};
+            \node[minimum width = 1.2cm, draw, below=0.2cm of ssr2] (ssr3) {SR3};
+            \node[minimum width = 1.2cm, draw, below=0.2cm of ssr3] (ssr4) {SR4};
+            
+           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr1);
+           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr2);
+           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr3);
+           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr4);
+           
+           \draw[->]  (ssr1.east) .. controls +(1,0) and +(0,1) .. (switch.north);
+           \draw[->]  (ssr2.east) .. controls +(2,0) and +(0,2) .. (switch.north);
+           \draw[->]  (ssr3.east) .. controls +(3,0) and +(0,3) .. (switch.north);
+           \draw[->]  (ssr4.east) .. controls +(4,0) and +(0,4) .. (switch.north);
+        \end{tikzpicture}
+    }
+    \subfigure[Сцепленный интерпретатор]{
+        \begin{tikzpicture}[>=latex,font=\small]
+            \clip[] (-2,0.5) rectangle (2.5,-4.2); % This is an ugly hack
+            \node[minimum width = 1.2cm, draw,]                   (tsr1) {SR1};
+            \node[minimum width = 1.2cm, draw, below=0.7cm of tsr1] (tsr2) {SR2};
+            \node[minimum width = 1.2cm, draw, below=0.7cm of tsr2] (tsr3) {SR3};
+            \node[minimum width = 1.2cm, draw, below=0.7cm of tsr3] (tsr4) {SR4};
+            
+            \draw[->] (tsr1.south) .. controls +(2,-1) and +(2,1) .. (tsr3.north);
+            \draw[->] (tsr3.south) .. controls +(-2,-1) and +(-2,1) .. (tsr2.north);
+            \draw[->] (tsr2.south) .. controls +(2,-1) and +(2,1) .. (tsr4.north);
+           
+        \end{tikzpicture}
+    }  
+    \caption{Сравнение последовательности передачи управления для переключаемой и сцепленной интерпретаций}
     \label{fig:threaded-interp}
 \end{figure}
 
@@ -454,26 +476,26 @@ INSTR_X: // Текущая инструкция X
 \begin{figure}[htb]
     \centering
     % \includegraphics[width=0.5\textwidth]{./cached-interp-crop}
-    \begin{tikzpicture}[>=latex,
-    action/.style={ rectangle, draw, node distance=2cm, text badly centered, text width=2.5cm},
-    choice/.style={diamond, draw, aspect=2, node distance=2.5cm, text badly centered, text width=2.5cm, inner sep=0cm},
-    complexaction/.style={rectangle, draw, rounded corners, node distance=2cm, text badly centered},
+    \begin{tikzpicture}[>=latex, font=\small,
+    action/.style={ rectangle, draw, text badly centered, text width=2.cm},
+    choice/.style={diamond, draw, aspect=2, text badly centered, text width=2.cm, inner sep=1pt},
+    complexaction/.style={rectangle, draw, rounded corners, text badly centered},
     ]
     \node[choice]       (is-decoded)   {\scriptsize Инструкция декодирована?};
-    \node[action, below of=is-decoded] (fetch-instr)      {Извлечь инструкцию};
-    \node[action, below of=fetch-instr] (decode)      {Декодировать};
-    \node[complexaction, matrix, below of=decode, yshift=-1cm, row sep=0.1cm, text width=4cm]   (cache-decode) {
+    \node[action, below=0.5cm of is-decoded] (fetch-instr)      {Извлечь инструкцию};
+    \node[action, below=0.5cm  of fetch-instr] (decode)      {Декодировать};
+    \node[complexaction, matrix, below=0.5cm  of decode, row sep=0.1cm, text width=4cm]   (cache-decode) {
         \node{Сохранить декодированное представление}; \\
         \node[complexaction] {Управление хранилищем кода}; \\
         };
-    \node[action, below of=cache-decode, yshift=-1cm] (execute)   {Исполнить};
+    \node[action, below=0.5cm of cache-decode] (execute)   {Исполнить};
     
     \path[->, draw] (is-decoded.east) -| ([xshift=2cm] execute.east) node[near start, above] {Да} -- (execute.east);
     \path[->, draw] (is-decoded.south) -- (fetch-instr.north) node[midway, right] {Нет};
     \path[->, draw] (fetch-instr.south) -- (decode.north);
     \path[->, draw] (decode.south) -- (cache-decode.north);
     \path[->, draw] (cache-decode.south) -- (execute.north);
-    \path[->, draw] (execute.south) |-  ([xshift=-2cm, yshift=-1.0cm] execute.west) |- ([xshift=-2.5cm,yshift=0.5cm] is-decoded.north) -| (is-decoded.north);
+    \path[->, draw] (execute.south) |-  ([xshift=-2cm, yshift=-0.5cm] execute.west) |- ([xshift=-2.5cm,yshift=0.5cm] is-decoded.north) -| (is-decoded.north);
     
     \end{tikzpicture}
     \caption{Схема работы кэширующего интерпретатора}
@@ -488,18 +510,18 @@ INSTR_X: // Текущая инструкция X
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[>=latex,font=\small,
+    \begin{tikzpicture}[>=latex,font=\footnotesize,
     action/.style={ rectangle, draw, node distance=2cm, text badly centered, text width=2.5cm},
     choice/.style={diamond, draw, aspect=2, node distance=2cm, text badly centered, text width=2.5cm, inner sep=0cm}
     ]
     \node[action]                           (decode-d1)  {Декодировать, используя D1};
-    \node[choice, below of=decode-d1]       (is-decoded) {Успешно декодирована?};
-    \node[action, below of=is-decoded, yshift=-0.25cm]      (exec1)      {Исполнить обработчик};
-    \node[action, below of=is-decoded, xshift=3cm]      (decode-d2)  {Декодировать, используя D2};
-    \node[choice, below of=decode-d2]       (is-decoded-2)     {Успешно декодирована?};
-    \node[action, below of=is-decoded-2, yshift=-0.25cm]    (exec2)    {Исполнить обработчик};
-    \node[action, below of=is-decoded-2, xshift=3cm]      (exception)  {Перейти на обработчик исключения};
-    \node[action, below of=exec2]           (next-instr)  {Перейти к следующей инструкции};
+    \node[choice, below=0.5cm of decode-d1]       (is-decoded) {Успешно декодирована?};
+    \node[action, below=0.5cm of is-decoded, yshift=-0.25cm]      (exec1)      {Исполнить обработчик};
+    \node[action, below=0.5cm of is-decoded, xshift=3cm]      (decode-d2)  {Декодировать, используя D2};
+    \node[choice, below=0.5cm of decode-d2]       (is-decoded-2)     {Успешно декодирована?};
+    \node[action, below=0.5cm of is-decoded-2, yshift=-0.25cm]    (exec2)    {Исполнить обработчик};
+    \node[action, below=0.5cm of is-decoded-2, xshift=3cm]      (exception)  {Перейти на обработчик исключения};
+    \node[action, below=0.5cm of exec2]           (next-instr)  {Перейти к следующей инструкции};
     
     \path[->, draw] (decode-d1.south) -- (is-decoded.north);
     \path[->, draw] (is-decoded.south) -- (exec1.north) node[midway, right] {Да};
@@ -510,7 +532,7 @@ INSTR_X: // Текущая инструкция X
     \path[->, draw] (is-decoded-2.east) -| (exception.north) node[near start, above] {Нет};
     \path[->, draw] (exec2.south) -- (next-instr.north);
     \path[->, draw] (exception.south) |- (next-instr.east);
-    \path[->, draw] (next-instr.south) |-  ([xshift=-4cm, yshift=-1.5cm] next-instr.west) -| ([xshift=-2.5cm,yshift=0.5cm] decode-d1.north) -| (decode-d1.north);
+    \path[->, draw] (next-instr.south) |-  ([xshift=-4cm, yshift=-0.5cm] next-instr.south west) -| ([xshift=-2.5cm,yshift=0.5cm] decode-d1.north) -| (decode-d1.north);
     
     \end{tikzpicture}
     \caption[Ступенчатая схема вызова декодеров]{Ступенчатая схема вызова декодеров при обнаружении инструкции, не поддерживаемой оригинальной моделью. При обнаружении в потоке инструкций машинного кода, не распознаваемого D1, управление передаётся на D2}
