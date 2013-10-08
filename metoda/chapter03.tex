@@ -346,16 +346,34 @@ typedef struct decode_result {
 
 \subsection{Оптимизация процесса декодирования}
 
-Число шаблонов, с которыми необходимо сравнивать декодируемый массив, может быть огромно. \todo
+Число шаблонов, с которыми необходимо сравнивать декодируемый массив, может быть огромно. \todo{WRITE ME}
 
-На рис.~\ref{fig:decode-tree}
+На рис.~\ref{fig:decode-tree}.
 
 \begin{figure}[htb]
     \centering
+    \bytefieldsetup{bitwidth=0.25cm, endianness = big}    
+    \begin{bytefield}[]{16}
+        \bitbox{2}{00} & \bitbox{14}{b} \\[0.25cm]
+        \bitbox{2}{01} & \bitbox{14}{b} \\[0.25cm]
+        \bitbox{2}{10} & \bitbox{2}{01} & \bitbox{12}{d} \\[0.25cm]
+        \bitbox{2}{10} & \bitbox{3}{100} & \bitbox{11}{f}
+    \end{bytefield}
+
     \begin{tikzpicture}[>=latex,font=\small]
-        \node {\todo{Дерево}};
+        \node {\todo{Дерево}}
+          child {node{a=00}
+            child {node{OK}}
+            }
+          child {node{a=01}
+            child {node{OK}}
+            }
+          child {node{a=10}}
+          child {node{a=11}};
+        
+        
     \end{tikzpicture}
-    \caption{Дерево декодирования}
+    \caption[Таблица шаблонов и дерево декодирования]{Пример таблицы шаблонов некоторого набора инструкций и эквивалентное ему дерево декодирования}
     \label{fig:decode-tree}
 \end{figure}
 
