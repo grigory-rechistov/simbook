@@ -1,6 +1,6 @@
 \chapter{Архитектурное состояние}\label{chapter10}
 
-\dictum[The Jargon File (version 4.4.7)\footnotemark]{\textbf{bytesexual}, \textit{adj.} [rare] Said of hardware, denotes willingness to compute or pass data in either big-endian or little-endian format (depending, presumably, on a mode bit somewhere).}
+\dictum[mind.in.a.box --- I Love 64]{I want to upgrade from my simple eight bits, but will you still love me when I'm sixty-four?}
 
 \footnotetext{\url{http://www.catb.org/jargon/}}
 
@@ -106,6 +106,8 @@ uint32_t rd_a = *(uint32_t*)(reg_space + offset_a); // чтение регист
 Принцип моделирования блоков памяти не отличается от рассмотренной выше схемы банка регистров; однако ячейки памяти не имеют ассоциированных с ними имён и характеризуются только смещением относительно начала банка; ширина читаемых из памяти данных тоже может варьироваться и определяется архитектурными особенностями моделируемой системы.
 
 \subsection{Endianness}
+
+\dictum[The Jargon File (version 4.4.7)\footnotemark]{\textbf{bytesexual}, \textit{adj.} [rare] Said of hardware, denotes willingness to compute or pass data in either big-endian or little-endian format (depending, presumably, on a mode bit somewhere).}
 
 Дополнительным фактором, который всегда необходимо учитывать при проектировании и написании моделей, является, возможно, различный порядок адресации байт внутри слов, двойных слов и прочих многобайтных чисел (\abbr Endianness), используемых системами хозяина и гостя.
 
