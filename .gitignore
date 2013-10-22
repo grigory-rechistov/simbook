@@ -1,2 +1,13 @@
+*.aux
+*.out
+*.log
+*.bcf
+*.swp
+*.fot
+*.run.xml
+*.toc
+*.blg
+*.bbl
+*.synctex.gz
+.*.kate-swp
 *.backup
-
