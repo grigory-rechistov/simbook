@@ -82,11 +82,33 @@
 
 \textbf{SystemC} --- язык проектирования и верификации моделей системного уровня, реализованный в виде библиотеки C++, которая включает компоненты дискретного моделирования событий~\cite{systemc2006}.
 
+\todo Accelera+SystemC -> Accelera systems initiative \url{http://accelera.org}
+
 SystemC курируется организацией «Open SystemC Initiative», созданной в 1999 году, был принят ассоциацией IEEE как стандарт IEEE 1666-2005, обновленный в 2011 году как IEEE 1666-2011. Существует «эталонная» реализация данной библиотеки, однако большое количество компаний-разработчиков аппаратуры  выпустили свои реализации и инструменты, основанные на спецификации и совместимые между собой.
+
+\paragraph{История}
+
+Date	Version	Notes
+Sept 1999	0.9	First version; Cycled based
+Mar 2000	1.0	Widely accessed major release
+Aug 2002	2.0	Add channels and events; cleaner syntax
+Apr 2002	2.0.1	Bug fixes; widely used
+Dec 2005	2.1.v1	IEEE approves the IEEE 1666–2005 standard for SystemC 
+Jun 2008	2.2.05	TLM-2.0.0 library released
+Nov 2011	2.3.0	IEEE approves the IEEE 1666–2011 standard for SystemC 
+
+
+\subsubsection{Архитектура }
 
 Язык использует возможности нижележащего С++ для объектной декомпозиции разрабатываемых моделей, а также возможностей шаблонного описания используемых данных. 
 
 Несмотря на то, что первая версия SystemC решала поставленную перед ней задачу адекватного отражения необходимых понятий моделирования, было принято решение об улучшении степени абстрагирования отдельных подкомпонент и транзакций от деталей их реализации. Это расширение было создано согласно принципам \textbf{TLM} (\abbr Transaction Level Modeling)~\cite{tlm2003} и вошло во вторую версию стандарта SystemC. 
+
+\todo Описать
+
+\includegraphics[width=\textwidth]{./tmp/systemc-arch.png}
+
+\subsubsection{Пример}
 
 Пример кода, использующего SystemC\footnote{Приведённые ниже примеры кода на языках SystemC, Verilog  и VHDL взяты из Wikipedia.}.
 
@@ -105,9 +127,30 @@ SC_MODULE(adder) {        // module (class) declaration
 };
 \end{lstlisting} 
 
+\subsubsection{Компиляция}
+
+\todo Описать
+
+\includegraphics[width=\textwidth]{./tmp/systemc-compilation.png}
+
+
 \subsubsection{Планировщик симулируемого времени SystemC}
 
 \todo Описать
+
+Управляет исполнением процессов
+
+Дискретно событийный
+
+Невытесняющая многозодачность
+
+Детерминистичен относительно событий, упорядоченных во времени
+
+\includegraphics[width=\textwidth]{./tmp/systemc-scheduler.png}
+
+
+\todo Send to review by Tyurin and add acknowledgements for him 
+
 
 \subsection{Специализированные языки}
 
