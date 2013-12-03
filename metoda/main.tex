@@ -4,8 +4,11 @@
 \documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
 %\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
 
-\def \documentversion {2.9} % increment and don't forget to update history.tex
+\def \documentversion {2.9$\beta$} % increment and don't forget to update history.tex
 \tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
+
+\widowpenalty=9998 % try to avoid widow lines
+\clubpenalty=9998 % try to avoid orphan lines
 \emergencystretch=3cm
 
 % A switch to change between document rendering options
@@ -137,9 +140,9 @@
 
 \begin{document}
 
-%\include{chapter05}
+% \include{chapter12}
 
-%\end{document}
+% \end{document}
 
 % Change bibliography format from "[1]" to "1." for bibtex
 \makeatletter\renewcommand\@biblabel[1]{#1.}\makeatother
