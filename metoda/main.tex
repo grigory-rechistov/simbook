@@ -44,9 +44,7 @@
 \setotherlanguage{english} % for polyglossia
 
 \defaultfontfeatures{Scale=MatchLowercase, Mapping=tex-text}
-\newfontfamily\russianfont{EB Garamond}
-\setromanfont{EB Garamond}
-\newfontfamily{\smallcaps}[RawFeature={+c2sc,+scmp}]{EB Garamond} % It is preferable to use the +c2sc and +scmp features for Small Caps, rather than the SC or ALLSC font files. 
+\newfontfamily\russianfont[Numbers=Uppercase, SmallCapsFont={EBGaramond12-SC},SmallCapsFeatures={Letters=SmallCaps}]{EB Garamond}
 
 \setsansfont[Scale=MatchLowercase]{CMU Sans Serif}
 \setmonofont[Scale=MatchLowercase]{CMU Typewriter Text}
