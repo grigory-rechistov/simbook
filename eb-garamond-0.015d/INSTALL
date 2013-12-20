@@ -1,0 +1,12 @@
+=Installation notes=
+
+==Linux==
+Copy the folder inside $HOME/.fonts/ directory and then run 'fc-cache' program.
+You can check if the fonts are included into the Fontconfig database by running 'fc-list |grep EB Garamond'.
+You can also use your desktop environment (e.g., KDE) to install fonts.
+This is per-user install. For system-wide installation refer to the Fontconfig manual.
+
+==Windows==
+Select all OTF files. Right click, then select "Install".
+To check results navigate to C:\Windows\Fonts folder and look for "EB Garamond" family.
+
