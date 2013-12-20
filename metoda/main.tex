@@ -4,7 +4,7 @@
 \documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
 %\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
 
-\def \documentversion {2.9$\beta$} % increment and don't forget to update history.tex
+\def \documentversion {2.10$\beta$} % increment and don't forget to update history.tex
 \tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
 
 \widowpenalty=9998 % try to avoid widow lines
@@ -42,15 +42,14 @@
 \usepackage{polyglossia}
 \setdefaultlanguage[spelling=modern]{russian} % for polyglossia
 \setotherlanguage{english} % for polyglossia
+
 \defaultfontfeatures{Scale=MatchLowercase, Mapping=tex-text}
+\newfontfamily\russianfont{EB Garamond}
+\setromanfont{EB Garamond}
+\newfontfamily{\smallcaps}[RawFeature={+c2sc,+scmp}]{EB Garamond} % It is preferable to use the +c2sc and +scmp features for Small Caps, rather than the SC or ALLSC font files. 
 
-\newfontfamily\russianfont{Garamond Premier Pro}
-\setromanfont{Garamond Premier Pro}
-
-% \newfontfamily\russianfont{CMU Serif}
-% \setromanfont{CMU Serif}
-\setsansfont{CMU Sans Serif}
-\setmonofont{CMU Typewriter Text}
+\setsansfont[Scale=MatchLowercase]{CMU Sans Serif}
+\setmonofont[Scale=MatchLowercase]{CMU Typewriter Text}
 
 \newcommand{\abbr}{\textit{англ.}\ }
 \newcommand{\todo}[1][]{\textcolor{red}{TODO #1}}
