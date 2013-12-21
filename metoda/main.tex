@@ -1,10 +1,12 @@
 % Can be compied with XelaTeX from:
-% * TL 2011 - a patched distro version
-% * TL 2013 - vanilla
+% * TL 2011 - a patched distro version (deprecated, may not work)
+% * TL 2013 - recent versions
+% FIXME: EB Garamond Bold font face is absent at the moment. 
+
 \documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
 %\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
 
-\def \documentversion {2.9$\beta$} % increment and don't forget to update history.tex
+\def \documentversion {2.10$\beta$} % increment and don't forget to update history.tex
 \tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
 
 \widowpenalty=9998 % try to avoid widow lines
@@ -42,15 +44,12 @@
 \usepackage{polyglossia}
 \setdefaultlanguage[spelling=modern]{russian} % for polyglossia
 \setotherlanguage{english} % for polyglossia
+
 \defaultfontfeatures{Scale=MatchLowercase, Mapping=tex-text}
+\newfontfamily\russianfont[Numbers=Uppercase, SmallCapsFont={EBGaramond12-SC},SmallCapsFeatures={Letters=SmallCaps}]{EB Garamond}
 
-\newfontfamily\russianfont{Garamond Premier Pro}
-\setromanfont{Garamond Premier Pro}
-
-% \newfontfamily\russianfont{CMU Serif}
-% \setromanfont{CMU Serif}
-\setsansfont{CMU Sans Serif}
-\setmonofont{CMU Typewriter Text}
+\setsansfont[Scale=MatchLowercase]{CMU Sans Serif}
+\setmonofont[Scale=MatchLowercase]{CMU Typewriter Text}
 
 \newcommand{\abbr}{\textit{англ.}\ }
 \newcommand{\todo}[1][]{\textcolor{red}{TODO #1}}
@@ -111,7 +110,7 @@
 \usepackage{verbatim}
 
 \usepackage{tikz}
-\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing,chains, snakes}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
 \usepackage{bytefield}
 
 \renewcommand{\chapterheadstartvskip}{\vspace *{-\baselineskip }} % Move chapter titles higher
