@@ -45,8 +45,18 @@
 \setdefaultlanguage[spelling=modern]{russian} % for polyglossia
 \setotherlanguage{english} % for polyglossia
 
+% Common settings for all fonts
+% 1. Attempt to make fonts be of the same size
+% 2. Support TeX ligatures like --- = emdash, << >> = guillemets
 \defaultfontfeatures{Scale=MatchLowercase, Mapping=tex-text}
-\newfontfamily\russianfont[Numbers=Uppercase, SmallCapsFont={EBGaramond12-SC},SmallCapsFeatures={Letters=SmallCaps}]{EB Garamond}
+% Playing with OTF font features of EB Garamond
+% 1. Regular numbers (not old style)
+% 2. Triangular variations for Russian "д" and "л"
+% 3. Choose font for small caps and explicitly enable them
+\newfontfamily\russianfont[Numbers=Uppercase, 
+                           StylisticSet={1}, 
+                           SmallCapsFont={EBGaramond12-SC},SmallCapsFeatures={Letters=SmallCaps}]
+                           {EB Garamond}
 
 \setsansfont[Scale=MatchLowercase]{CMU Sans Serif}
 \setmonofont[Scale=MatchLowercase]{CMU Typewriter Text}
@@ -158,7 +168,6 @@
 } {
     % Put TOC to the end.
 }
-
 
 \include{contrib}
 
