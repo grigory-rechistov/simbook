@@ -17,10 +17,6 @@
 \usepackage{etoolbox}
 \newtoggle{webpaper}
 \toggletrue{webpaper}
-%\togglefalse{webpaper}
-\newtoggle{hasquiz} % An option to add quizes at the end of each chapter.
-\togglefalse{hasquiz}
-\toggletrue{hasquiz}
 
 \newtoggle{showanswers} % An option to show answers in quizes.
 \togglefalse{showanswers}
@@ -29,36 +25,21 @@
 \togglefalse{inappendix} % ... but not yet
 
 \usepackage[top=2.0cm, bottom=2.0cm, left=1.84cm, right=1.5cm, footskip=1cm]{geometry}
+\pagestyle{plain} % no headers, page numbers in footers
 
 \input{setup-fonts}
 \input{main-packages}
 \input{setup-appendix}
-\input{setup-biblio}
-
+% \input{setup-biblio} % TODO setup
 \input{setup-hacks}
-
-\title{Программное моделирование вычислительных систем}
-\date{\today}
-
-\iftoggle{hasquiz}{\input{examp-dummy}}{}
-\pagestyle{plain} % no headers, page numbers in footers
+\input{examp-dummy}
 
 \begin{document}
 
 \makeatletter\renewcommand\@biblabel[1]{#1.}\makeatother
 
-\iftoggle{webpaper}{
-    \include{title}
-} {
-    \include{title-print}
-    \include{backside}
-}
-
-\iftoggle{webpaper}{
-    \tableofcontents
-} {
-    % Put TOC to the end.
-}
+\include{title-print}
+\include{backside}
 
 \include{contrib}
 
@@ -90,33 +71,18 @@
 
 \include{afterword}
 
-\iftoggle{hasquiz}{
-    \toggletrue{inappendix}
-    \appendix
-    \appendixpage
-    \toggletrue{showanswers}
-    \input{examp-dummy}
-    \include{appendix-answers}
+\toggletrue{inappendix}
+\appendix
+\appendixpage
+\toggletrue{showanswers}
+\input{examp-dummy}
+\include{appendix-answers}
 
-    \include{chapter06}     % Chapter 6 has been demoted to an appendix
-    \include{ic-route}     
-}{
-    % No appendix if no quiz.
-}
+\include{chapter06}     % Chapter 6 has been demoted to an appendix
+\include{ic-route}     
 
-\iftoggle{webpaper}{
-    % Changelog here
-    \input{history.tex}
-}{} % Nothing for printed version
+\include{literature}
+\tableofcontents
+\include{lastpage}
 
-\iftoggle{webpaper}{
-    % No bibliography for the web version
-    % Per chapter entries are already in place
-    \include{todo}
-    \phantomsection\label{page:lastpage}
-} {
-    \include{literature}
-    \tableofcontents
-    \include{lastpage}
-}
 \end{document}
