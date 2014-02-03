@@ -1,16 +1,19 @@
+% This variant is used for web PDF version of the book.
 % Can be compied with XelaTeX:
 % * TL 2013 or later
 
 \documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
 %\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
-\typeout{Copyright 2014 Grigory Rechistov and the contributors.}
 
-\def \documentversion {2.11$\beta$} % increment and don't forget to update history.tex
+\include{main-version}
+
 \tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
 
 \widowpenalty=9998 % try to avoid widow lines
 \clubpenalty=9998 % try to avoid orphan lines
 \emergencystretch=3cm
+
+\input{main-packages}
 
 % A switch to change between document rendering options
 \usepackage{etoolbox}
