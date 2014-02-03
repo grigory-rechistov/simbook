@@ -1,1 +1,26 @@
-% Common packages and their configuration
+% Common packages, commands and their configuration
+
+\newcommand{\abbr}{\textit{англ.}\ }
+\newcommand{\todo}[1][]{\textcolor{red}{TODO #1}}
+
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}} % path to pictures, trailing slash is mandatory.
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, filecolor=black, citecolor=black, urlcolor=black , pdfauthor=Grigory Rechistov <grigory.rechistov@phystech.edu>, pdftitle=Программное моделирование вычислительных систем}
+
+\usepackage{footnpag}
+\usepackage{indentfirst}
+\usepackage{underscore}
+\usepackage{url}
+
+\usepackage{listings}
+\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true, keepspaces=true }
+
+\usepackage{listings}
+\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true, keepspaces=true}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\usepackage{bytefield}

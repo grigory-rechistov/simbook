@@ -5,7 +5,7 @@
 \documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
 %\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
 
-\include{main-version}
+\input{main-version}
 
 \tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
 
@@ -31,39 +31,14 @@
 \usepackage[top=2.0cm, bottom=2.0cm, left=1.84cm, right=1.5cm, footskip=1cm]{geometry}
 
 \input{setup-fonts}
-
-\newcommand{\abbr}{\textit{англ.}\ }
-\newcommand{\todo}[1][]{\textcolor{red}{TODO #1}}
-
-\usepackage{graphicx}
-\graphicspath{{pictures/}} % path to pictures, trailing slash is mandatory.
-
-\usepackage{hyperref}
-\hypersetup{colorlinks=true, linkcolor=black, filecolor=black, citecolor=black, urlcolor=black , pdfauthor=Grigory Rechistov <grigory.rechistov@phystech.edu>, pdftitle=Программное моделирование вычислительных систем}
-
-\usepackage{footnpag}
-\usepackage{indentfirst}
-\usepackage{underscore}
-\usepackage{url}
-
-\usepackage{listings}
-\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true, keepspaces=true }
-
+\input{main-packages}
 \input{setup-appendix}
 \input{setup-biblio}
 
 \input{setup-hacks}
 
-\usepackage{listings}
-\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true, keepspaces=true}
-
-\usepackage{tikz}
-\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
-\usepackage{bytefield}
-
 \title{Программное моделирование вычислительных систем}
 \date{\today}
-
 
 \iftoggle{hasquiz}{\input{examp-dummy}}{}
 \pagestyle{plain} % no headers, page numbers in footers
