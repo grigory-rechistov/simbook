@@ -1,0 +1,14 @@
+% Load package and tune params
+
+\usepackage{appendix}
+\renewcommand{\appendixname}{Приложения}
+\renewcommand{\appendixtocname}{Приложения}
+\renewcommand{\appendixpagename}{Приложения}
+\let\plainappendixpage\appendixpage
+\makeatletter
+\renewcommand{\appendixpage}{% Delete page number in appendixpage
+  \begingroup
+  \let\ps@plain\ps@empty
+  \plainappendixpage
+  \endgroup}
+\makeatother

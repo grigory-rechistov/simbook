@@ -1,0 +1,36 @@
+% Custom stylistic adjustments for KOMAscript and fixes for
+% certain problems discovered over time.
+% Most were found on Internet.
+% Some may be obscure
+
+\usepackage{nameref}
+\usepackage{enumitem} % continue enumeration 
+\usepackage{subfigure}
+\renewcommand*{\thesubfigure}{\alph{subfigure})} % only one bracket in subfigures
+\usepackage{mdwlist} % compact itemize lists environment
+\renewcommand{\labelitemi}{--}  % Use endash for itemized lists
+\renewcommand{\dictumwidth}{0.5\textwidth}
+\newcommand{\dictumtext}{\normalfont\normalcolor\sffamily\tiny}
+\renewcommand{\dictumauthorformat}[1]{#1}
+\setcounter{tocdepth}{2}
+
+\usepackage[hang,flushmargin]{footmisc} % correct indent for footnotes
+\usepackage{verbatim}
+
+\usepackage{amsthm}
+\newtheorem*{digression}{Замечание}
+
+\renewcommand{\chapterheadstartvskip}{\vspace *{-\baselineskip }} % Move chapter titles higher
+\setcapindent{0pt} % make multi-line captions to be not indented, save some space with this
+\renewcommand{\captionformat}{~} % do not put colon after figures numbers
+\usepackage[subfigure, titles]{tocloft}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % Dots to TOC chapter titles
+%\setlength{\cftaftertoctitleskip}{20pt}
+
+\let\cleardoublepage\clearpage % do not start from even page
+\setkomafont{pageheadfoot}{% Enforce header and footer to be correct.
+    \normalfont\normalcolor\itshape\small\rmfamily
+}
+\setkomafont{pagenumber}{\normalfont\rmfamily} % fix KOMA bug when footer/header inherits font settings from main text.
+
+\addtokomafont{caption}{\small}
