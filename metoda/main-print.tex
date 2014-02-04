@@ -1,4 +1,4 @@
-% This variant was used for paper printed version of the book.
+% This variant to be used for the printed version of the book.
 % Can be compied with XelaTeX:
 % * TL 2013 or later
 
@@ -11,16 +11,14 @@
 
 \input{main-version}
 
-\tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
-
-\widowpenalty=9998 % try to avoid widow lines
-\clubpenalty=9998 % try to avoid orphan lines
-\emergencystretch=3cm
-
 % A switch to change between document rendering options
 \usepackage{etoolbox}
+
 \newtoggle{webpaper}
-\toggletrue{webpaper}
+\togglefalse{webpaper} % Must by false for print paper 
+
+\newtoggle{htmlpaper} 
+\togglefalse{htmlpaper} % Must be false for non-HTML builds
 
 \newtoggle{showanswers} % An option to show answers in quizes.
 \togglefalse{showanswers}

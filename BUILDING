@@ -6,7 +6,7 @@
 ==Build variants==
 Several variants of builds for the book are avaialble:
 * web - a PDF formatted for reading from screen;
-* paper - a PDf prepared for paper print, with publisher output data;
+* print - a PDf prepared for print, with publisher output data;
 * html - a HTML for online viewing. Note that this version is experimental.
 
 == Build sequence ==

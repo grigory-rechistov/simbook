@@ -1,7 +1,12 @@
 % Custom stylistic adjustments for KOMAscript and fixes for
 % certain problems discovered over time.
 % Most were found on Internet.
-% Some may be obscure
+% Some may be obscure.
+
+\tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
+\widowpenalty=9998 % try to avoid widow lines
+\clubpenalty=9998 % try to avoid orphan lines
+\emergencystretch=3cm
 
 \usepackage{nameref}
 \usepackage{enumitem} % continue enumeration 

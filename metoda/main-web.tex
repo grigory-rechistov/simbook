@@ -11,23 +11,21 @@
 
 \input{main-version}
 
-\tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
-
-\widowpenalty=9998 % try to avoid widow lines
-\clubpenalty=9998 % try to avoid orphan lines
-\emergencystretch=3cm
-
 % A switch to change between document rendering options
 \usepackage{etoolbox}
 
 \newtoggle{webpaper}
-\toggletrue{webpaper}
+\toggletrue{webpaper} % Must be true for Web-PDF
+
+\newtoggle{htmlpaper} 
+\togglefalse{htmlpaper} % Must be false for non-HTML builds
 
 \newtoggle{showanswers} % An option to show answers in quizes.
 \togglefalse{showanswers}
 
 \newtoggle{inappendix} % we are now in appendix
 \togglefalse{inappendix} % ... but not yet
+
 
 \usepackage[top=2.0cm, bottom=2.0cm, left=1.84cm, right=1.5cm, footskip=1cm]{geometry}
 \pagestyle{plain} % no headers, page numbers in footers
