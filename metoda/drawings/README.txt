@@ -1,0 +1,1 @@
+This folder contains TikZ drawings. They are represented with separate TeX files that can be compiled either directly (with -shell-escape option) into a PDF/PNG image or within a book, if they are included with \input.
