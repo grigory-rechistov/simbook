@@ -2,8 +2,11 @@
 % Can be compied with XelaTeX:
 % * TL 2013 or later
 
+% TODO export all Tikz pictures to separate standalone TeX files for HTML build
+% TODO apply letterspacing for titles: \\addfontfeature\{Style=TitlingCaps\} or \\addfontfeature\{ WordSpace = 1.1 \} or \\addfontfeature\{LetterSpace=2.0\}
+% TODO add small caps
+
 \documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
-%\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
 
 \input{main-version}
 
@@ -28,7 +31,7 @@
 \usepackage[top=2.0cm, bottom=2.0cm, left=1.84cm, right=1.5cm, footskip=1cm]{geometry}
 \pagestyle{plain} % no headers, page numbers in footers
 
-\input{setup-fonts}
+\input{setup-web-fonts}
 \input{main-packages}
 \input{setup-appendix}
 \input{setup-biblio}
@@ -80,10 +83,9 @@
 \input{examp-dummy}
 \include{appendix-answers}
 
-\include{alternatives}     % Chapter 6 has been demoted to an appendix
+\include{alternatives}
 \include{ic-route}     
 
-% Changelog here
 \input{history}
 
 \include{todo}

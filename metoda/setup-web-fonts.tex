@@ -1,0 +1,25 @@
+\usepackage{fontspec}
+\usepackage{xunicode} % some extra unicode support
+\usepackage{xltxtra}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{csquotes}
+
+\usepackage{polyglossia}
+\setdefaultlanguage[spelling=modern]{russian} % for polyglossia
+\setotherlanguage{english} % for polyglossia
+
+% Common settings for all fonts
+% 1. Attempt to make fonts be of the same size
+% 2. Support TeX ligatures like --- = emdash, << >> = guillemets
+\defaultfontfeatures{Scale=MatchLowercase, Mapping=tex-text}
+
+% Use Computer Modern Unicode
+\newfontfamily\russianfont{CMU Serif}
+\setromanfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+\newfontfamily\titlefont[LetterSpace=1.5]{CMU Serif}

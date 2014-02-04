@@ -1,1 +1,1 @@
-Keep number of raster images a low as possible. For drawing charts use TikZ facilities.
+Keep number of raster images as low as possible. For drawing charts use TikZ facilities. Put them into drawings folder.
