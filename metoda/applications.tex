@@ -21,7 +21,6 @@
 
 \begin{figure}[htb]
     \centering
-    %\includegraphics[width=\textwidth]{./error-cost-crop.pdf}
     \begin{tikzpicture}[scale=0.9, >=latex]
         \draw[->] (0,0) -- (0,6)  node[very near end, right, text width = 3cm, text badly ragged] {\small{Стоимость исправления ошибки}};
         \draw[->] (0,0) -- (11,0) node[very near end, below] {\small Время};
@@ -161,7 +160,7 @@
 
     \path (-0.5,-2) node[below left] (mon) {Монитор виртуальных машин};  \path (0.5,-2) node[below right] (app-lin) {Приложения Linux};
     \path (0,-3) node[below] (lin) {Linux};
-    \path (0,-4) node (hw) {Аппаратура IA-32};
+    \path (-1,-4) node (hw) {Аппаратура IA-32};
 
     \draw (0, -3) -|
         (node cs:name=mon, anchor=south east) -| (node cs:name=app-win,anchor=north east) -|
