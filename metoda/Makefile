@@ -16,9 +16,14 @@ print: main-print.tex
 	xelatex main-print.tex
 	xelatex main-print.tex
 	
-html:
+html: png-drawings
 	echo Not implemented
-	xelatex -shell-escape
+	echo FIXME xelatex -shell-escape
+
+png-drawings:
+	make -C drawings all
+	
+	
 
 clean:
 	rm -rf *.aux *.log *.fot *.blg *.bcf *.run.xml *.synctex.gz
