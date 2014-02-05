@@ -1,0 +1,54 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}
+\path (-0.5,0) node[below left] (app-win) {Приложения Windows}; \path (0.5,0) node[below right] (app-lin) {Приложения Linux}; 
+\path (-0.5,-1) node[below left, text width=2cm] (win) {Windows};           \path (0.5,-1) node[below right, text width=2cm] (lin) {Linux};
+
+\path (0,-2) node[below] (mon) {Монитор виртуальных машин};
+\path (0,-3) node (hw) {Аппаратура IA-32};
+
+\draw   (node cs:name=app-win, anchor=north west) -- (node cs:name=app-win, anchor=north east) |-
+		(0, -2) ; 
+\draw   (node cs:name=app-lin, anchor=north east) -- (node cs:name=app-lin, anchor=north west) |-
+		(0, -2) ; 
+
+\draw   (node cs:name=win, anchor=north east) -- (node cs:name=win, anchor=north west) -- 
+		(node cs:name=win, anchor=south west);
+
+\draw   (node cs:name=lin, anchor=north west) -- (node cs:name=lin, anchor=north east) -- 
+		(node cs:name=lin, anchor=south east);
+
+\draw [snake=snake] (node cs:name=win, anchor=south east) --  
+		(perpendicular cs:
+		vertical line through  ={(app-win.west)},
+		horizontal line through={(win.south east)} 
+		);
+\draw [snake=snake] (node cs:name=lin, anchor=south west) --  
+		(perpendicular cs:
+		vertical line through  ={(app-lin.east)},
+		horizontal line through={(lin.south west)} 
+		);
+
+\draw[snake=snake] %(node cs:name=hw,anchor=north west) -- (node cs:name=hw,anchor=north east);
+(perpendicular cs:
+		vertical line through  ={(app-lin.east)},
+		horizontal line through={(hw.north)} 
+		) --
+(perpendicular cs:
+		vertical line through  ={(app-win.west)},
+		horizontal line through={(hw.north)} 
+		);
+
+\draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-win, anchor=north west);
+\draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-lin, anchor=north east);
+\end{tikzpicture}
+\end{document}

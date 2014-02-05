@@ -1,0 +1,30 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+   \begin{tikzpicture}
+    \coordinate (A) at (-4,-4) {};
+    \coordinate (B) at ( 4,-4) {};
+    \coordinate (C) at ( 0, 0) {};
+    \draw (A) -- ($(A)!5/6!(C)$);
+    \draw (B) -- ($(B)!5/6!(C)$);
+    \draw ($(A)!5/6!(C)$) -- ($(B)!5/6!(C)$);
+        \foreach \y/\A/\S in {0/{Логические элементы}/{RTL-модели},
+                            1/Микроархитектура/{Потактовые симуляторы},
+                            2/Инструкции/{Функциональные симуляторы},
+                            3/API/{Симуляторы уровня приложения},
+                            4/Поведение/{Аналитические методы}
+                            } {
+            \draw ($(A)!\y/6!(C)$) -- ($(B)!\y/6!(C)$)
+            node[midway,above] {\small\A}
+            node[above right = 0.25cm, draw, rectangle callout, callout relative pointer={(185:0.5cm)}] {\scriptsize\S};
+        }
+    \end{tikzpicture}
+\end{document}

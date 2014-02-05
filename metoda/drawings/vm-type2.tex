@@ -1,0 +1,54 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}
+\path (-0.5,0) node[below left] (app-win) {Приложения Windows};
+
+\path (-0.5,-1) node[below left] (win) {Windows};
+
+\path (-0.5,-2) node[below left] (mon) {Монитор виртуальных машин};  \path (0.5,-2) node[below right] (app-lin) {Приложения Linux};
+\path (0,-3) node[below] (lin) {Linux};
+\path (-1,-4) node (hw) {Аппаратура IA-32};
+
+\draw (0, -3) -|
+	(node cs:name=mon, anchor=south east) -| (node cs:name=app-win,anchor=north east) -|
+	(node cs:name=mon, anchor=south west);
+
+\draw (node cs:name=win, anchor=south west) |- (node cs:name=app-win,anchor=south east);
+
+\draw   (node cs:name=app-lin, anchor=north east) -- (node cs:name=app-lin, anchor=north west) |-
+		(0, -3) ; 
+
+\draw   (node cs:name=hw, anchor=south) -| (node cs:name=mon, anchor=north west);
+\draw   (node cs:name=hw, anchor=south) -| (node cs:name=app-lin, anchor=north east);
+
+\draw [snake=zigzag] (node cs:name=win, anchor=south east) --  
+		(perpendicular cs:
+		vertical line through  ={(mon.west)},
+		horizontal line through={(win.south east)} 
+		);
+\draw [snake=snake] (node cs:name=mon, anchor=south west) --  
+					(node cs:name=mon, anchor=south east) ;
+\draw [snake=snake] (node cs:name=app-lin, anchor=south west) --  
+					(node cs:name=app-lin, anchor=south east) ;
+
+\draw[snake=saw]
+(perpendicular cs:
+		vertical line through  ={(app-lin.east)},
+		horizontal line through={(hw.north)} 
+		) --
+(perpendicular cs:
+		vertical line through  ={(mon.west)},
+		horizontal line through={(hw.north)} 
+		);
+\end{tikzpicture}
+
+\end{document}
