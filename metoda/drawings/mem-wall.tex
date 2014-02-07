@@ -1,0 +1,41 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+
+\begin{tikzpicture}[>=latex, font=\small]
+	% axes
+	\draw[->] (0,0) -- (0, 5.5);
+	\draw[->] (0,0) -- (10, 0);
+	
+	% legend
+	
+	\node at (10,-0.3) {Год};
+	\node[anchor=east, rotate=90] at (-1,5.5) {Относительная производительность};
+	
+	% labels on axes
+	\foreach \y/\lab in {0/{1},1.67/{10},3.33/{100},5/{1000}} {
+            \node[anchor=south east] at (0, \y) {\lab};
+        };
+	\foreach \x/\lab in {0/1980,3.0/1990,6.0/2000,9.0/2010} {
+            \node[anchor=east, rotate=45] at (\x, 0) {\lab};
+        };
+		
+	% plots
+	\draw[thick] plot[domain=0:9, mark=x, mark size=0.99, id=memory] (\x,0.15*\x) coordinate (dram-top);
+	\node at (9,1) {DRAM};
+	
+	\draw[thick] plot[domain=0:9, mark=*, mark size=0.7, id=cpu] (\x,0.55*\x) coordinate (cpu-top);
+	\node[anchor=south] at (9,5) {CPU};
+	
+	\draw[<->] (dram-top) -- (cpu-top) node [midway, fill=white, text width=2cm, align=left] {Разрыв процессор--память: рост 50\% в год};
+	
+\end{tikzpicture}
+\end{document}

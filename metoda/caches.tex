@@ -8,8 +8,13 @@
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.85\textwidth]{./mem-wall-crop.pdf}
-    \caption{Сравнительный рост скорости оперативной памяти и микропроцессоров}
+    % \includegraphics[width=0.85\textwidth]{./mem-wall-crop.pdf}
+		\iftoggle{htmlpaper}{
+		\includegraphics{drawings/mem-wall-0}
+	}{
+		\input{drawings/mem-wall}
+	}
+    \caption[Сравнение темпов роста скоростей памяти и ЦПУ]{Сравнение темпов роста скоростей оперативной памяти (DRAM) и микропроцессоров (CPU)}
     \label{fig:mem-wall}
 \end{figure}
 
