@@ -34,23 +34,7 @@
 
 \begin{figure}[htbp]
     \centering
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    \node[matrix, column sep={0.5cm}, row sep={0.1cm}, nodes={text width = 2.3cm, align=center, inner sep=3pt}] (separate)
-    {
-        \node (t1) {Хозяйский поток 1}; & \node (t2) {Хозяйский поток 2}; & \node (t3) {Хозяйский поток $N$}; \\[0.25cm]
-        \node[draw] {Процессор 1};  & \node[draw] {Процессор 3}; & \node[draw] {Процессор $K-1$}; \\
-        \node[draw] {Процессор 2};  & \node[draw] {Процессор 4}; & \node[draw] {Процессор $K$}; \\[0.25cm]
-        \node[draw] {Устройство А};  & \node[draw] {Устройство В}; & \node[draw] {Устройство Ю}; \\
-        \node[draw] {Устройство Б};  & \node[draw] {Устройство Г}; & \node[draw] {Устройство Я}; \\
-        \node[draw] {Очередь 1};  & \node[draw] {Очередь 2}; & \node[draw] {Очередь $N$}; \\[0.25cm]
-        \node[inner xsep=0pt] (z1) {};  & \node[inner xsep=0pt] (z2) {}; & \node[inner xsep=0pt] (z3) {}; \\
-    };
-    \node[draw, inner xsep=0pt, align=center, fit=(z1) (z2) (z3)] {Общая память};
-    
-    \draw[dashed] ([yshift=0.5cm] barycentric cs:t1=0.5,t2=0.5) -- ([yshift=-0.5cm] barycentric cs:z1=0.5,z2=0.5);
-    \draw[dashed] ([yshift=0.5cm] barycentric cs:t2=0.5,t3=0.5) -- ([yshift=-0.5cm] barycentric cs:z2=0.5,z3=0.5);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/parsim-overview}
     \caption[Общая схема распределения симуляции на несколько потоков]{Общая схема распределения симуляции на несколько потоков. Устройства и процессоры содержатся целиком внутри одного потока, тогда как модель памяти необходимо сделать доступной для всех}
     \label{fig:parsim-overview}
 \end{figure}
@@ -150,30 +134,7 @@
 
 \begin{figure}[htbp]
     \centering
-    %\includegraphics[width=\textwidth]{./two-queues-2-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    
-    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (5, -1) {$T_1$};
-    \node[shape=dart, draw, shape border rotate=270 ] at (5, 0.5) {};
-    
-%     \node[dashed, shape=dart, draw, shape border rotate=270 ] at (7, 0.5) {};
-    
-    \node[fill=black!10, shape=dart, draw, shape border rotate=270 ] at (3, 0.5) (ev2) {};
-    
-    \draw[->] (0,-2) -- (10,-2) node[pos=0.9, below] (sim-time2) {Время};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-2.15) -- (\x,-1.85) node (tick\x) {};
-    };
-    
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (1, -3) {$T_2$};
-    \node[shape=dart, draw, shape border rotate=270 ] at (1, -1.5) (ev1) {};
-    
-    \draw[->] (ev1.east) .. controls +(3,0) and +(-2,0) .. (ev2.west);
-    \end{tikzpicture}
+	\inputpicture{drawings/two-queues-2}
     \caption[Нарушение корректности относительного положения событий]{Нарушение корректности относительного положения событий в случае $T_2 < T_1$. Новое событие оказалось в прошлом и не может быть обработано}
     \label{fig:two-queues-2}
 \end{figure}
@@ -188,37 +149,7 @@
 
 \begin{figure}[htbp]
     \centering
-    %\includegraphics[width=\textwidth]{./timestamps-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    
-    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (4, -1) {$T_1$};
-    \node[shape=dart, draw, shape border rotate=270 ] at (4, 0.5) {};
-    
-    \draw[->] (0,-3) -- (10,-3) node[pos=0.9, below] (sim-time2) {Время};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-3.15) -- (\x,-2.85) node (tick\x) {};
-    };
-    
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (2, -4) {$T_2$};
-    \node[shape=dart, draw, shape border rotate=270 ] at (2, -2.5) (ev1) {};
-    
-    \node[shape=dart, draw, shape border rotate=270 ] at (5, -1) (ev2) {};
-    \node[above =0cm of ev2] {$T_{event}$};
-        
-    \draw[->] (ev1.east) .. controls +(3,0) and +(0,-0.5) .. (ev2.south);
-
-    \node[dashed, shape=dart, draw, shape border rotate=270 ] at (7, 0.5)  (ev-correct) {};
-    \node[align = center, text width = 2cm, above =0cm of ev-correct] {Скорректированное событие};
-    
-    \draw[->] (ev2.west) .. controls +(-1,1) and +(-1,+0) .. (ev-correct.west);
-    
-    \end{tikzpicture}
-
+	\inputpicture{drawings/timestamps}
     \caption[Пересылка меток времени создания событий вместе с самим событием]{Пересылка меток времени создания событий вместе с самим событием. Поток-приёмник корректирует положение события и принимает решение о том, соответствует ли ситуация условиям корректной симуляции}
     \label{fig:timestamps}
 \end{figure}
@@ -238,44 +169,7 @@
 
 \begin{figure}[htbp]
     \centering
-    % \includegraphics[width=\textwidth]{./send-and-block-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    
-    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время} node[pos=0., below] {Поток 1};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (2, -1) {$T_1$};
-%     \node[draw, arrow box, arrow box arrows={south:.6cm}, text width = 0.6cm] at (2, 1) {};
-    \node[shape=dart, draw, shape border rotate=270 ] at (2, 0.5)  {};
-    
-    \node[shape=dart, draw, shape border rotate=270 ] at (7, 0.5) (ev-unlock) {};
-    \node[above=0cm of ev-unlock, text width=3.cm, inner sep=0.2cm] {
-            \begin{enumerate*}
-                \item Обработать событие 
-                \item Разблокировать поток 2
-            \end{enumerate*}
-    };
-    
-    \draw[->] (0,-3) -- (10,-3) node[pos=0.9, below] (sim-time2) {Время} node[pos=0., below] {Поток 2};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-3.15) -- (\x,-2.85) node (tick\x) {};
-    };
-    
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (4, -4) {$T_2$};
-    
-    \node[shape=dart, draw, shape border rotate=270 ] at (4, -2.5) (ev-lock) {};
-    \node[text width=3.2cm, inner sep=0.2cm, above of=ev-lock] {
-        \begin{enumerate*}
-            \item Послать сообщение
-            \item Заблокироваться
-        \end{enumerate*}
-    };
-    
-    \draw[->] (ev-lock.east) .. controls +(3,0) and +(-1,0) .. (ev-unlock.west);
-    \end{tikzpicture}
-
+	\inputpicture{drawings/send-and-block}
     \caption[Консервативный сценарий параллельной симуляции]{Консервативный сценарий параллельной симуляции. Поток, желающий добавить событие в очередь другого потока, блокируется до момента обработки этого события}
     \label{fig:send-and-block}
 \end{figure}
@@ -291,38 +185,7 @@
 
 \begin{figure}[htbp]
     \centering
-    % \includegraphics[width=\textwidth]{./deadlock-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время} node[pos=0., below] {Поток 1};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (1, -1) {$T_1$};
-    \node[shape=dart, draw, shape border rotate=270 ] at (1, 0.5)  (ev11) {};
-    
-    \draw[->] (0,-2) -- (10,-2) node[pos=0.9, below] (sim-time2) {Время} node[pos=0., below] {Поток 2};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-2.15) -- (\x,-1.85) node (tick\x) {};
-    };
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (3, -3) {$T_2$};
-    \node[shape=dart, draw, shape border rotate=270 ] at (3, -1.5)  (ev21) {};
-   
-    \draw[->] (0,-4) -- (10,-4) node[pos=0.9, below] (sim-time3) {Время} node[pos=0., below] {Поток 3};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-4.15) -- (\x,-3.85) node (tick\x) {};
-    };
-    \node[draw, arrow box, arrow box arrows={north:.7cm}] at (5, -5) {$T_3$};
-    \node[shape=dart, draw, shape border rotate=270 ] at (5, -3.5)  (ev31) {};
-    
-    \node[shape=dart, draw, shape border rotate=270 ] at (9, 0.5)  (ev12) {};
-    \node[shape=dart, draw, shape border rotate=270 ] at (6, -1.5)  (ev22) {};
-    \node[shape=dart, draw, shape border rotate=270 ] at (7, -3.5)  (ev32) {};
-    
-    \draw[->] (ev11.east) .. controls +(1,0) and +(-1,0) .. (ev22.west);
-    \draw[->] (ev21.east) .. controls +(1,0) and +(-1,0) .. (ev32.west);
-    \draw[->] (ev31.east) .. controls +(1,0) and +(-1,0) .. (ev12.west);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/deadlock}
     \caption[Ситуация взаимной блокировки в системе с тремя потоками]{Ситуация взаимной блокировки в системе с тремя потоками. Каждый процесс ожидает сигнала окончания блокировки от какого-либо другого потока}
     \label{fig:deadlock}
 \end{figure}
@@ -363,45 +226,7 @@
 
 \begin{figure}[htbp]
     \centering
-    % \includegraphics[width=0.95\textwidth]{./checkpoints-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    
-    \node (thread1) {Поток 1};
-    \node[below of= thread1, node distance = 1cm] (thread2) {Поток 2};
-    
-    \node[draw, single arrow, node distance=1.5cm, inner ysep=0.2cm, text width = 1.cm, right of = thread1] (arrow11) {};
-    \node[draw, single arrow, node distance = 1.8cm, inner ysep=0.2cm, text width = 1.cm, right of=arrow11] (arrow12) {};
-    \node[dashed, draw, single arrow, node distance = 1.8cm, inner ysep=0.2cm, text width = 1.cm, right of=arrow12] (arrow13) {};
-    
-    \node[draw, single arrow, node distance=1.5cm, inner ysep=0.2cm, text width = 1.cm, right of = thread2] (arrow21) {};
-    \node[draw, single arrow, node distance = 1.8cm, inner ysep=0.2cm, text width = 1.cm, right of=arrow21] (arrow22) {};
-    \node[dashed, draw, single arrow, node distance = 1.8cm, inner ysep=0.2cm, text width = 1.cm, right of=arrow22] (arrow23) {};
-    
-    \node[fill=white, starburst, draw, right of = arrow23, node distance = 2.cm, text width = 1.6cm, inner sep = 0cm] (detection) {Обнаружение нарушения};
-    
-    \node[draw, circle, inner sep=0.18cm, at=(arrow11.west), yshift=-0.5cm] (chkpt0) {};
-    \node[draw, circle, inner sep=0.18cm, right of=arrow11, yshift=-0.5cm] (chkpt1) {};
-    \node[draw, circle, inner sep=0.18cm, right of=arrow12, yshift=-0.5cm] (chkpt2) {};
-    \node[above of = chkpt2, node distance = 1.5cm, inner sep = 0cm] (rollback) {Откат состояния};
-
-    \node[above of= chkpt0, node distance=1.5cm, inner sep = 0cm, xshift=-0.1cm] (chkpts) {Точки сохранения};
-    \draw[dotted] (chkpt0) -- (chkpts);
-    \draw[dotted] (chkpt1) -- (chkpts);
-    \draw[dotted] (chkpt2) -- (chkpts);
-    
-    
-    \node[draw, single arrow, node distance = 1.5cm, inner ysep=0.2cm, text width = 1.cm, below of=arrow23] (arrow33) {};
-    \node[draw, single arrow, node distance = 1.cm, inner ysep=0.2cm, text width = 1.cm, below of=arrow33] (arrow43) {};
-    \node[draw, circle, inner sep=0.18cm, below of=chkpt2, node distance=2.5cm] (chkpt2-restored) {};
-    \node[left of = chkpt2-restored, node distance = 1.5cm, inner sep = 0cm, text width = 2.5cm] (restore) {Восстановление точки сохранения};
-    
-    \draw[->] (detection) .. controls +(0cm,1.cm) and +(1cm, 0cm).. (rollback.east);
-    \draw[->] (rollback.south) .. controls +(0cm,-1cm) and +(0cm, 1cm).. (chkpt2.north);
-    \draw[->] (chkpt2.south) .. controls +(0cm,-2cm) and +(0cm, 1cm).. (chkpt2-restored);
-    
-    \node[right of=chkpt2-restored, node distance = 3.cm] {Повторное исполнение};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/checkpoints}
     \caption[Симуляция с периодическими точками сохранения]{Симуляция с периодическими точками сохранения. Штрихами показана часть симуляции, приведшая к нарушению корректности и откату к ближайшему сохранённому состоянию}
     \label{fig:checkpoints}
     % \begin{tikzpicture}[>=latex]
@@ -450,45 +275,8 @@
 На рис.~\ref{fig:time-warp} приведены все компоненты схемы Time Warp. Рассмотрим подробнее процессы, происходящие при работе такой модели.
 
 \begin{figure}[htbp]
-\centering
-    \begin{tikzpicture}[>=latex, font=\scriptsize, node distance=0pt, scale=0.85]
-
-    \draw[->] (0,0) -- (10,0) coordinate[pos=0.2] (c11) coordinate[pos=0.3] (c12) coordinate[pos=0.5] (c13) coordinate[pos=0.6] (c14) coordinate[pos=0.9] (c15);
-    \draw[->] (0,-2) -- (10,-2) coordinate[pos=0.1] (c21) coordinate[pos=0.4] (c22) coordinate[pos=0.7] (c23) coordinate[pos=0.8] (c24);
-    \draw[->] (0,-4) -- (10,-4) coordinate[pos=0.05] (c31) coordinate[pos=0.5] (c32) coordinate[pos=0.8] (c33) coordinate[pos=0.9] (c34) coordinate[pos=0.6] (c3s);
-    
-    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c11] (ev11) {};
-    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c12] (ev12) {};
-    \node[dashed, shape=dart, draw, shape border rotate=270, above=of c13] (ev13) {};
-    \node[thick, shape=dart, draw, shape border rotate=270, above=of c14] (ev14) {};
-
-    \node[shape=dart, draw, shape border rotate=270, above=of c15] (ev15) {};
-    
-    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c21] (ev21) {};
-    \node[thick, shape=dart, draw, shape border rotate=270, above=of c22] (ev22) {};
-    \node[shape=dart, draw, shape border rotate=270, above=of c23] (ev23) {};
-    \node[shape=dart, draw, shape border rotate=270, above=of c24] (ev24) {};
-    
-    \node[double, shape=dart, draw, shape border rotate=270, above=of ev23] (ev23anti) {};
-
-    \node[dotted, shape=dart, draw, shape border rotate=270, above=of c31] (ev31) {};
-    \node[dashed, shape=dart, draw, shape border rotate=270, above=of c32] (ev32) {};
-    \node[thick, shape=dart, draw, shape border rotate=270, above=of c33] (ev33) {};
-    \node[shape=dart, draw, shape border rotate=270, above=of c34] (ev34) {};
-    
-    \node[fill=black!10, shape=dart, draw, shape border rotate=270, above=of c3s] (ev3s) {};
-    
-    \draw[dashed] (4,1) -- (4,-4.5) node {$GVT$};
-    
-    \node[below=of ev14] {$LVT_1$};
-    \node[below=of ev22] {$LVT_2$};
-    \node[below=of ev33] {$LVT_3$};
-    
-    \draw[->] (ev22) to[bend left=45] node[auto, sloped] {Нарушение} (ev3s) ;
-    \draw[->] (ev15) to[bend right=45] node[auto, swap] (rollback) {Откат} (ev14) ;
-    \draw[->] (rollback) -- (ev23anti);
-    
-    \end{tikzpicture}
+	\centering
+	\inputpicture{drawings/time-warp}
     \caption[Симуляция Time Warp]{Оптимистичная симуляция Time Warp. Точками обозначены события, подлежащие процессу сборки окаменелостей, штриховыми линиями --- уже обработанные, к которым симуляция потенциально может откатиться, жирным --- текущее событие, тонкой линией --- запланированные в будущем. Серым фоном выделено отставшее сообщение, а двойной линией --- антисообщение}
     \label{fig:time-warp}
 \end{figure}
@@ -567,49 +355,7 @@
 
 \begin{figure}[htbp]
     \centering
-    \begin{tikzpicture}[>=latex, font=\scriptsize, scale=0.8]
-    
-    \node[align=right, anchor=east] at (0, 0) {Поток 1};
-    \node[align=right, anchor=east] at (0,-1) {Поток 2};
-    \node[align=right, anchor=east] at (0,-2) {Поток 3};
-    \node[align=right, anchor=east] at (0,-3) {Поток 4};
-    % epoch 1
-    \draw[->, thick] (0,0) -- (2, 0);
-    \draw[-, dashed] (2,0) -- (4, 0);
-    
-    \draw[->, thick] (0,-1) -- (3, -1);
-    \draw[-, dashed] (3,-1) -- (4, -1);
-
-    \draw[->, thick] (0,-2) -- (4, -2);
-    \draw[-, dashed] (4,-2) -- (4, -2);
-    
-    \draw[->, thick] (0,-3) -- (1, -3);
-    \draw[-, dashed] (1,-3) -- (4, -3);
-    
-    %epoch 2
-    \draw[->, thick] (0+5,0) -- (3+5, 0);
-    \draw[-, dashed] (3+5,0) -- (4+5, 0);
-    
-    \draw[->, thick] (0+5,-1) -- (4+5, -1);
-    \draw[-, dashed] (4+5,-1) -- (4+5, -1);
-
-    \draw[->, thick] (0+5,-2) -- (1+5, -2);
-    \draw[-, dashed] (1+5,-2) -- (4+5, -2);
-    
-    \draw[->, thick] (0+5,-3) -- (2+5, -3);
-    \draw[-, dashed] (2+5,-3) -- (4+5, -3);
-
-    %barrier 0
-    \draw[dashdotted] (0,1) -- (0,-4);
-    %barrier 1
-    \draw[dashdotted] (4,1) -- (4,-4);
-    \draw[dashdotted] (5,-4) -- (5,1) node[sloped,midway, above] {Барьер};
-    
-    %barrier 2
-    \draw[dashdotted] (4+5,1) -- (4+5,-4);
-    \draw[dashdotted] (5+5,-4) -- (5+5,1) node[sloped,midway, above] {Барьер};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/domains}
     \caption[Симуляция с барьерной синхронизацией]{Симуляция с барьерной синхронизацией. Жирными сплошными линиями показаны активные участки симуляции, штриховыми --- ожидание остальных потоков без выполнения полезной работы}
     \label{fig:domains}
 \end{figure}
@@ -646,38 +392,7 @@
 
 \begin{figure}[htbp]
     \centering
-    \begin{tikzpicture}[>=latex, font=\small]
-    
-    \draw[->] (0,0) -- (10,0) node[above, pos = 0] {Запуск 1};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-0.15) -- (\x,0.15) coordinate[pos=0.5] (tick\x);
-    };
-    
-    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of tick5] (ev11) {1};
-    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of ev11]  (ev12) {2};
-    
-    \coordinate [above=2cm of tick1] (src11);     
-    \coordinate [above=2cm of tick3] (src12);     
-    
-    \draw[->] (src11) to[bend right = 30] (ev11);
-    \draw[->] (src12) to[bend right = 30] (ev12);
-    
-    
-    \draw[->] (0,-4) -- (10,-4) node[above, pos = 0] {Запуск 2};
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-4.15) -- (\x,-3.85) coordinate[pos=0.5] (tick\x);
-    };
-    
-    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of tick5] (ev22) {2};
-    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of ev22]  (ev21) {1};
-    
-    \coordinate [above=2cm of tick1] (src22);     
-    \coordinate [above=2cm of tick3] (src21);     
-    
-    \draw[->] (src21) to[bend right = 30] (ev21);
-    \draw[->] (src22) to[bend right = 30] (ev22);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/same-time-stamp}
     \caption[Различный порядок получения сообщений от внешних потоков]{Различный порядок получения сообщений от внешних потоков}
     \label{fig:same-time-stamp}
 \end{figure}

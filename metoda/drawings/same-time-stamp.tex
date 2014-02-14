@@ -1,0 +1,46 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex, font=\small]
+    
+    \draw[->] (0,0) -- (10,0) node[above, pos = 0] {Запуск 1};
+    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
+        \draw (\x,-0.15) -- (\x,0.15) coordinate[pos=0.5] (tick\x);
+    };
+    
+    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of tick5] (ev11) {1};
+    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of ev11]  (ev12) {2};
+    
+    \coordinate [above=2cm of tick1] (src11);     
+    \coordinate [above=2cm of tick3] (src12);     
+    
+    \draw[->] (src11) to[bend right = 30] (ev11);
+    \draw[->] (src12) to[bend right = 30] (ev12);
+    
+    
+    \draw[->] (0,-4) -- (10,-4) node[above, pos = 0] {Запуск 2};
+    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
+        \draw (\x,-4.15) -- (\x,-3.85) coordinate[pos=0.5] (tick\x);
+    };
+    
+    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of tick5] (ev22) {2};
+    \node[minimum width=0.3cm, shape=dart, draw, shape border rotate=270, above=0cm of ev22]  (ev21) {1};
+    
+    \coordinate [above=2cm of tick1] (src22);     
+    \coordinate [above=2cm of tick3] (src21);     
+    
+    \draw[->] (src21) to[bend right = 30] (ev21);
+    \draw[->] (src22) to[bend right = 30] (ev22);
+    
+    \end{tikzpicture}
+
+
+\end{document}

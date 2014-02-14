@@ -1,0 +1,31 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex, font=\scriptsize]
+    \node[matrix, column sep={0.5cm}, row sep={0.1cm}, nodes={text width = 2.3cm, align=center, inner sep=3pt}] (separate)
+    {
+        \node (t1) {Хозяйский поток 1}; & \node (t2) {Хозяйский поток 2}; & \node (t3) {Хозяйский поток $N$}; \\[0.25cm]
+        \node[draw] {Процессор 1};  & \node[draw] {Процессор 3}; & \node[draw] {Процессор $K-1$}; \\
+        \node[draw] {Процессор 2};  & \node[draw] {Процессор 4}; & \node[draw] {Процессор $K$}; \\[0.25cm]
+        \node[draw] {Устройство А};  & \node[draw] {Устройство В}; & \node[draw] {Устройство Ю}; \\
+        \node[draw] {Устройство Б};  & \node[draw] {Устройство Г}; & \node[draw] {Устройство Я}; \\
+        \node[draw] {Очередь 1};  & \node[draw] {Очередь 2}; & \node[draw] {Очередь $N$}; \\[0.25cm]
+        \node[inner xsep=0pt] (z1) {};  & \node[inner xsep=0pt] (z2) {}; & \node[inner xsep=0pt] (z3) {}; \\
+    };
+    \node[draw, inner xsep=0pt, align=center, fit=(z1) (z2) (z3)] {Общая память};
+    
+    \draw[dashed] ([yshift=0.5cm] barycentric cs:t1=0.5,t2=0.5) -- ([yshift=-0.5cm] barycentric cs:z1=0.5,z2=0.5);
+    \draw[dashed] ([yshift=0.5cm] barycentric cs:t2=0.5,t3=0.5) -- ([yshift=-0.5cm] barycentric cs:z2=0.5,z3=0.5);
+    
+    \end{tikzpicture}
+
+
+\end{document}
