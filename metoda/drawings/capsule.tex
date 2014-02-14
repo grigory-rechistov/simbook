@@ -1,0 +1,28 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[font=\scriptsize, >=latex]
+    \node[draw] (guest-inst) {\texttt{addq (\%rbx), \%rax}};
+    \matrix[draw, right=2cm of guest-inst, anchor=west] (capsule) {
+        \node{\texttt{push RBX\_OFF(\%ebp); }};    & \node{(1)}; \\
+        \node{\texttt{push (RBX\_OFF+4)(\%ebp);}}; & \node{(2)}; \\
+        \node{\texttt{call v2h;}};& \node{(3)}; \\
+        \node{\texttt{movl (\%eax), \%edx;}};       & \node{(4)}; \\
+        \node{\texttt{movl 4(\%eax), \%ebx;}};      & \node{(5)}; \\
+        \node{\texttt{addl \%edx, RAX_OFF(\%ebp);}};& \node{(6)}; \\
+        \node{\texttt{addcl \%ebx, 4+RAX_OFF(\%ebp);}};& \node{(7)}; \\
+        \node{\texttt{addl \$3, RIP\_OFF(\%ebp);}}; & \node{(8)}; \\
+    } ;
+    \draw[->] (guest-inst) -- (capsule);
+        
+    \end{tikzpicture}
+
+\end{document}

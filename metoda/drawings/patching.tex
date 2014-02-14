@@ -1,0 +1,36 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[font=\ttfamily\small, >=latex]
+        \node[draw, align=left] (src) {
+        mov \%r2, \%r1 \\
+        add \$0xaabb, \%r2 \\
+        ld (\textit{0x100}), \%r3 \\
+        st \%r2, (\textit{0x200}) \\
+        call \textit{0x3040}
+        };
+        
+        \node[draw, align=left, right=2cm of src] (patched) {
+        mov \%r2, \%r1 \\
+        add \$0xaabb, \%r2 \\
+        ld (\textit{0xf00100}), \%r3 \\
+        st \%r2, (\textit{0xf00200}) \\
+        call \textit{0xf003040}
+        };
+        
+        \node[above=0.5cm of src, font=\small] {Исходный код};
+        \node[above=0.5cm of patched, font=\small] {Код после наложения заплаток};
+        
+        \draw[->] (src) -- (patched);
+        
+    \end{tikzpicture}
+
+\end{document}

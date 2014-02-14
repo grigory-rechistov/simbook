@@ -26,34 +26,7 @@
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[font=\scriptsize, >=latex]
-
-    \node (guest) {Гость}; 
-    \node[right=3cm of guest] (host) {Хозяин}; 
-    
-    \node[draw, minimum width = 0.7cm, below =0.5cm of guest] (gi1) {инструкция};
-    \node[draw, minimum width = 0.7cm, below = 0cm of gi1] (gi2) {инструкция};
-    \node[draw, minimum width = 0.7cm, below = 0cm of gi2] (gi3) {инструкция};
-    \node[draw, minimum width = 0.7cm, below = 0cm of gi3] (gi4) {инструкция};
-    
-    \node[draw, minimum width = 1.5cm, minimum height = 1cm, below =0.5cm of host] (hi1) {капсула};
-    \node[draw, minimum width = 1.5cm, minimum height = 2cm, below = 0cm of hi1] (hi2) {капсула};
-    \node[draw, minimum width = 1.5cm, minimum height = 0.5cm, below = 0cm of hi2] (hi3) {капсула};
-    \node[draw, minimum width = 1.5cm, minimum height = 1cm, below = 0cm of hi3] (hi4) {капсула};
-    \node[draw, minimum width = 1.5cm, below = 0cm of hi4] (glue) {клей};
-    
-    \coordinate[right=3.5cm of glue] (next-block);
-    \coordinate[above=1.5cm of hi1] (entry);
-    
-    \draw[->] (gi1.east) to (hi1.west);
-    \draw[->] (gi2.east) to (hi2.west);
-    \draw[->] (gi3.east) to (hi3.west);
-    \draw[->] (gi4.east) to (hi4.west);
-    
-    \draw[->, dashed] (glue) -- (next-block) node[midway, above, font=\tiny, align=left] {К следующему \\ блоку трансляции};
-    \draw[->, dashed] (entry) -- (hi1.north);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/bb-translation}
     \caption[Исходный код и результат трансляции]{Исходный код базового блока приложения и его связь с результатом двоичной трансляции. Штриховыми линиями показаны точки входа и выхода}
     \label{fig:bb-translation}
 \end{figure}
@@ -68,23 +41,8 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.95\textwidth]{./capsule-crop}
-    \begin{tikzpicture}[font=\scriptsize, >=latex]
-    \node[draw] (guest-inst) {\texttt{addq (\%rbx), \%rax}};
-    \matrix[draw, right=2cm of guest-inst, anchor=west] (capsule) {
-        \node{\texttt{push RBX\_OFF(\%ebp); }};    & \node{(1)}; \\
-        \node{\texttt{push (RBX\_OFF+4)(\%ebp);}}; & \node{(2)}; \\
-        \node{\texttt{call v2h;}};& \node{(3)}; \\
-        \node{\texttt{movl (\%eax), \%edx;}};       & \node{(4)}; \\
-        \node{\texttt{movl 4(\%eax), \%ebx;}};      & \node{(5)}; \\
-        \node{\texttt{addl \%edx, RAX_OFF(\%ebp);}};& \node{(6)}; \\
-        \node{\texttt{addcl \%ebx, 4+RAX_OFF(\%ebp);}};& \node{(7)}; \\
-        \node{\texttt{addl \$3, RIP\_OFF(\%ebp);}}; & \node{(8)}; \\
-    } ;
-    \draw[->] (guest-inst) -- (capsule);
-        
-    \end{tikzpicture}
-    \caption{Пример соответствия гостевой инструкции и хозяйской капсулы, эмулирующей её семантику и написанной на языке ассемблера. В этом примере хозяйский регистр \texttt{EBP} хранит указатель на структуру гостевого состояния, макросы вида \texttt{RxX_OFF} --- смещение внутри гостевого состояния для регистра RxX, а \texttt{v2h} --- функция преобразования виртуальных гостевых адресов в хозяйские}
+	\inputpicture{drawings/capsule}
+    \caption[Пример соответствия гостевой инструкции и хозяйской капсулы]{Пример соответствия гостевой инструкции и хозяйской капсулы, эмулирующей её семантику и написанной на языке ассемблера. В этом примере хозяйский регистр \texttt{EBP} хранит указатель на структуру гостевого состояния, макросы вида \texttt{RxX_OFF} --- смещение внутри гостевого состояния для регистра RxX, а \texttt{v2h} --- функция преобразования виртуальных гостевых адресов в хозяйские}
     \label{fig:capsule}
 \end{figure}
 
@@ -180,23 +138,7 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.7\textwidth]{./dynamic-bt-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\small]
-    \matrix[column sep=1cm, row sep=0.1cm]{
-        \node (bt) {Двоичная трансляция}; & \node (sim) {Симуляция}; \\[1.cm]
-        \node[draw] (translation) {Создание/удаление кода}; & \node[draw] (execution) {Исполнение кода}; \\[0.25cm]
-        \node[draw, rounded corners,text width=4cm] (storage) {Хранилище транслированного кода}; & \node[draw, rounded corners] (current-page) {Текущая секция кода}; \\
-    };
-    \draw[->] (bt) to [bend right] (sim);
-    \draw[->] (sim) to [bend right] (bt);
-    \draw[->] (storage) to (current-page);
-    \draw[->] (translation) -- (storage);
-    \draw[->] (execution) -- (current-page);
-    
-    \node[draw, dashed, fit = (bt) (translation) (storage)] {};
-    \node[draw, dashed, fit = (sim) (execution) (current-page)] {};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/dynamic-bt}
     \caption[Динамическая ДТ]{Динамическая ДТ. Фаза симуляции, использующая сгенерированный код, периодически сменяется фазой трансляции, хранящей уже существующие  и создающей новые секции хозяйского кода из гостевого}
     \label{fig:dynamic-bt}
 \end{figure}
@@ -213,32 +155,7 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.7\textwidth]{./dynamic-bt-crop.pdf}
-    \begin{tikzpicture}[>=latex]
-
-    \begin{scope}[start chain, node distance = 0cm, font=\ttfamily\small, every node/.style={on chain}]
-        \node[align=left] (byte0) {0xc4};
-        \node[align=left] (byte1) {0xe2};
-        \node[align=left] (byte2) {0x69};
-        \node[align=left] (byte3) {0x37};
-        \node[align=left] (byte4) {0xd9};
-        \node[align=left] (byte5) {0xe4};
-        \node[align=left] (byte6) {0x90};
-    \end{scope}
-    
-    \node[below= of byte2, anchor = west, align=left, font=\ttfamily\scriptsize]  (var1) {loop   6b <.text+0x6b> \\ aaa \\ ftst \\ nop};
-    
-    \node[above= of byte2, anchor = west, align=left, font=\ttfamily\scriptsize]  (var2) { vpcmpgtq \%xmm1,\%xmm2,\%xmm3 \\ in     \$0x90,\%al};
-    
-    \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte0.north west) -- ([yshift=0.05cm] byte4.north east);
-    \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte5.north west) -- ([yshift=0.05cm] byte6.north east);
-    
-    \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte2.south east) -- ([yshift=0.05cm] byte1.south west);
-    \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte3.south east) -- ([yshift=0.05cm] byte3.south west);
-    \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte5.south east) -- ([yshift=0.05cm] byte4.south west);
-    \draw[decorate, decoration={brace, amplitude=6pt}] ([yshift=0.05cm] byte6.south east) -- ([yshift=0.05cm] byte6.south west);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/byte-shift}
     \caption[Обнаружение кода]{Обнаружение кода. Смысл содержимого памяти меняется при изменении стартового адреса. Пример двух интерпретаций для фрагмента кода архитектуры IA-32}
     \label{fig:byte-shift}
 \end{figure}
@@ -269,22 +186,7 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.8\textwidth]{./bt-pages-crop.pdf}
-    \begin{tikzpicture}[>=latex, row sep=0.1cm]
-    \matrix[] {
-    \node {\tiny Адреса гостевых страниц}; & \node{\tiny Гостевой код};          &[2cm] \node{\tiny Сгенерированный код}; \\
-    \node {0x1000}; & \draw[rounded corners] node (1000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \draw node (1000t) {} (-0.5,-0.4) rectangle (0.5,0.4); \\
-    \node {0x2000}; & \draw[rounded corners] node (2000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \draw node (2000t) {} (-0.5,-0.4) [dashed] rectangle (0.5,0.4); \\
-    \node {0x3000}; & \draw[rounded corners] node (3000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \node[text width=2cm] (3000t) {Трансляция отсутствует}; \\
-    \node {0x4000}; & \draw[rounded corners] node (4000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \draw node (4000t) {} (-0.5,-0.4) rectangle (0.5,0.4); \\
-    };
-    \path[->] (1000) edge (1000t);
-    \path[->, densely dashed] (3000) edge (3000t);
-    \node[style=single arrow,draw] at ([xshift=1.75cm] 2000.east) {\scriptsize Трансляция};
-    \path[->] (4000) edge (4000t);
-    
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/bt-pages}
     \caption[Двоичная трансляция целых страниц]{Двоичная трансляция целых страниц. Для ранее исполненных блоков переиспользуются оттранслированные секции хозяйского кода. Процесс симуляции прерывается для трансляции новой страницы}
     \label{fig:bt-pages}
 \end{figure}
@@ -299,30 +201,7 @@
 
 \begin{figure}[htp]
     \centering
-    % \includegraphics[width=0.6\textwidth]{./bt-traces-crop.pdf}
-    \begin{tikzpicture}[>=latex, node distance = 1.5cm,
-        guest-page/.style={draw, shape=signal, signal pointer angle=160, signal from=north, signal to=south, text width = 1.5cm, node distance = 0.5cm},
-        host-page/.style={draw, shape=tape, text width = 1.5cm, node distance = 0.5cm},
-        ]
-    \node[diamond, aspect=2, inner sep=0pt, draw, text width = 2.5cm, text badly centered] (first-exec) {Первое исполнение?};
-    \node[below of=first-exec] (dummy) {};
-    \node[left of= dummy, anchor=east] (gc) {Гостевой код};
-    \node[right of=dummy, anchor=west] (hc) {Трасса} ;
-    
-    \node[below of= gc, style=guest-page] (gp01) {};
-    \node[below of= hc, style=host-page] (hp01) {};
-    \foreach \x/\y/\s in {1/2/,2/3/,3/4/thick,4/5/,5/6/,6/7/} {
-        \node[below of= gp0\x, style=guest-page, \s] (gp0\y) {};
-    };
-    \foreach \x/\y/\s in {1/2/,2/3/,3/4/thick} {
-        \node[below of= hp0\x, style=host-page, \s ] (hp0\y) {};
-    };
-    \node[arrow box, text width = 2.0cm, draw, arrow box arrows={west:.4cm, east:0.35cm}, left of=hp04, node distance = 2.5cm] {\scriptsize Интерпретация и трансляция};
-
-    \draw[->] (first-exec.west) -| (gc.north) node[near start, above] {Да};
-    \draw[->] (first-exec.east) -| (hc.north) node[near start, above] {Нет};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/bt-traces}
     \caption[ДТ с трассами исполнения]{ДТ с трассами исполнения. Первое исполнение каждой гостевой инструкции производится с помощью интерпретатора, при этом также осуществляется её трансляция и сохранение результатата в трассе}
     \label{fig:bt-traces}
 \end{figure}
@@ -347,55 +226,13 @@
 
 После того, как некоторый блок трансляции создан, может оказаться, что возможно преобразовать его так, чтобы он исполнялся быстрее, при этом сохранив его семантику; другими словами, провести \emph{оптимизирующую} трансляцию. Этот процесс по смыслу аналогичен фазе оптимизаций обычного компилятора, позволяющей уменьшить время выполнения программ. Подчеркнём критически важное условие неизменности алгоритма фрагмента до и после преобразования. Если есть ненулевая вероятность того, что в каких-то случаях результат исполнения после применения определённой оптимизации будет отличаться от исходного, то её применять нельзя.
 
-На рис.~\ref{fig:optimization} приведён пример часто используемой оптимизации некоторого блока трансляции с одной точкой входа и выхода~\cite{helmstetter2011} для некоторой архитектуры. Гостевой код состоит из пяти арифметических инструкций \texttt{instr1} \dots \texttt{instr5} и инструкции \texttt{branch}. При трансляции капсулы отдельных инструкций\footnote{Несущественное для данного объяснения содержимое капсул объединено и обозначено угловыми скобками.} берутся последовательно друг за другом, формируя блок. При этом последняя машинная инструкция \texttt{inc} каждой из них предназначена для продвижения симулируемого регистра \texttt{PC}. 
+На рис.~\ref{fig:bt-optimization} приведён пример часто используемой оптимизации некоторого блока трансляции с одной точкой входа и выхода~\cite{helmstetter2011} для некоторой архитектуры. Гостевой код состоит из пяти арифметических инструкций \texttt{instr1} \dots \texttt{instr5} и инструкции \texttt{branch}. При трансляции капсулы отдельных инструкций\footnote{Несущественное для данного объяснения содержимое капсул объединено и обозначено угловыми скобками.} берутся последовательно друг за другом, формируя блок. При этом последняя машинная инструкция \texttt{inc} каждой из них предназначена для продвижения симулируемого регистра \texttt{PC}. 
 
 \begin{figure}[htp]
     \centering
-    \begin{tikzpicture}[>=latex, font=\ttfamily\small, node distance = 0.5cm]
-        
-        \node[draw, align=left] (guest) {
-instr1 \\
-instr2 \\
-instr3 \\
-instr4 \\
-instr5 \\
-branch
-        };
-         
-        \node[draw, align=left, right = of guest.north east, anchor = north west] (orig) {
-<instr1> \\
-inc PC_OFF(\%r14) \\
-<instr2>             \\
-inc PC_OFF(\%r14) \\
-<instr3>             \\
-inc PC_OFF(\%r14) \\
-<instr4>             \\
-inc PC_OFF(\%r14) \\
-<instr5>             \\
-inc PC_OFF(\%r14) \\
-<branch>
-        };
-        
-        \node[draw, align=left, right=of orig.north east, anchor = north west] (opt) {
-<instr1> \\
-<instr2> \\
-<instr3> \\
-<instr4> \\
-<instr5> \\
-add \$5, PC_OFF(\%r14) \\
-<branch>
-        };
-        
-    \node[font=\scriptsize, above=0.3cm  of guest.north, anchor = south] (guest-lbl) {Гостевой код};
-    \node[font=\scriptsize, above=0.3cm  of orig.north, anchor = south] (orig-lbl) {ДТ};
-    \node[font=\scriptsize, above=0.3cm  of opt.north, anchor = south] (opt-lbl) {Оптимизация ДТ};
-    
-    \draw[->] (guest-lbl) -- (orig-lbl);
-    \draw[->] (orig-lbl) -- (opt-lbl);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/bt-optimization}
     \caption[Оптимизация при ДТ]{Пример простой оптимизации кода блока трансляции. Инструкции \texttt{inc} продвижения регистра \texttt{PC} после каждой капсулы заменены одним сложением \texttt{add} в конце блока}
-    \label{fig:optimization}
+    \label{fig:bt-optimization}
 \end{figure}
 
 Оптимизация в данном случае основана на том факте, что значение этого регистра \texttt{PC} на протяжении почти всего блока никто не читает, и неважно, изменилось оно или нет. Поэтому можно отложить все изменения до того  момента, когда понадобится новое значение, т.е. до капсулы  инструкции перехода \texttt{<branch>}. Следующий напрашивающийся шаг --- использовать очевидное равенство $x+1+1+1+1+1 = x +5$ и заменить пять инструкций сложения одной.
@@ -421,40 +258,14 @@ add \$5, PC_OFF(\%r14) \\
 
 \begin{figure}[htb]
     \centering
-\begin{tikzpicture}[>=latex, font=\small]
-    \draw[->] (2,0) -- (3,0);
-    \draw[->] (3.5,-1.5) -- (5, -1.5);
-    \draw[->] (5.5, 0) -- (7, 0);
-    \draw[->] (7.5,-1.5) -- (9, -1.5);
-    
-    \draw[->, dashed] (3,0) -- (3.5, -1.5);
-    \draw[->, dashed] (5,-1.5) -- (5.5, 0);
-    \draw[->, dashed] (7,0) -- (7.5, -1.5);
-    
-    \node[anchor= west, text width = 2cm] at (-0.2,0) {Двоичная трансляция};    
-    \node[anchor= west] at (-0.2,-1.5) {Симуляция};
-\end{tikzpicture}
+	\inputpicture{drawings/serial-bt}
     \caption{ДТ и симуляция выполняются последовательно}
     \label{fig:serial-bt}
 \end{figure}
 
 \begin{figure}[htb]
     \centering
-\begin{tikzpicture}[>=latex, font=\small]
-    \draw[->] (2,0) -- (3.5,0);
-    \draw[->] (4, 0) -- (8, 0);
-    
-    \draw[->] (2,-1.5) -- (3.5, -1.5);
-    \draw[->] (4,-1.5) -- (8, -1.5);
-    
-    \draw[->, dashed] (3.5,   0) -- (4, -1.5);
-    \draw[->, dashed] (3.5,-1.5) -- (4,    0);
-    \draw[->, dashed] (8,0   ) -- (8.5, -1.5);
-    \draw[->, dashed] (8,-1.5) -- (8.5,    0);
-    
-    \node[anchor= west, text width = 2cm] at (-0.2,0) {Двоичная трансляция};
-    \node[anchor= west] at (-0.2,-1.5) {Симуляция};
-\end{tikzpicture}
+	\inputpicture{drawings/parallel-bt}
     \caption{ДТ вынесена в отдельный поток}
     \label{fig:parallel-bt}
 \end{figure}
@@ -493,73 +304,14 @@ add \$5, PC_OFF(\%r14) \\
 
 \begin{figure}[htpb]
     \centering
-    \begin{tikzpicture}[font=\ttfamily\small, >=latex]
-        \node[draw, align=left] (src) {
-        mov \%r2, \%r1 \\
-        add \$0xaabb, \%r2 \\
-        ld (\textit{0x100}), \%r3 \\
-        st \%r2, (\textit{0x200}) \\
-        call \textit{0x3040}
-        };
-        
-        \node[draw, align=left, right=2cm of src] (patched) {
-        mov \%r2, \%r1 \\
-        add \$0xaabb, \%r2 \\
-        ld (\textit{0xf00100}), \%r3 \\
-        st \%r2, (\textit{0xf00200}) \\
-        call \textit{0xf003040}
-        };
-        
-        \node[above=0.5cm of src, font=\small] {Исходный код};
-        \node[above=0.5cm of patched, font=\small] {Код после наложения заплаток};
-        
-        \draw[->] (src) -- (patched);
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/patching}
     \caption[Использование заплаток]{Использование заплаток. После применения техники все адреса обращений к памяти заменены ссылками на симулируемые}
     \label{fig:patching}
 \end{figure}
 
 \begin{figure}[htpb]
     \centering
-    \begin{tikzpicture}[font=\ttfamily\small, >=latex]
-        \node[draw, align=left] (src) {
-        mov \%r2, \%r1 \\
-        \textit{mov \%cr0, \%r4} \\
-        add \$0xaabb, \%r2 \\
-        \textit{trap 0xbb}
-        };
-        
-        \node[draw, align=left, right=0.5cm of src] (patched) {
-        mov \%r2, \%r1 \\
-        \textit{trap 0x001} \\
-        add \$0xaabb, \%r2 \\
-        \textit{trap 0x002}
-        };
-        
-        \coordinate[right=2cm of patched] (mp);
-        
-        \node[draw, align=left, above=1.5cm of mp] (stub001) {
-        handle_stub001: \\
-        <обработка mov cr>
-        };
-        \node[draw, align=left, below=1.5cm of mp] (stub002) {
-        handle_stub002: \\
-        <обработка trap>
-        };
-        
-        \node[above=0.5cm of src, font=\small] {Исходный код};
-        \node[above=0.5cm of patched, font=\small, align=center ] {Код после \\ вставки заглушек};
-        
-        % And this is badly hard coded
-        \coordinate[above=0.2cm of patched.east] (trap1);
-        \coordinate[below=0.6cm of patched.east] (trap2);
-        
-        \draw[->] (src) -- (patched);
-        \draw[->, dashed] ([xshift=-1.2cm] trap1) -| (stub001);
-        \draw[->, dashed] ([xshift=-1.2cm] trap2) -| (stub002);
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/stubbing}
     \caption[Использование заглушек]{Использование заглушек. Инструкции, требующие контролируемого выполнения, заменяются на инструкции безусловной передачи управления в процедуру-обработчик симулятора}
     \label{fig:stubbing}
 \end{figure}
@@ -602,31 +354,7 @@ add \$5, PC_OFF(\%r14) \\
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.8\textwidth]{./vm-assist-crop.pdf}
-    \begin{tikzpicture}[
-        ctx/.style={draw, chamfered rectangle, chamfered rectangle corners={north west, south east}}
-    ]
-    \node[text centered] (mon-label) {}; % {Режим монитора};           
-    \node[text centered, right of=mon-label, node distance = 5cm] (gst-label) {}; % {Режим гостя}; 
-    % \node[dashed, draw, text width = 3cm] (root) {}; 
-    % \node[dashed, draw, text width = 3cm] (non-root) {};
-    
-    \node[ctx, below of=mon-label, inner sep=1pt] (gst-ctx1) {\scriptsize Контекст гостя};
-    \node[ctx, below of=gst-ctx1, xshift=-1cm, inner sep=1pt] (hst-ctx1) {\scriptsize Контекст хозяина};
-    
-    \node[ctx, below of=gst-label, inner sep=1pt] (hst-ctx2) {\scriptsize Контекст хозяина};
-    \node[ctx, below of=hst-ctx2, xshift=-1cm, inner sep=1pt] (gst-ctx2) {\scriptsize Контекст гостя};
-
-    \node[draw, text width = 2.5cm, below of=hst-ctx1, xshift=0cm, inner ysep=1cm] (mon-mode) {Режим монитора}; 
-    \node[draw, double, text width = 3.5cm, below of=gst-ctx2, xshift=0cm, inner ysep=1cm] (gst-mode) {Режим виртуальной машины};
-    
-    
-    \node[single arrow, draw, right of=mon-mode, yshift=1cm, xshift=1.3cm] (arr-to) {\scriptsize Вход};
-    \node[single arrow, draw, left of=gst-mode, yshift=-1.5cm, xshift=-1.7cm, shape border rotate=180] (arr-to) {\scriptsize Выход};
-    
-    \node[starburst,fill=white,draw, inner sep=1pt, text width = 1.5cm, right of=arr-to, xshift=0.7cm] (bad-beh) {\scriptsize <<Плохое>> поведение};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/vm-assist}
     \caption[Аппаратная поддержка переключения контекста между монитором виртуальных машин и гостевой системой]{Аппаратная поддержка переключения контекста между монитором виртуальных машин и гостевой системой. При входе в режим виртуальной машины с помощью системной инструкции контекст хозяина сохраняется в выделенной области памяти и заменяется контекстом гостя. При любой причине обратного перехода в режим монитора (например, при попытке выполнить зарезервированную операцию) этот контекст обменивается с гостевым}
     \label{fig:vm-assist}
 \end{figure}
@@ -643,25 +371,7 @@ add \$5, PC_OFF(\%r14) \\
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.95\textwidth]{./hypersim-crop.pdf}
-    \begin{tikzpicture}[>=latex,
-        instr/.style={draw, shape=signal, signal pointer angle=160, signal from=west, signal to=east, text width = .15cm, node distance = 0.35cm, inner ysep=1cm, inner xsep=0cm},
-        ]
-    \draw[->] (0,0) -- (11,0) node[pos=0.8, below] (sim-time) {\small Симулируемое время};
-
-    \foreach \x in {0, 1, 2, 3, 4, 5, 6} { 
-        \draw (\x,-0.25) -- (\x,0.25) node (tick\x) {};
-    };
-    
-    \node[anchor=west] at (0, 0.5) {\small Прошлое};
-    \node at (4, 0.5) {\small Известное будущее};
-    \node[anchor=east] at (11, 0.5) {\small Неизвестное будущее};
-    
-    \node[style=single arrow,draw, rotate=90, anchor=east] (now) at (2, 0 ) {\scriptsize Настоящее};
-    \node[draw, arrow box, arrow box arrows={south:.7cm}] (event) at (6.5, 1) {\scriptsize Следующее событие};
-    \draw[->] (now.south) .. controls +(2,-0.5) .. (event.south) node[below, midway] {\scriptsize Перемотка времени};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/hypersim}
     \caption[Гиперсимуляция]{Гиперсимуляция. При обнаружении возможности симулируемое время продвигается вперёд до следующего события, состояние процессора при этом неизменно}
     \label{fig:hypersim}
 \end{figure}
@@ -732,25 +442,7 @@ xchgl (locked), %eax
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[>=latex, font=\small, align=center, inner sep=2pt]
-
-    \node[draw, text width = 2.5cm, minimum height = 1.2cm] (interp) {Интерпретатор};
-    
-    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of interp] (bt) {Двоичный транслятор};
-    
-    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of bt] (dex) {Прямое исполнение};
-    
-    \begin{scope}[auto, text width = 3cm]
-    \draw[->] (interp.north) to[bend left] node {Горячий код} ([xshift=-0.2cm] bt.north);
-    \draw[->] (bt.north) to[bend left] node {Горячий код + возможность DEX} (dex.north);
-    
-    \draw[->] ([xshift=-0.2cm] bt.south) to[bend left] node {SMC} (interp.south);
-    \draw[->] (dex.south) to[bend left] node {Частые выходы в монитор} (bt.south);
-    
-    \end{scope}
-    \draw[->] ([xshift=0.75cm] dex.south) to[bend left=60] node[auto] {Неподдерживаемый режим/инструкции} ([xshift=-0.75cm] interp.south);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/gearbox}
     \caption[Динамическое переключение режимов симуляции]{Динамическое переключение режимов симуляции}
     \label{fig:gearbox}
 \end{figure}

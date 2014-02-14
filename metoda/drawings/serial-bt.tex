@@ -1,0 +1,27 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small]
+    \draw[->] (2,0) -- (3,0);
+    \draw[->] (3.5,-1.5) -- (5, -1.5);
+    \draw[->] (5.5, 0) -- (7, 0);
+    \draw[->] (7.5,-1.5) -- (9, -1.5);
+    
+    \draw[->, dashed] (3,0) -- (3.5, -1.5);
+    \draw[->, dashed] (5,-1.5) -- (5.5, 0);
+    \draw[->, dashed] (7,0) -- (7.5, -1.5);
+    
+    \node[anchor= west, text width = 2cm] at (-0.2,0) {Двоичная трансляция};    
+    \node[anchor= west] at (-0.2,-1.5) {Симуляция};
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,33 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex, font=\small, align=center, inner sep=2pt]
+
+    \node[draw, text width = 2.5cm, minimum height = 1.2cm] (interp) {Интерпретатор};
+    
+    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of interp] (bt) {Двоичный транслятор};
+    
+    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of bt] (dex) {Прямое исполнение};
+    
+    \begin{scope}[auto, text width = 3cm]
+    \draw[->] (interp.north) to[bend left] node {Горячий код} ([xshift=-0.2cm] bt.north);
+    \draw[->] (bt.north) to[bend left] node {Горячий код + возможность DEX} (dex.north);
+    
+    \draw[->] ([xshift=-0.2cm] bt.south) to[bend left] node {SMC} (interp.south);
+    \draw[->] (dex.south) to[bend left] node {Частые выходы в монитор} (bt.south);
+    
+    \end{scope}
+    \draw[->] ([xshift=0.75cm] dex.south) to[bend left=60] node[auto] {Неподдерживаемый режим/инструкции} ([xshift=-0.75cm] interp.south);
+    
+    \end{tikzpicture}
+
+
+\end{document}

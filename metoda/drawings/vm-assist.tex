@@ -1,0 +1,38 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[
+        ctx/.style={draw, chamfered rectangle, chamfered rectangle corners={north west, south east}}
+    ]
+    \node[text centered] (mon-label) {}; % {Режим монитора};           
+    \node[text centered, right of=mon-label, node distance = 5cm] (gst-label) {}; % {Режим гостя}; 
+    % \node[dashed, draw, text width = 3cm] (root) {}; 
+    % \node[dashed, draw, text width = 3cm] (non-root) {};
+    
+    \node[ctx, below of=mon-label, inner sep=1pt] (gst-ctx1) {\scriptsize Контекст гостя};
+    \node[ctx, below of=gst-ctx1, xshift=-1cm, inner sep=1pt] (hst-ctx1) {\scriptsize Контекст хозяина};
+    
+    \node[ctx, below of=gst-label, inner sep=1pt] (hst-ctx2) {\scriptsize Контекст хозяина};
+    \node[ctx, below of=hst-ctx2, xshift=-1cm, inner sep=1pt] (gst-ctx2) {\scriptsize Контекст гостя};
+
+    \node[draw, text width = 2.5cm, below of=hst-ctx1, xshift=0cm, inner ysep=1cm] (mon-mode) {Режим монитора}; 
+    \node[draw, double, text width = 3.5cm, below of=gst-ctx2, xshift=0cm, inner ysep=1cm] (gst-mode) {Режим виртуальной машины};
+    
+    
+    \node[single arrow, draw, right of=mon-mode, yshift=1cm, xshift=1.3cm] (arr-to) {\scriptsize Вход};
+    \node[single arrow, draw, left of=gst-mode, yshift=-1.5cm, xshift=-1.7cm, shape border rotate=180] (arr-to) {\scriptsize Выход};
+    
+    \node[starburst,fill=white,draw, inner sep=1pt, text width = 1.5cm, right of=arr-to, xshift=0.7cm] (bad-beh) {\scriptsize <<Плохое>> поведение};
+    
+    \end{tikzpicture}
+
+
+\end{document}

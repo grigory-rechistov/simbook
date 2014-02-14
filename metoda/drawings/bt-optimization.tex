@@ -1,0 +1,57 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex, font=\ttfamily\small, node distance = 0.5cm]
+        
+        \node[draw, align=left] (guest) {
+instr1 \\
+instr2 \\
+instr3 \\
+instr4 \\
+instr5 \\
+branch
+        };
+         
+        \node[draw, align=left, right = of guest.north east, anchor = north west] (orig) {
+<instr1> \\
+inc PC_OFF(\%r14) \\
+<instr2>             \\
+inc PC_OFF(\%r14) \\
+<instr3>             \\
+inc PC_OFF(\%r14) \\
+<instr4>             \\
+inc PC_OFF(\%r14) \\
+<instr5>             \\
+inc PC_OFF(\%r14) \\
+<branch>
+        };
+        
+        \node[draw, align=left, right=of orig.north east, anchor = north west] (opt) {
+<instr1> \\
+<instr2> \\
+<instr3> \\
+<instr4> \\
+<instr5> \\
+add \$5, PC_OFF(\%r14) \\
+<branch>
+        };
+        
+    \node[font=\scriptsize, above=0.3cm  of guest.north, anchor = south] (guest-lbl) {Гостевой код};
+    \node[font=\scriptsize, above=0.3cm  of orig.north, anchor = south] (orig-lbl) {ДТ};
+    \node[font=\scriptsize, above=0.3cm  of opt.north, anchor = south] (opt-lbl) {Оптимизация ДТ};
+    
+    \draw[->] (guest-lbl) -- (orig-lbl);
+    \draw[->] (orig-lbl) -- (opt-lbl);
+    
+    \end{tikzpicture}
+
+
+\end{document}
