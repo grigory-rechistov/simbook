@@ -38,29 +38,7 @@
 
 \begin{figure}[htp]
     \centering
-    % \includegraphics[width=\textwidth]{./queue1-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time) {Время};
-
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    \node[shape=dart, draw, shape border rotate=270 ] at (2, 0.5) (currevent) {};
-    \node[draw, arrow box, arrow box arrows={north:.7cm}, text width=2.5cm, align=center, below = 0cm of currevent] (tsim) {Текущее симулируемое время};
-    \node[align=center, above=0.2cm of currevent, text width=2cm]  {Обрабатываемое событие};
-    
-    \node[shape=dart, draw, shape border rotate=270 ] at (5, 0.5) (futureevent) {};
-    \node[align=center, above=0.2cm of futureevent, text width=2cm] {Запланированное событие};
-    
-    \node[fill=black!10, shape=dart, draw, shape border rotate=270 ] at (7, 0.5) (newbornevent) {};
-    \node[align=center, above=0.2cm of newbornevent, text width=1.5cm] {Новое событие};
-    
-    \node[shape=dart, draw, shape border rotate=270 ] at (9, 0.5) (futureevent2) {};
-    \node[shape=dart, draw, shape border rotate=270, above=0cm of futureevent2 ] (futureevent3) {};
-    
-    \draw[dashed, ->] (currevent.south) .. controls +(1,-0.5) and +(-1,-0.5) .. (newbornevent.south); % node[below, pos=0.7, text width=3cm] {Обработка события порождает новое событие в будущем};
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/queue1}
     \caption[Дискретная симуляция событий]{Дискретная симуляция событий. События привязаны к границам тактов. Показано состояние системы в некоторый момент: несколько запланированы в будущем, одно исполняется, при этом оно порождает новое и добавляет его в очередь}
     \label{fig:queue1}
 \end{figure}
@@ -117,33 +95,7 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=\textwidth]{./queue2-crop.pdf}
-    \begin{tikzpicture}[>=latex, font=\scriptsize]
-    
-    \draw[->] (-0.5,0) -- (10.5,0); % node[pos=0.9, above] (sim-time) {Время};
-
-    \begin{scope}
-    \clip (0,-2) rectangle (10, 2.5);
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    
-    \node[shape=dart, draw, shape border rotate=270 ] at (1, 0.5) (event1) {};
-    \node[shape=dart, draw, shape border rotate=270 ] at (5, 0.5) (event2) {};
-    \node[shape=dart, draw, shape border rotate=270 ] at (9, 0.5) (event3) {};
-    
-    \node[above of=event2] (desalabel) {Дискретные события};
-    \draw[->] (desalabel) -- (event1);
-    \draw[->] (desalabel) -- (event2);
-    \draw[->] (desalabel) -- (event3);
-    
-    \draw (3,-0.5) ellipse[x radius = 2cm, y radius = 0.5cm] node {Исполнение процессора} ;
-    \draw (7,-0.5) ellipse[x radius = 2cm, y radius = 0.5cm] node {Исполнение процессора} ;
-    
-    \draw (-1,-0.5) ellipse[x radius = 2cm, y radius = 0.5cm] node {} ;
-    \draw (11,-0.5) ellipse[x radius = 2cm, y radius = 0.5cm] node {} ;
-    \end{scope}
-    \end{tikzpicture}
+	\inputpicture{drawings/queue2}
     \caption{Симуляция исполняющего устройства, перемежающаяся с обработкой дискретных событий}
     \label{fig:queue2}
 \end{figure}
@@ -166,17 +118,7 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.75\textwidth]{./cosim-crop.pdf}
-    \begin{tikzpicture}[>=latex]
-    \node[draw, circle, text width = 3cm, text badly centered] (dessim) {Симулятор дискретных событий};
-    \node[draw, circle, text width = 3cm, text badly centered, right = 2.5cm of dessim] (execsim) {Модель исполняющего устройства};
-    
-    \draw (dessim.45)   edge[bend left = 45, ->] (execsim.135);
-    \node[above=1cm of execsim.135] {\small Длительность до следующего события};
-    \draw (execsim.225) edge[->, bend left = 45] (dessim.315);
-    \node[below=1cm of dessim.315] {\small Число исполненных шагов};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/cosim}
     \caption[Косимуляция моделей исполняющих устройств и DES]{Косимуляция моделей исполняющих устройств и DES. При каждой передаче управления соответствующая модель сообщает другой о том, насколько было продвинуто симулируемое время}
     \label{fig:cosim}
 \end{figure}
@@ -197,44 +139,14 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.7\textwidth]{./quota-mp-crop.pdf}
-    \begin{tikzpicture}[>=latex]
-        \draw[->] (0,0) -- (8,0) node[pos=0.9, below] (sim-time) {Физическое время};
-
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    \matrix[anchor=south west] at (-0.5,0.5){
-        \node[] {CPU3}; & & & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!5] (arr3) {}; \\
-        \node {CPU2}; & & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!10] (arr2) {}; & \\
-        \node {CPU1}; & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!15] (arr1) {}; & & \\
-    };
-       
-    \draw[->] (arr1.east) -- (arr2.west);
-    \draw[->] (arr2.east) -- (arr3.west);
-    \end{tikzpicture}
+	\inputpicture{drawings/quota-mp-pt1}
     \caption[Совместная симуляция нескольких процессоров, часть 1]{Совместная симуляция нескольких процессоров. Отдельные интервалы симуляции чередуются на хозяйском процессоре}
     \label{fig:quota-mp-pt1}
 \end{figure}
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[>=latex]
-        \draw[->] (0,0) -- (8,0) node[pos=0.9, below] (sim-time) {Симулируемое время};
-
-    \foreach \x in { 1, 2, 3, 4, 5, 6, 7} { 
-        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
-    };
-    \matrix[anchor=south west] at (-0.5,0.5){
-        \node {CPU3}; & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!5] (arr3) {};  \\
-        \node {CPU2}; & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!10] (arr2) {}; \\
-        \node {CPU1}; & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!15] (arr1) {}; \\
-    };
-       
-    % \draw[->] (arr1.east) -- (arr2.west);
-    % \draw[->] (arr2.east) -- (arr3.west);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/quota-mp-pt2}
     \caption[Совместная симуляция нескольких процессоров, часть 2]{Совместная симуляция нескольких процессоров. В контексте моделируемой системы процесс выглядит как параллельная непрерывная работа}
     \label{fig:quota-mp-pt2}
 \end{figure}

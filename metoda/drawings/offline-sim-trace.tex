@@ -1,0 +1,42 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[node distance=0.3cm, dot/.style={fill=black,circle,inner sep=0.05cm}]
+        \node[draw, rounded corners, inner ysep=0.25cm] (ev1) {};
+        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev1] (ev2) {};
+        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev2] (ev3) {};
+        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev3] (ev4) {};
+        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev4] (ev5) {};
+        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev5] (ev6) {};
+        \node[above of=ev3, node distance = 0.5cm] (evts) {\small События};
+        \node[tape, draw, fit= (ev1) (ev2) (ev3) (ev4) (ev5) (ev6) (evts)] (trace) {};
+        
+        \node[draw, single arrow, node distance = 1.6cm, right of = trace, inner xsep=0.35cm] (arrow1) {};
+        \draw[xshift=3.5cm, scale=1.7, right of= arrow1]
+        \foreach \i in {1,2,...,10} {% draw the gear
+            [rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
+        };  
+        \node (sim) at (4.0, 0.1) {\footnotesize Симулятор};
+        \node[draw, single arrow, node distance = 3.3cm, right of = arrow1, inner xsep=0.35cm] (arrow2) {};
+        
+        \node[draw, yshift=-1cm, shape=semicircle, inner xsep=1.5cm, right of=arrow2, anchor=center, node distance=2.2cm] (scrc) {};
+        
+        \node[above of=scrc, node distance = 1.8cm] {\small Результаты};
+        
+         \draw[>=latex, very thick, ->] (scrc.south) -- +(70:1.5cm);
+        
+        \foreach \a in {15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165} {
+            \node[dot] at (scrc.\a) {};
+        };
+        \node[dot] at (scrc.south) {};
+        
+    \end{tikzpicture}
+\end{document}

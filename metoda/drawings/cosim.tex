@@ -1,0 +1,24 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex]
+    \node[draw, circle, text width = 3cm, text badly centered] (dessim) {Симулятор дискретных событий};
+    \node[draw, circle, text width = 3cm, text badly centered, right = 2.5cm of dessim] (execsim) {Модель исполняющего устройства};
+    
+    \draw (dessim.45)   edge[bend left = 45, ->] (execsim.135);
+    \node[above=1cm of execsim.135] {\small Длительность до следующего события};
+    \draw (execsim.225) edge[->, bend left = 45] (dessim.315);
+    \node[below=1cm of dessim.315] {\small Число исполненных шагов};
+    
+    \end{tikzpicture}
+
+
+\end{document}

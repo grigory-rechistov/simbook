@@ -1,0 +1,37 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[node distance=0cm, font=\scriptsize, text height=0.4cm, >=latex]
+        \node[draw] (funcsim) {Функц. симуляция};
+        \node[draw, right=of funcsim.east, anchor=west, fill=black!10] (warmup) {Разогрев};
+        \node[draw, right=of warmup.east, anchor=west, fill=black!20] (measure) {Измерение};
+        
+        \node[draw, right=of measure.east, anchor=west] (funcsim2) {\phantom{Аууууу}}; % I am an idiot!
+        \node[draw, right=of funcsim2.east, anchor=west, fill=black!10] (warmup2) {\phantom{Ау}};
+        \node[draw, right=of warmup2.east, anchor=west, fill=black!20] (measure2) {\phantom{Ау}};
+        
+        \node[draw, right=of measure2.east, anchor=west] (funcsim3) {\phantom{Аууууу}};
+        \node[draw, right=of funcsim3.east, anchor=west, fill=black!10] (warmup3) {\phantom{Ау}};
+        \node[draw, right=of warmup3.east, anchor=west, fill=black!20] (measure3) {\phantom{Ау}};
+        
+        \draw[decorate,decoration={brace, amplitude=0.15cm}] (funcsim.north west) -- (measure.north east) node[align=center, above, midway] {Цикл\\исследования};
+        \draw[decorate,decoration={brace, amplitude=0.15cm}] (funcsim2.north west) -- (measure2.north east) node[align=center,above, midway] {Цикл\\исследования};
+        \draw[decorate,decoration={brace, amplitude=0.15cm}] (funcsim3.north west) -- (measure3.north east) node[align=center, above, midway] {Цикл\\исследования};
+        
+        \node[below=of measure.east, yshift = -1cm, circle, draw] (sigma) {\large{$\Sigma$}};
+        
+        \draw (measure.south)  edge[->] (sigma);
+        \draw (measure2.south) edge[->] (sigma);
+        \draw (measure3.south) edge[->] (sigma);
+        
+    \end{tikzpicture}
+
+\end{document}

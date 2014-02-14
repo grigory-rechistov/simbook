@@ -1,6 +1,6 @@
 \chapter{Моделирование с~использованием трасс}\label{traces}
 
-\dictum[А.С. Пушкин]{Там на неведомых дорожках следы невиданных зверей.}
+\dictum[А.С.~Пушкин]{Там на неведомых дорожках следы невиданных зверей.}
 
 Симуляция на основе трасс (\abbr trace driven simulation) базируется на возможности использования истории дискретных событий для нужд симуляций. Под трассами (\abbr trace --- след) понимаются истории событий, произошедших в системе за определённый период времени и сохранённые в порядке их возникновения в файл. В каждой записи содержится информация об изменении состояния системы из-за внешних или внутренних факторов. 
 
@@ -61,29 +61,10 @@ time=25 port write addr=0x10 data=0xabcd
 
 \begin{figure}[htp]
     \centering
-    \begin{tikzpicture}[font=\small, >=latex]
-    \node[draw] (extern-input) {Внешний ввод};
-    \node[draw, circle, right=of extern-input] (splitter) {};
-    \draw     (splitter.west) -- (splitter.center);
-    \draw[->] (splitter.center) -- (splitter.east);
-    \draw[->] (splitter.center) -- (splitter.south);
-    
-    \node[draw, below=0.5cm of splitter] (recorder) {Запись};
-    \node[draw, right=of splitter] (sim1) {Симулятор};
-    \node[draw, tape, below=1cm of extern-input] (trace) {Трасса};
-    \node[draw, below=1cm of sim1] (sim2) {Симулятор};
-    
-    \draw[->] (extern-input) -- (splitter);
-    \draw[->] (splitter) -- (recorder);
-    \draw[->] (splitter) -- (sim1);
-    \draw[->] (recorder) -| (trace);
-    \draw[->] (trace) -- (sim2);
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/trace-collection}
     \caption[Этапы сбора и использования трассы]{Этапы сбора и использования трассы}
     \label{fig:trace-collection}
 \end{figure}
-
 
 Приведём несколько примеров сценариев использования данной техники.
 \begin{itemize*}
@@ -99,42 +80,7 @@ time=25 port write addr=0x10 data=0xabcd
 
 \begin{figure}[htp]
     \centering
-    \begin{tikzpicture}[font=\small, >=latex]
-        \begin{scope}[start chain,node distance=5mm, every node/.style={on chain, draw},]
-            \node []  (ref-start) {};
-            \node []              {};
-            \node []              {};
-            \node []              {};
-            \node []  (ref-true)  {};
-            \node []              {};
-            \node []              {};
-            \node []  (ref-end)   {};
-        \end{scope}
-        
-        \begin{scope}[start chain,node distance=5mm, every node/.style={on chain,join, draw}, every join/.style={->}]
-            \node [below=of ref-start]  (test-start) {};
-            \node []              {};
-            \node []              {};
-            \node []              {};
-            \node [fill=black!10]  (test-end)  {};
-        \end{scope}
-        
-        \coordinate  (pnt) at (barycentric cs:ref-start=0.5,test-start=0.5);              
-        \node[thick, draw, left=0.5cm of pnt] (initial-state) {};    
-        \draw[->] (initial-state) -- (ref-start);
-        \draw[->] (initial-state) -- (test-start);
-        
-        \node[left=of ref-start] {Эталонная трасса};
-        \node[left=of test-start] {Проверяемая смуляция};
-        
-        \node[align=center, below=1cm of initial-state, inner sep=1pt] (init-label) {Начальное состояние};
-        \draw[dotted] (init-label) -- (initial-state);
-        
-        \node[draw, dashed, fit = (ref-true) (test-end)] (diffbox) {};
-        \node[right = 0.5cm of init-label] (difflabel) {Расхождение состояний};
-        \draw[dotted] (difflabel) -- (diffbox);
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/trace-verification}
     \caption[Верификация симулятора с помощью эталонной трассы]{Верификация модели с помощью эталонной трассы на каждом шаге симуляции}
     \label{fig:trace-verification}
 \end{figure}
@@ -150,45 +96,14 @@ time=25 port write addr=0x10 data=0xabcd
 \begin{enumerate*}
     \item Трасса записывается на реальной (старой) аппаратуре, в неё попадают все доступы в память (с результатами отдельных чтений и записей), а также другие внешние и внутренние события (прерывания, исключения). 
     \item Сохранённые результаты подаются на модель, которая использует их как историю взаимодействия с внешним миром, при этом изменяя своё внутреннее состояние соответствующим образом и сообщая задержки, при этом возникающие. 
-    \item На этапе анализа не приходится писать точную имитационную модель новой аппаратуры, достаточно иметь лишь упрощённую схему задержек (рис.~\ref{fig:tracing}).
+    \item На этапе анализа не приходится писать точную имитационную модель новой аппаратуры, достаточно иметь лишь упрощённую схему задержек (рис.~\ref{fig:offline-sim-trace}).
 \end{enumerate*}
 
 \begin{figure}[htb]
     \centering
-%     \includegraphics[width=0.8\textwidth]{./tracing-crop}
-    \begin{tikzpicture}[node distance=0.3cm, dot/.style={fill=black,circle,inner sep=0.05cm}]
-        \node[draw, rounded corners, inner ysep=0.25cm] (ev1) {};
-        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev1] (ev2) {};
-        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev2] (ev3) {};
-        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev3] (ev4) {};
-        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev4] (ev5) {};
-        \node[draw, rounded corners, inner ysep=0.25cm, right of=ev5] (ev6) {};
-        \node[above of=ev3, node distance = 0.5cm] (evts) {\small События};
-        \node[tape, draw, fit= (ev1) (ev2) (ev3) (ev4) (ev5) (ev6) (evts)] (trace) {};
-        
-        \node[draw, single arrow, node distance = 1.6cm, right of = trace, inner xsep=0.35cm] (arrow1) {};
-        \draw[xshift=3.5cm, scale=1.7, right of= arrow1]
-        \foreach \i in {1,2,...,10} {% draw the gear
-            [rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
-        };  
-        \node (sim) at (4.0, 0.1) {\footnotesize Симулятор};
-        \node[draw, single arrow, node distance = 3.3cm, right of = arrow1, inner xsep=0.35cm] (arrow2) {};
-        
-        \node[draw, yshift=-1cm, shape=semicircle, inner xsep=1.5cm, right of=arrow2, anchor=center, node distance=2.2cm] (scrc) {};
-        
-        \node[above of=scrc, node distance = 1.8cm] {\small Результаты};
-        
-         \draw[>=latex, very thick, ->] (scrc.south) -- +(70:1.5cm);
-        
-        \foreach \a in {15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165} {
-            \node[dot] at (scrc.\a) {};
-        };
-        \node[dot] at (scrc.south) {};
-        
-    \end{tikzpicture}
-
+	\inputpicture{drawings/offline-sim-trace}
     \caption{Процесс использования трассы в оффлайн-симуляторе}
-    \label{fig:tracing}
+    \label{fig:offline-sim-trace}
 \end{figure}
 
 Заметим, что начиная со второго шага нет необходимости иметь доступ к изучаемому приложению ни в виде исходного кода, ни даже в виде кода скомпилированного --- после генерации трассы они не нужны~\cite{Cain02preciseand}. Это может оказаться важным в случае, если изучаемое приложение является закрытым или каким-либо образом ограниченным в распространении ---  мы можем его исследовать и получить важные характеристики его работы по <<безликой>> трассе.
@@ -216,37 +131,10 @@ time=25 port write addr=0x10 data=0xabcd
 \begin{figure}[htp]
     \centering
     \subfigure[Сценарий 1]{
-    \begin{tikzpicture}[font=\small, >=latex, scale=0.8]
-        \clip (-0.1,0) rectangle (5, -6);
-        \draw[->] (0,0) -- (0, -6);
-        
-        \draw (0.5,0) rectangle (1.5, -2);
-        \draw (0.5,-2) rectangle (1.5, -3);
-        \draw (0.5,-3) rectangle (1.5, -5);
-        \node[align=center] at (1.0, -2.5) {A};
-        
-        \draw (2.5,0) rectangle (3.5, -3);
-        \draw (2.5,-3) rectangle (3.5, -4);
-        \draw (2.5,-4) rectangle (3.5, -5);
-        \node[align=center] at (3.0, -3.5) {B};
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/trace-parallel-a}
     }
     \subfigure[Сценарий 2] {
-    \begin{tikzpicture}[font=\small, >=latex, scale=0.8]
-        \clip (-0.1,0) rectangle (5, -6);
-        \draw[->] (0,0) -- (0, -6);
-        
-        \draw (0.5,0) rectangle (1.5, -3);
-        \draw (0.5,-3) rectangle (1.5, -4);
-        \draw (0.5,-4) rectangle (1.5, -5);
-        \node[align=center] at (1.0, -3.5) {A};
-        
-        \draw (2.5,0) rectangle (3.5, -2);
-        \draw (2.5,-2) rectangle (3.5, -3);
-        \draw (2.5,-3) rectangle (3.5, -4);
-        \node[align=center] at (3.0, -2.5) {B};
-    \end{tikzpicture}        
+	\inputpicture{drawings/trace-parallel-b}
     }
     \caption[Трассировка параллельных систем]{Трассировка параллельных систем. Порядок A и B зависит от длительности предшествующих перед ними событий. Трасса, собранная на первой симуляции, не отражает правильный порядок событий для второй}
     \label{fig:trace-parallel}
@@ -263,35 +151,7 @@ time=25 port write addr=0x10 data=0xabcd
 
 \begin{figure}[htp]
     \centering
-    \begin{tikzpicture}[font=\small, >=latex]
-        \begin{scope}[start chain,node distance=5mm, every node/.style={on chain, draw, join}, every join/.style={->}]
-            \node []              {};
-            \node []              {};
-            \node []              {};
-            \node []    (brnch)   {};
-        \end{scope}
-
-        \begin{scope}[start chain,node distance=5mm, every node/.style={on chain, join, draw}, every join/.style={->}]
-            \node [below=of brnch, xshift=7mm] (brnch-start) {};
-            \node []  (brnch-middle) {};
-            \node []  (brnch-end)    {};
-        \end{scope}
-
-        \begin{scope}[start chain,node distance=5mm, every node/.style={on chain, join, draw},every join/.style={->}]
-            \node [above=of brnch-end, xshift=7mm] (resume) {};
-            \node []              {};
-            \node []              {};
-            \node []    (trace-end)   {};
-        \end{scope}
-
-        \draw[->] (brnch) -- (brnch-start);
-        \draw[->] (brnch-end) -- (resume);
-        \node[draw, help lines, cross out, fit = (brnch-start) (brnch-end)] {};
-        
-        \node[above=1.3cm of brnch-middle] (arch-label)   {Архитектурно видимые доступы};
-        \node[below=0.5cm of brnch-middle]    (cancel-label) {Неправильно предсказанные доступы};
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/trace-misspeculation}
     \caption[Предсказание переходов]{Предсказание переходов. Если в трассе будут отражены доступы в память, связанные с исполнением ветки кода, впоследствии отменённой из-за ошибки предсказания перехода, то при последующей симуляции они будут <<фантомными>>}
     \label{fig:trace-misspeculation}
 \end{figure}
@@ -317,37 +177,13 @@ time=25 port write addr=0x10 data=0xabcd
 
 Поэтому для сокращения длительности фазы симуляции измерения проводятся только для серии коротких отрезков. Сами отрезки (\textit{сэмплы}) в исходной трассе выбираются или через регулярные интервалы, случайным образом или каким-либо другим способом. Такой подход называется \textit{сэмплированием} (\abbr sampling) и позволяет получить компромисс между длительностью анализа и его точностью.
 
-\paragraph{Фазы сэмплирования.} На рис.~\ref{fig:warmup} показан пример последовательности трёх используемых фаз при сэмплировании для задачи анализа микроархитектурного поведения некоторой системы.
+\paragraph{Фазы сэмплирования.} На рис.~\ref{fig:trace-warmup} показан пример последовательности трёх используемых фаз при сэмплировании для задачи анализа микроархитектурного поведения некоторой системы.
 
 \begin{figure}[htbp]
     \centering
-    % \includegraphics[width=0.8\textwidth]{./warmup-crop}
-    \begin{tikzpicture}[node distance=0cm, font=\scriptsize, text height=0.4cm, >=latex]
-        \node[draw] (funcsim) {Функц. симуляция};
-        \node[draw, right=of funcsim.east, anchor=west, fill=black!10] (warmup) {Разогрев};
-        \node[draw, right=of warmup.east, anchor=west, fill=black!20] (measure) {Измерение};
-        
-        \node[draw, right=of measure.east, anchor=west] (funcsim2) {\phantom{Аууууу}}; % I am an idiot!
-        \node[draw, right=of funcsim2.east, anchor=west, fill=black!10] (warmup2) {\phantom{Ау}};
-        \node[draw, right=of warmup2.east, anchor=west, fill=black!20] (measure2) {\phantom{Ау}};
-        
-        \node[draw, right=of measure2.east, anchor=west] (funcsim3) {\phantom{Аууууу}};
-        \node[draw, right=of funcsim3.east, anchor=west, fill=black!10] (warmup3) {\phantom{Ау}};
-        \node[draw, right=of warmup3.east, anchor=west, fill=black!20] (measure3) {\phantom{Ау}};
-        
-        \draw[decorate,decoration={brace, amplitude=0.15cm}] (funcsim.north west) -- (measure.north east) node[align=center, above, midway] {Цикл\\исследования};
-        \draw[decorate,decoration={brace, amplitude=0.15cm}] (funcsim2.north west) -- (measure2.north east) node[align=center,above, midway] {Цикл\\исследования};
-        \draw[decorate,decoration={brace, amplitude=0.15cm}] (funcsim3.north west) -- (measure3.north east) node[align=center, above, midway] {Цикл\\исследования};
-        
-        \node[below=of measure.east, yshift = -1cm, circle, draw] (sigma) {\large{$\Sigma$}};
-        
-        \draw (measure.south)  edge[->] (sigma);
-        \draw (measure2.south) edge[->] (sigma);
-        \draw (measure3.south) edge[->] (sigma);
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/trace-warmup}
     \caption[Сэмплирование трассы]{Сэмплирование трассы. Потактовая модель включена только на этапах разогрева и измерения, результаты собираются только при измерениях}
-    \label{fig:warmup}
+    \label{fig:trace-warmup}
 \end{figure}
 
 

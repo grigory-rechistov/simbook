@@ -1,0 +1,30 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex]
+        \draw[->] (0,0) -- (8,0) node[pos=0.9, below] (sim-time) {Симулируемое время};
+
+    \foreach \x in { 1, 2, 3, 4, 5, 6, 7} { 
+        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
+    };
+    \matrix[anchor=south west] at (-0.5,0.5){
+        \node {CPU3}; & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!5] (arr3) {};  \\
+        \node {CPU2}; & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!10] (arr2) {}; \\
+        \node {CPU1}; & \node[shape=single arrow, draw, text width = 2cm, inner xsep = 0cm, fill=black!15] (arr1) {}; \\
+    };
+       
+    % \draw[->] (arr1.east) -- (arr2.west);
+    % \draw[->] (arr2.east) -- (arr3.west);
+    
+    \end{tikzpicture}
+
+
+\end{document}

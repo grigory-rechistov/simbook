@@ -1,0 +1,36 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex, font=\scriptsize]
+    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time) {Время};
+
+    \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
+        \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
+    };
+    \node[shape=dart, draw, shape border rotate=270 ] at (2, 0.5) (currevent) {};
+    \node[draw, arrow box, arrow box arrows={north:.7cm}, text width=2.5cm, align=center, below = 0cm of currevent] (tsim) {Текущее симулируемое время};
+    \node[align=center, above=0.2cm of currevent, text width=2cm]  {Обрабатываемое событие};
+    
+    \node[shape=dart, draw, shape border rotate=270 ] at (5, 0.5) (futureevent) {};
+    \node[align=center, above=0.2cm of futureevent, text width=2cm] {Запланированное событие};
+    
+    \node[fill=black!10, shape=dart, draw, shape border rotate=270 ] at (7, 0.5) (newbornevent) {};
+    \node[align=center, above=0.2cm of newbornevent, text width=1.5cm] {Новое событие};
+    
+    \node[shape=dart, draw, shape border rotate=270 ] at (9, 0.5) (futureevent2) {};
+    \node[shape=dart, draw, shape border rotate=270, above=0cm of futureevent2 ] (futureevent3) {};
+    
+    \draw[dashed, ->] (currevent.south) .. controls +(1,-0.5) and +(-1,-0.5) .. (newbornevent.south); % node[below, pos=0.7, text width=3cm] {Обработка события порождает новое событие в будущем};
+        
+    \end{tikzpicture}
+
+
+\end{document}
