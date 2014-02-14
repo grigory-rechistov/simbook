@@ -1,0 +1,39 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex,font=\footnotesize,
+    action/.style={ rectangle, draw, node distance=2cm, text badly centered, text width=2.5cm, inner sep=2pt},
+    choice/.style={diamond, draw, aspect=2, node distance=2cm, text badly centered, text width=2.5cm, inner sep=0cm}
+    ]
+    \node[action]                           (decode-d1)  {Декодировать, используя D1};
+    \node[choice, below=0.4cm of decode-d1]       (is-decoded) {Успешно декодирована?};
+    \node[action, below=0.4cm of is-decoded, yshift=-0.25cm]      (exec1)      {Исполнить обработчик};
+    \node[action, below=0.4cm of is-decoded, xshift=3cm]      (decode-d2)  {Декодировать, используя D2};
+    \node[choice, below=0.4cm of decode-d2]       (is-decoded-2)     {Успешно декодирована?};
+    \node[action, below=0.4cm of is-decoded-2, yshift=-0.25cm]    (exec2)    {Исполнить обработчик};
+    \node[action, below=0.4cm of is-decoded-2, xshift=3cm]      (exception)  {Перейти на обработчик исключения};
+    \node[action, below=0.3cm of exec2]           (next-instr)  {Перейти к следующей инструкции};
+    
+    \path[->, draw] (decode-d1.south) -- (is-decoded.north);
+    \path[->, draw] (is-decoded.south) -- (exec1.north) node[midway, right] {Да};
+    \path[->, draw] (is-decoded.east) -| (decode-d2.north) node[near start, above] {Нет};
+    \path[->, draw] (exec1.south) |- (next-instr.west);
+    \path[->, draw] (decode-d2.south) -- (is-decoded-2.north);
+    \path[->, draw] (is-decoded-2.south) -- (exec2.north) node[midway, right] {Да};
+    \path[->, draw] (is-decoded-2.east) -| (exception.north) node[near start, above] {Нет};
+    \path[->, draw] (exec2.south) -- (next-instr.north);
+    \path[->, draw] (exception.south) |- (next-instr.east);
+    \path[->, draw] (next-instr.south) |-  ([xshift=-4cm, yshift=-0.4cm] next-instr.south west) -| ([xshift=-2.5cm,yshift=0.4cm] decode-d1.north) -| (decode-d1.north);
+    
+    \end{tikzpicture}
+
+
+\end{document}

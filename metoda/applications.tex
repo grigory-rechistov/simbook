@@ -21,11 +21,7 @@
 
 \begin{figure}[htb]
     \centering
-	\iftoggle{htmlpaper}{
-		\includegraphics{drawings/error-cost-0}
-	}{
-		\input{drawings/error-cost}
-	}
+	\inputpicture{drawings/error-cost}
     \caption[Рост стоимости исправления ошибки с фазой проектирования устройства]{Рост стоимости исправления ошибки с фазой проектирования устройства. Различные этапы проектирования могут перекрываться во времени, однако каждый из них подразумевает всё большие вложения ресурсов. Ошибки в уже выпущенном продукте могут повлечь за собой существенные финансовые и имиджевые потери для допустившей их компании}
     \label{fig:error-cost}
 \end{figure}
@@ -39,11 +35,7 @@
 
 \begin{figure}[htp]
 \centering
-\iftoggle{htmlpaper}{
-	\includegraphics{drawings/interface-0}
-}{
-	\input{drawings/interface}
-}
+\inputpicture{drawings/interface}
 \caption[Соединение компонент сложной системы через интерфейсы]{Соединение компонент сложной системы через интерфейсы, определяющие форматы запроса и отклика, но не специфицирующие детали реализации необходимой функциональности. Это позволяет заменять некоторые или даже все части такой системы на программные модели}\label{fig:interface}
 \end{figure}
 
@@ -87,11 +79,7 @@
 
 \begin{figure}[htp]
 \centering
-\iftoggle{htmlpaper}{
-	\includegraphics{drawings/vm-type1-0}
-}{
-	\input{drawings/vm-type1}
-}
+\inputpicture{drawings/vm-type1}
 \caption[Гипервизор первого типа]{Пример использования гипервизора первого типа для одновременного запуска приложений двух различных операционных систем}\label{fig:vm-type1}
 \end{figure}
 
@@ -101,11 +89,7 @@
 
 \begin{figure}[htp]
     \centering
-\iftoggle{htmlpaper}{
-	\includegraphics{drawings/vm-type2-0}
-}{
-	\input{drawings/vm-type2}
-}
+	\inputpicture{drawings/vm-type2}
     \caption[Гипервизор второго типа]{Пример использования гипервизора второго типа для запуска приложений второй операционной системы при уже загруженной основной}\label{fig:vm-type2}
 \end{figure}
 
@@ -127,12 +111,8 @@
 
 \begin{figure}[htb]
     \centering
-\iftoggle{htmlpaper}{
-	\includegraphics{drawings/simulation-levels-0}
-}{
-	\input{drawings/simulation-levels}
-}
-   \caption[Место различных типов симуляции]{Место различных типов симуляции в стеке существующих интерфейсов вычислительных систем}
+	\inputpicture{drawings/simulation-levels}
+    \caption[Место различных типов симуляции]{Место различных типов симуляции в стеке существующих интерфейсов вычислительных систем}
     \label{fig:simulation-levels}
 \end{figure}
 
@@ -150,11 +130,7 @@
 
 \begin{figure}[htb]
     \centering
-\iftoggle{htmlpaper}{
-	\includegraphics{drawings/multiplexing-0}
-}{
-	\input{drawings/multiplexing}
-}
+	\inputpicture{drawings/multiplexing}
     \caption[Виртуализация как сочетание изоляции и разделения ресурсов]{Виртуализация как сочетание изоляции виртуальных машин и разделения хозяйских ресурсов между ними. Под мультиплексированием понимается временн\'{o}е разделение выполнения нескольких виртуальных процессоров на одном хозяйском}
     \label{fig:multiplexing}
 \end{figure}

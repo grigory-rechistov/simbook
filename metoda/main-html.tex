@@ -35,6 +35,10 @@
 
 \input{examp-dummy}
 
+% Include PNGs generated from standalone TeX files.
+% The final "-0" sufffix is added by the ImageMagick conversion
+\newcommand{\inputpicture}[1]{\includegraphics{#1-0}}
+
 \begin{document}
 
 \makeatletter\renewcommand\@biblabel[1]{#1.}\makeatother
@@ -79,7 +83,7 @@
 \input{examp-dummy}
 \include{appendix-answers}
 
-\include{alternatives}     % Chapter 6 has been demoted to an appendix
+\include{alternatives}
 \include{ic-route}     
 
 % Changelog here

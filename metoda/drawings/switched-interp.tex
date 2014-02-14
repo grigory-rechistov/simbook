@@ -1,0 +1,32 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex,font=\small]
+	\clip[] (-0.8,1.7) rectangle (4,-3.5); % This is an ugly hack
+	
+	\node[draw] (switch) {\texttt{switch}};
+	\node[minimum width = 1.2cm, draw, below=0.5cm of switch.south east, anchor=west] (ssr1) {SR1};
+	\node[minimum width = 1.2cm, draw, below=0.2cm of ssr1] (ssr2) {SR2};
+	\node[minimum width = 1.2cm, draw, below=0.2cm of ssr2] (ssr3) {SR3};
+	\node[minimum width = 1.2cm, draw, below=0.2cm of ssr3] (ssr4) {SR4};
+	
+   \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr1);
+   \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr2);
+   \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr3);
+   \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr4);
+   
+   \draw[->]  (ssr1.east) .. controls +(1,0) and +(0,1) .. (switch.north);
+   \draw[->]  (ssr2.east) .. controls +(2,0) and +(0,2) .. (switch.north);
+   \draw[->]  (ssr3.east) .. controls +(3,0) and +(0,3) .. (switch.north);
+   \draw[->]  (ssr4.east) .. controls +(4,0) and +(0,4) .. (switch.north);
+\end{tikzpicture}
+
+\end{document}

@@ -1,4 +1,5 @@
 \chapter{Модели процессора на основе интерпретации}\label{interpretation}
+
 \dictum[Nick Morgan]{Assembly language is the lowest level of abstraction in computers --- the point at which the code is still readable\footnotemark}
 \footnotetext{Язык ассемблера --- самый низкий уровень абстракции в компьютерах, точка, в которой код программ всё ещё можно разобрать.}
 
@@ -34,24 +35,7 @@ typedef struct {
 
 \begin{figure}[htb]
     \centering
-    %\includegraphics[width=0.7\textwidth]{./interp-cycle-expanded-crop}
-    \begin{tikzpicture}[font=\footnotesize, >=latex]
-        % five circles
-        \foreach \A/\T in    { 90/{Извлечь инструкцию},
-                               18/{Декодировать},
-                              306/{Исполнить},
-                              234/{Запись в память},
-                              162/{Продвинуть \texttt{PC}}
-            } {
-            \node[draw, circle, text width = 2cm, text badly centered](stage\A) at (\A:2.5cm) {\small\T};
-            }
-            % arrows, dumb way
-            \draw[->, ] (stage90) -- (stage18);
-            \draw[->, ] (stage18) -- (stage306);
-            \draw[->, ] (stage306) -- (stage234);
-            \draw[->, ] (stage234) -- (stage162);
-            \draw[->, ] (stage162) -- (stage90);
-    \end{tikzpicture}
+	\inputpicture{drawings/interp-cycle-expanded}
     \caption{Рабочий цикл интерпретатора}
     \label{fig:interp-cycle-expanded}
 \end{figure}
@@ -104,37 +88,7 @@ cpu.pc = (cpu.pc + instr_size) & addr_mask;
 
 \begin{figure}[h!tbp]
     \centering
-    %\includegraphics[width=0.7\textwidth]{./interp-cycle-expanded-exception-crop}
-        \begin{tikzpicture}[font=\footnotesize, >=latex]
-        % five circles
-        \foreach \A/\T in    { 90/{Извлечь инструкцию},
-                               18/{Декодировать},
-                              306/{Исполнить},
-                              234/{Запись в память},
-                              162/{Продвинуть \texttt{PC}}
-            } { 
-            \node[draw, circle, text width = 2cm, text badly centered](stage\A) at (\A:2.5cm) {\small\T};
-            }
-            
-            % The exception circle
-            \node[draw, circle, text width = 2cm, text badly centered](stageE) at (0,-5.0cm){\small Исключение};
-            
-            % arrows, dumb way
-            \draw[->] (stage90) -- (stage18);
-            \draw[->] (stage18) -- (stage306);
-            \draw[->] (stage306) -- (stage234);
-            \draw[->] (stage234) -- (stage162);
-            \draw[->] (stage162) -- (stage90);
-            
-            % arrows to exception
-            \draw[dashed, ->] (stage90) .. controls (6,3) and (6,-3) .. (stageE);
-            \draw[dashed, ->] (stage18) .. controls (4,-3) .. (stageE);
-            \draw[dashed, ->] (stage306) .. controls (1,-4) .. (stageE.north east);
-            \draw[dashed, ->] (stage234) .. controls (-2,-4) .. (stageE);
-            % an edge from exception
-            \draw[->] (stageE) .. controls (-6, -3) and (-6, 3).. (stage90);
-            
-    \end{tikzpicture}
+	\inputpicture{drawings/interp-cycle-expanded-exception}
     \caption[Цикл интерпретатора с фазой обработки исключения]{Рабочий цикл интерпретатора. Показана возможность возникновения исключительной ситуации на любой стадии симуляции}
     \label{fig:interp-cycle-expanded-exception}
 \end{figure}
@@ -242,22 +196,7 @@ int main() {
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[>=latex,font=\small]
-        \node[draw,align=center] (get-byte) {Считать ещё один байт};
-        
-        \node[draw,align=center,diamond, aspect=2, below=of get-byte] (try-decode) {Декодировать};
-        
-        \node[draw,align=center, below=of try-decode] (done) {Успех};
-        \node[draw,align=center, right=of done] (exception) {Исключение};
-        \draw[->] (get-byte.south) -- (try-decode.north) node[pos=0.3, right] {OK};
-        
-        \draw[->] (get-byte.east) -| ([xshift=0.5cm] exception.north) node[pos=0.5, above] {Исключение};
-        
-        \draw[->] (try-decode.south) -- (done) node[pos=0.3, right] {0};
-        \draw[->] (try-decode.east) -| (exception) node[pos=0.1, below] {1};
-        \draw[->] (try-decode.west) -| ([xshift=-1cm] get-byte.west) node[pos=0.1, below] {-1} -- (get-byte.west);
-        
-    \end{tikzpicture}
+	\inputpicture{drawings/variable-length}
     \caption{Блок-схема декодирования, учитывающая переменную длину инструкции}
     \label{fig:variable-length}
 \end{figure}
@@ -268,21 +207,7 @@ int main() {
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[>=latex,font=\small]
-
-    \foreach \b in {1,2,3}
-    {\fill[black!10] (\b,0) rectangle (\b +1,1); };
-    
-    \foreach \b/\type in {0/solid,1/solid,2/solid,3/solid,4/solid,5/dashed,6/dashed,7/dashed,8/dashed,9/dashed}
-    {\draw[\type] (\b,0) rectangle (\b +1,1); };
-
-    \node[fill=white, align=center, inner sep=1pt] at (7.5,0.5) {Отсутствующая страница};
-    
-    \draw[decorate, decoration={brace, amplitude=6pt}, yshift=2pt]  (1,1) -- (8,1) node[midway, sloped, above=0.1cm] {Максимальная длина инструкции};
-    
-    \draw[decorate, decoration={brace, amplitude=6pt}, yshift=-2pt]  (4,0) -- (1,0) node[midway, sloped, below=0.1cm] {Действительная длина инструкции};
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/page-crossing-decode}
     \caption[Пересечение границы страниц при декодировании]{Пересечение границы страниц при декодировании, вызывающее ложное исключение}
     \label{fig:page-crossing-decode}
 \end{figure}
@@ -436,47 +361,18 @@ typedef struct decode_result {
 
 \subsection{Сцепленная интерпретация}
 
-Одной из причин низкой скорости работы является неэффективное использование различных аппаратных ресурсов хозяйской системы, призванных уменьшить влияние явлений, разрушительных для конвейерной обработки. Так, из-за использования единого \texttt{switch} в теле цикла, из которого передача управления может быть осуществлена  во множество мест, предсказатель переходов процессора не может каждый раз правильно предугадать адрес инструкции перехода, что вызывает сброс конвейера и задержку в несколько тактов. Этот негативный эффект проявляется в начале обработки каждой новой гостевой инструкции. Вместо концентрации условного перехода в одном месте  желательно <<размазать>> его по многим местам в коде, уменьшив в каждом из них число вариантов адреса (в идеале --- до одного). Этого можно достичь, если вызывать обработчик следующей инструкции сразу после конца работы текущей инструкции, без возвращения в общий цикл. Такой алгоритм интерпретации называется \textit{сцепленным} (\abbr threaded), см. рис.~\ref{fig:threaded-interp}. 
+Одной из причин низкой скорости работы является неэффективное использование различных аппаратных ресурсов хозяйской системы, призванных уменьшить влияние явлений, разрушительных для конвейерной обработки. Так, из-за использования единого \texttt{switch} в теле цикла, из которого передача управления может быть осуществлена  во множество мест, предсказатель переходов процессора не может каждый раз правильно предугадать адрес инструкции перехода, что вызывает сброс конвейера и задержку в несколько тактов. Этот негативный эффект проявляется в начале обработки каждой новой гостевой инструкции. Вместо концентрации условного перехода в одном месте  желательно <<размазать>> его по многим местам в коде, уменьшив в каждом из них число вариантов адреса (в идеале --- до одного). Этого можно достичь, если вызывать обработчик следующей инструкции сразу после конца работы текущей инструкции, без возвращения в общий цикл. Такой алгоритм интерпретации называется \textit{сцепленным} (\abbr threaded), см. рис.~\ref{fig:switched-threaded-interp}. 
 
 \begin{figure}[htb]
     \centering
     \subfigure[Переключаемый интерпретатор]{
-        \begin{tikzpicture}[>=latex,font=\small]
-            \clip[] (-0.8,1.7) rectangle (4,-3.5); % This is an ugly hack
-            
-            \node[draw] (switch) {\texttt{switch}};
-            \node[minimum width = 1.2cm, draw, below=0.5cm of switch.south east, anchor=west] (ssr1) {SR1};
-            \node[minimum width = 1.2cm, draw, below=0.2cm of ssr1] (ssr2) {SR2};
-            \node[minimum width = 1.2cm, draw, below=0.2cm of ssr2] (ssr3) {SR3};
-            \node[minimum width = 1.2cm, draw, below=0.2cm of ssr3] (ssr4) {SR4};
-            
-           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr1);
-           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr2);
-           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr3);
-           \draw[->]  (switch.south) .. controls +(0,-1) and +(-1,0) .. (ssr4);
-           
-           \draw[->]  (ssr1.east) .. controls +(1,0) and +(0,1) .. (switch.north);
-           \draw[->]  (ssr2.east) .. controls +(2,0) and +(0,2) .. (switch.north);
-           \draw[->]  (ssr3.east) .. controls +(3,0) and +(0,3) .. (switch.north);
-           \draw[->]  (ssr4.east) .. controls +(4,0) and +(0,4) .. (switch.north);
-        \end{tikzpicture}
+	\inputpicture{drawings/switched-interp}
     }
     \subfigure[Сцепленный интерпретатор]{
-        \begin{tikzpicture}[>=latex,font=\small]
-            \clip[] (-2,0.5) rectangle (2.5,-4.2); % This is an ugly hack
-            \node[minimum width = 1.2cm, draw,]                   (tsr1) {SR1};
-            \node[minimum width = 1.2cm, draw, below=0.7cm of tsr1] (tsr2) {SR2};
-            \node[minimum width = 1.2cm, draw, below=0.7cm of tsr2] (tsr3) {SR3};
-            \node[minimum width = 1.2cm, draw, below=0.7cm of tsr3] (tsr4) {SR4};
-            
-            \draw[->] (tsr1.south) .. controls +(2,-1) and +(2,1) .. (tsr3.north);
-            \draw[->] (tsr3.south) .. controls +(-2,-1) and +(-2,1) .. (tsr2.north);
-            \draw[->] (tsr2.south) .. controls +(2,-1) and +(2,1) .. (tsr4.north);
-           
-        \end{tikzpicture}
+	\inputpicture{drawings/threaded-interp}
     }  
     \caption{Сравнение последовательности передачи управления для переключаемой и сцепленной интерпретаций}
-    \label{fig:threaded-interp}
+    \label{fig:switched-threaded-interp}
 \end{figure}
 
 
@@ -500,29 +396,7 @@ INSTR_X: // Текущая инструкция X
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.5\textwidth]{./cached-interp-crop}
-    \begin{tikzpicture}[>=latex, font=\small,
-    action/.style={ rectangle, draw, text badly centered, text width=2.cm},
-    choice/.style={diamond, draw, aspect=2, text badly centered, text width=2.cm, inner sep=1pt},
-    complexaction/.style={rectangle, draw, rounded corners, text badly centered},
-    ]
-    \node[choice]       (is-decoded)   {\scriptsize Инструкция декодирована?};
-    \node[action, below=0.5cm of is-decoded] (fetch-instr)      {Извлечь инструкцию};
-    \node[action, below=0.5cm  of fetch-instr] (decode)      {Декодировать};
-    \node[complexaction, matrix, below=0.5cm  of decode, row sep=0.1cm, text width=4cm]   (cache-decode) {
-        \node{Сохранить декодированное представление}; \\
-        \node[complexaction] {Управление хранилищем кода}; \\
-        };
-    \node[action, below=0.5cm of cache-decode] (execute)   {Исполнить};
-    
-    \path[->, draw] (is-decoded.east) -| ([xshift=2cm] execute.east) node[near start, above] {Да} -- (execute.east);
-    \path[->, draw] (is-decoded.south) -- (fetch-instr.north) node[midway, right] {Нет};
-    \path[->, draw] (fetch-instr.south) -- (decode.north);
-    \path[->, draw] (decode.south) -- (cache-decode.north);
-    \path[->, draw] (cache-decode.south) -- (execute.north);
-    \path[->, draw] (execute.south) |-  ([xshift=-2cm, yshift=-0.5cm] execute.west) |- ([xshift=-2.5cm,yshift=0.5cm] is-decoded.north) -| (is-decoded.north);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/cached-interp}
     \caption{Схема работы кэширующего интерпретатора}
     \label{fig:cached-interp}
 \end{figure}
@@ -535,31 +409,7 @@ INSTR_X: // Текущая инструкция X
 
 \begin{figure}[h!tb]
     \centering
-    \begin{tikzpicture}[>=latex,font=\footnotesize,
-    action/.style={ rectangle, draw, node distance=2cm, text badly centered, text width=2.5cm, inner sep=2pt},
-    choice/.style={diamond, draw, aspect=2, node distance=2cm, text badly centered, text width=2.5cm, inner sep=0cm}
-    ]
-    \node[action]                           (decode-d1)  {Декодировать, используя D1};
-    \node[choice, below=0.4cm of decode-d1]       (is-decoded) {Успешно декодирована?};
-    \node[action, below=0.4cm of is-decoded, yshift=-0.25cm]      (exec1)      {Исполнить обработчик};
-    \node[action, below=0.4cm of is-decoded, xshift=3cm]      (decode-d2)  {Декодировать, используя D2};
-    \node[choice, below=0.4cm of decode-d2]       (is-decoded-2)     {Успешно декодирована?};
-    \node[action, below=0.4cm of is-decoded-2, yshift=-0.25cm]    (exec2)    {Исполнить обработчик};
-    \node[action, below=0.4cm of is-decoded-2, xshift=3cm]      (exception)  {Перейти на обработчик исключения};
-    \node[action, below=0.3cm of exec2]           (next-instr)  {Перейти к следующей инструкции};
-    
-    \path[->, draw] (decode-d1.south) -- (is-decoded.north);
-    \path[->, draw] (is-decoded.south) -- (exec1.north) node[midway, right] {Да};
-    \path[->, draw] (is-decoded.east) -| (decode-d2.north) node[near start, above] {Нет};
-    \path[->, draw] (exec1.south) |- (next-instr.west);
-    \path[->, draw] (decode-d2.south) -- (is-decoded-2.north);
-    \path[->, draw] (is-decoded-2.south) -- (exec2.north) node[midway, right] {Да};
-    \path[->, draw] (is-decoded-2.east) -| (exception.north) node[near start, above] {Нет};
-    \path[->, draw] (exec2.south) -- (next-instr.north);
-    \path[->, draw] (exception.south) |- (next-instr.east);
-    \path[->, draw] (next-instr.south) |-  ([xshift=-4cm, yshift=-0.4cm] next-instr.south west) -| ([xshift=-2.5cm,yshift=0.4cm] decode-d1.north) -| (decode-d1.north);
-    
-    \end{tikzpicture}
+	\inputpicture{drawings/chained-interp}
     \caption[Ступенчатая схема вызова декодеров]{Ступенчатая схема вызова декодеров при обнаружении инструкции, не поддерживаемой оригинальной моделью. При обнаружении в потоке инструкций машинного кода, не распознаваемого D1, управление передаётся на D2}
     \label{fig:chained-interp}
 \end{figure}

@@ -1,0 +1,24 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex,font=\small]
+	\foreach \b in {1,2,3}
+	{\fill[black!10] (\b,0) rectangle (\b +1,1); };
+
+	\foreach \b/\type in {0/solid,1/solid,2/solid,3/solid,4/solid,5/dashed,6/dashed,7/dashed,8/dashed,9/dashed}
+	{\draw[\type] (\b,0) rectangle (\b +1,1); };
+	\node[fill=white, align=center, inner sep=1pt] at (7.5,0.5) {Отсутствующая страница};
+	\draw[decorate, decoration={brace, amplitude=6pt}, yshift=2pt]  (1,1) -- (8,1) node[midway, sloped, above=0.1cm] {Максимальная длина инструкции};
+	\draw[decorate, decoration={brace, amplitude=6pt}, yshift=-2pt]  (4,0) -- (1,0) node[midway, sloped, below=0.1cm] {Действительная длина инструкции};
+
+\end{tikzpicture}
+
+\end{document}

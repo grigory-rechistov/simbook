@@ -7,7 +7,7 @@
 % TODO update backside and lastpage with actual publisher information (ISBN etc)
 % TODO update generated bibliography 
 
-\documentclass[a5paper,11pt,twoside,titlepage, numbers=endperiod]{scrbook}
+\documentclass[a5paper, 11pt, twoside, titlepage, numbers=endperiod]{scrbook}
 
 \input{main-version}
 
@@ -35,6 +35,9 @@
 % \input{setup-biblio} % TODO setup
 \input{setup-hacks}
 \input{examp-dummy}
+
+% Create vector pictures from TikZ environments
+\newcommand{\inputpicture}[1]{\input{#1}}
 
 \begin{document}
 

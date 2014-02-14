@@ -1,0 +1,31 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+
+\begin{tikzpicture}[font=\footnotesize, >=latex]
+	% five circles
+	\foreach \A/\T in    { 90/{Извлечь инструкцию},
+						   18/{Декодировать},
+						  306/{Исполнить},
+						  234/{Запись в память},
+						  162/{Продвинуть \texttt{PC}}
+		} {
+		\node[draw, circle, text width = 2cm, text badly centered](stage\A) at (\A:2.5cm) {\small\T};
+		}
+		% arrows, dumb way
+		\draw[->, ] (stage90) -- (stage18);
+		\draw[->, ] (stage18) -- (stage306);
+		\draw[->, ] (stage306) -- (stage234);
+		\draw[->, ] (stage234) -- (stage162);
+		\draw[->, ] (stage162) -- (stage90);
+\end{tikzpicture}
+
+\end{document}

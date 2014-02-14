@@ -1,0 +1,26 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex,font=\small]
+	\clip[] (-2,0.5) rectangle (2.5,-4.2); % This is an ugly hack
+	\node[minimum width = 1.2cm, draw,]                   (tsr1) {SR1};
+	\node[minimum width = 1.2cm, draw, below=0.7cm of tsr1] (tsr2) {SR2};
+	\node[minimum width = 1.2cm, draw, below=0.7cm of tsr2] (tsr3) {SR3};
+	\node[minimum width = 1.2cm, draw, below=0.7cm of tsr3] (tsr4) {SR4};
+	
+	\draw[->] (tsr1.south) .. controls +(2,-1) and +(2,1) .. (tsr3.north);
+	\draw[->] (tsr3.south) .. controls +(-2,-1) and +(-2,1) .. (tsr2.north);
+	\draw[->] (tsr2.south) .. controls +(2,-1) and +(2,1) .. (tsr4.north);
+   
+\end{tikzpicture}
+
+
+\end{document}

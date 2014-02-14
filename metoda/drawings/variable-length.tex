@@ -1,0 +1,28 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex,font=\small]
+	\node[draw,align=center] (get-byte) {Считать ещё один байт};
+	
+	\node[draw,align=center,diamond, aspect=2, below=of get-byte] (try-decode) {Декодировать};
+	
+	\node[draw,align=center, below=of try-decode] (done) {Успех};
+	\node[draw,align=center, right=of done] (exception) {Исключение};
+	\draw[->] (get-byte.south) -- (try-decode.north) node[pos=0.3, right] {OK};
+	
+	\draw[->] (get-byte.east) -| ([xshift=0.5cm] exception.north) node[pos=0.5, above] {Исключение};
+	
+	\draw[->] (try-decode.south) -- (done) node[pos=0.3, right] {0};
+	\draw[->] (try-decode.east) -| (exception) node[pos=0.1, below] {1};
+	\draw[->] (try-decode.west) -| ([xshift=-1cm] get-byte.west) node[pos=0.1, below] {-1} -- (get-byte.west);
+	
+\end{tikzpicture}
+\end{document}

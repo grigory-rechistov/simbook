@@ -1,0 +1,36 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex, font=\small,
+    action/.style={ rectangle, draw, text badly centered, text width=2.cm},
+    choice/.style={diamond, draw, aspect=2, text badly centered, text width=2.cm, inner sep=1pt},
+    complexaction/.style={rectangle, draw, rounded corners, text badly centered},
+    ]
+    \node[choice]       (is-decoded)   {\scriptsize Инструкция декодирована?};
+    \node[action, below=0.5cm of is-decoded] (fetch-instr)      {Извлечь инструкцию};
+    \node[action, below=0.5cm  of fetch-instr] (decode)      {Декодировать};
+    \node[complexaction, matrix, below=0.5cm  of decode, row sep=0.1cm, text width=4cm]   (cache-decode) {
+        \node{Сохранить декодированное представление}; \\
+        \node[complexaction] {Управление хранилищем кода}; \\
+        };
+    \node[action, below=0.5cm of cache-decode] (execute)   {Исполнить};
+    
+    \path[->, draw] (is-decoded.east) -| ([xshift=2cm] execute.east) node[near start, above] {Да} -- (execute.east);
+    \path[->, draw] (is-decoded.south) -- (fetch-instr.north) node[midway, right] {Нет};
+    \path[->, draw] (fetch-instr.south) -- (decode.north);
+    \path[->, draw] (decode.south) -- (cache-decode.north);
+    \path[->, draw] (cache-decode.south) -- (execute.north);
+    \path[->, draw] (execute.south) |-  ([xshift=-2cm, yshift=-0.5cm] execute.west) |- ([xshift=-2.5cm,yshift=0.5cm] is-decoded.north) -| (is-decoded.north);
+    
+    \end{tikzpicture}
+
+
+\end{document}
