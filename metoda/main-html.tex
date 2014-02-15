@@ -1,16 +1,10 @@
 % This variant is used for genration of a HTML version of the book.
 % FIXME implement me
 
-\documentclass[a4paper,12pt, oneside,titlepage, numbers=endperiod]{book}
+\documentclass[a4paper,12pt, oneside,titlepage]{book}
 %\documentclass[a4paper,10pt,twoside,titlepage]{book} % swap for latex2rtf
 
 \input{setup-version}
-
-\tolerance=9999 % let the text underfull be ugly as hell, nobody cares.
-
-\widowpenalty=9998 % try to avoid widow lines
-\clubpenalty=9998 % try to avoid orphan lines
-\emergencystretch=3cm
 
 % A switch to change between document rendering options
 \usepackage{etoolbox}
@@ -18,30 +12,30 @@
 \newtoggle{webpaper}
 \toggletrue{webpaper}
 
+\newtoggle{htmlpaper}
+\toggletrue{htmlpaper}
+
 \newtoggle{showanswers} % An option to show answers in quizes.
 \togglefalse{showanswers}
 
 \newtoggle{inappendix} % we are now in appendix
 \togglefalse{inappendix} % ... but not yet
 
-\usepackage[top=2.0cm, bottom=2.0cm, left=1.84cm, right=1.5cm, footskip=1cm]{geometry}
 \pagestyle{plain} % no headers, page numbers in footers
 
-\input{setup-fonts}
-\input{setup-packages}
-\input{setup-appendix}
-\input{setup-biblio}
-\input{setup-hacks}
+% \input{setup-fonts}
+% \input{setup-packages}
+% \input{setup-appendix}
+% \input{setup-biblio}
+% \input{setup-hacks}
 
-\input{examp-dummy}
+%\input{examp-dummy}
 
 % Include PNGs generated from standalone TeX files.
 % The final "-0" sufffix is added by the ImageMagick conversion
 \newcommand{\inputpicture}[1]{\includegraphics{#1-0}}
 
 \begin{document}
-
-\makeatletter\renewcommand\@biblabel[1]{#1.}\makeatother
 
 \include{title}
 \tableofcontents
