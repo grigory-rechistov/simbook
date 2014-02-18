@@ -1,0 +1,25 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    \begin{tikzpicture}[>=latex, node distance=2cm, font=\small]
+        \node (input) {Вход};
+        \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=input] (f1) {$F(x)$};
+        \node[right of=f1] (output) {Выход};
+        \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, below of= f1, node distance=1cm] (port) {\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};
+        \node[below of=output, node distance=1cm ] (memory) {Память узла};
+        \draw[>-] (input) -- (f1);
+        \draw[->] (f1) -- (output);
+        \draw[->] (f1.340) -- +(0.2,0) |- (port.east);
+        \draw[->] (port.west) -- +(-0.8,0) |- (f1.200);
+    \end{tikzpicture}
+
+
+\end{document}

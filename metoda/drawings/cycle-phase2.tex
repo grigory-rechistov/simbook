@@ -1,0 +1,40 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+    % FIXME This picture is drawn in a so lame way that it makes me cry. Someone please do something about it.
+    \begin{tikzpicture}[>=latex, text width=0.5cm, text badly centered, inner ysep=0.5cm, inner xsep=0cm, node distance=2cm, font=\tiny]
+    
+    \def\delayport{node[very thick, draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, midway]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};}
+    \def\doubledelayport{node[very thick, draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, pos=0.25]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}} node[very thick, draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, pos=0.75]{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}};}
+    
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}] (u11) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u11] (u12) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u12] (u13) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right of=u13] (u14) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below=of u11.west] (u21) {};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, below =of u14.east] (u22) {};
+    
+    \draw[->] ([yshift=0.25cm] u11.east) -- ([yshift=0.25cm] u12.west) \delayport;
+    \draw[->] (u12.east) -- (u13.west) \delayport;
+    \draw[->] ([yshift=0.25cm] u13.east) -- ([yshift=0.25cm] u14.west) \delayport;
+    \draw[->] (u13.-30) -| ([xshift=-1.2cm] u22.west) -- (u22.west) \delayport;
+    \draw[-] (u21.east) -|  ([xshift=-1.1cm] u12.220) \delayport;
+        \draw ([xshift=-1.1cm] u12.220) -- (u12.220) \delayport;
+    \draw[-] (u22.east) -|  ([xshift=0.5cm, yshift=-1cm] u22.east);
+        \draw[-] ([xshift=0.5cm, yshift=-1cm] u22.east) -- ([xshift=-0.5cm, yshift=-1cm] u21.west) \doubledelayport;
+        \draw[->] ([xshift=-0.5cm, yshift=-1cm] u21.west) |- (u21.west);
+    
+    \draw[-] (u14.east) -|  ([xshift=0.5cm, yshift=1cm] u14.east);
+        \draw[-] ([xshift=0.5cm, yshift=1cm] u14.east) -- ([xshift=-0.5cm, yshift=1cm] u11.west) \doubledelayport;
+        \draw[->] ([xshift=-0.5cm, yshift=1cm] u11.west) |- (u11.west);   
+    \end{tikzpicture}
+
+\end{document}

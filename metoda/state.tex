@@ -31,50 +31,21 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.6\textwidth]{./register-crop}
-\begin{tikzpicture}[>=latex, font=\small, node distance=2cm]
-    \node[draw] (reader) {Читающее устройство};
-    \node[draw, right =of reader] (register) {Регистр};
-    \node[draw, right =of reader,  xshift=-0.1cm, inner xsep=1.5cm, inner ysep=0.5cm] (box) {};
-    \draw[<-] (reader.east) -- (register.west) node[midway, above] {32 бит} node[midway] {/} ;
-\end{tikzpicture}
+	\inputpicture{drawings/register}
     \caption[Чтение регистра]{Чтение регистра фиксированной ширины может быть произведено связанным с ним устройством на каждом такте работы}
     \label{fig:register}
 \end{figure}
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.6\textwidth]{./membus-crop}
-\begin{tikzpicture}[inner xsep=1pt, inner ysep=0.2cm, node distance=0cm, font=\small,>=latex]
-    \node[draw, text width = 0.8cm                       ] (data1) {};
-    \node[draw, text width = 0.8cm, below =of data1.south] (data2) {};
-    \node[draw, text width = 0.8cm, below =of data2.south] (data3) {};
-    \node[draw, text width = 0.8cm, below =of data3.south] (data4) {};
-    \node[draw, text width = 0.8cm, below =of data4.south] (data5) {};
-    \node[very thick, draw, text width = 0.8cm, below =of data5.south] (data6) {};
-    \node[draw, text width = 0.8cm, below =of data6.south] (data7) {};
-    \node[draw, text width = 0.8cm, below =of data7.south] (data8) {};
-    \node[draw, fit=(data1) (data8), inner sep=0.5cm] (bbox) {};
-    
-    \node[draw, text badly centered, text width = 2cm, node distance=4.5cm, left of=data4, ] (reader) {Читающее устройство};
-    
-    \draw[->] (data6.west) -- +(-2.,-0) node [pos=0.6, above] {32 бит} node[pos=0.6] {/} |- (reader.east)  node[pos=0.5, above] {Результат};
-    \draw[->] (reader.north) |- (bbox.120) node [pos=0.6, above] {8 бит} node[pos=0.6] {/} node[pos=0.8, above] {Адрес};
-    
-\end{tikzpicture}
+	\inputpicture{drawings/membus}
     \caption[Пример чтения из блока памяти]{Пример чтения из блока памяти. Для указания адреса блока используется шина адреса. Чтение результата, как правило, происходит по другой группе проводов, составляющих шину данных. Не показаны, но часто присутствуют дополнительные линии шины адреса для передачи типа операции (чтение/запись), а также линия шины результата, используемая для индикации его готовности}
     \label{fig:membus}
 \end{figure}
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.4\textwidth]{./interrupt-line-crop}
-\begin{tikzpicture}[font=\small,>=latex, inner sep=2pt]
-    \node[draw, text width=2.5cm, text badly centered] (source) {Источник прерываний};
-    \node[draw, text width=2.5cm, right of=source, node distance = 4cm, inner ysep=0.5cm] (dest) {};
-    \draw[->] (source) -- (dest) node[midway, above] {1 бит};
-    
-\end{tikzpicture}
+	\inputpicture{drawings/interrupt-line}
     \caption[Линия прерывания]{Линия для сигнализации ситуации прерывания состоит из одного провода, уровень или фронт сигнала на котором обозначает событие, требующее внимания ЦПУ}
     \label{fig:interrupt-line}
 \end{figure}
@@ -159,25 +130,7 @@ f_write(addr, value);
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.75\textwidth]{./memmap-crop}
-\begin{tikzpicture}[font=\small, >=latex]
-    \path[font=\ttfamily, inner xsep=0pt] (0,0) -- (10,0) node[pos=0.05, above] (0x0) {0x0} node[pos=0.2, above] (0x30) {0x30} node[pos=0.35, above] {0x40} node[pos=0.5,above] (midpoint) {0xafff} node[pos=0.9, above] (0xffff) {0xffff};
-    \node[draw, fit=(0x0) (0xffff)] (ruler) {};
-    \node[draw, rounded corners, above=0.5cm of ruler] (cpu) {ЦПУ};
-    
-    \draw[<->] (cpu) -- (ruler);
-    
-    \draw (2,0.1) -- (2,-1.5) coordinate[very near end, inner sep=0pt] (left-c) {};
-    \draw (3.5,0.1) -- (3.5,-1.5) coordinate[very near end, inner sep=0pt] (right-c) {};
-    
-    \draw (0.5,0.1) -- (0.5,-3) coordinate[very near end, inner sep=0pt] (left-a) {};
-    \draw (5,0.1) -- (5,-3.) coordinate[very near end, inner sep=0pt] (right-a) {} node[very near end, inner sep=0pt] (left-b) {};
-    \draw (9.5,0.1) -- (9.5,-3) coordinate[very near end, inner sep=0pt] (right-b) {};
-    
-    \draw[<->] (left-c) -- (right-c) node[midway, above] (dev-c) {Устр. В};
-    \draw[<->] (left-a) -- (right-a) node[midway, above] (dev-a) {Устройство А};
-    \draw[<->] (left-b) -- (right-b) node[midway, above] (dev-b) {Устройство Б};
-\end{tikzpicture}
+	\inputpicture{drawings/memmap}
     \caption[Отображение регистров на пространство памяти]{Отображение регистров устройств на пространство памяти. Диапазоны адресов памяти, принадлежащие различным устройствам, в общем случае могут перекрываться (устройства А и В в данном примере), при этом необходимо определять приоритет их расположения}
     \label{fig:memmap}
 \end{figure}
@@ -206,39 +159,7 @@ f_write(addr, value);
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.75\textwidth]{./mapalg-crop}
-    \begin{tikzpicture}[font=\small, >=latex]
-    
-    \path[font=\ttfamily, inner xsep=0pt] (0,0) -- (10,0) node[pos=0.05, above] (0x0) {0x0} node[pos=0.9, above] (0xffff) {0xffff} node[pos=0.5, above] {\rmfamily Карта 1};
-    
-    \node[draw, fit=(0x0) (0xffff)] (map1) {};
-    % \node[font=\scriptsize, single arrow, text width=2.0cm, text badly centered, draw,  shape border rotate=180, rotate=90, above =0cm of map1, anchor=west] ;
-        
-    \node[above=of map1] (access) {Доступ};
-        
-    \path[yshift=-1.5cm] (0,0) -- (10,0) coordinate[pos=0] (dev-a-left) coordinate[pos=0.2] (dev-a-right) coordinate[pos=0.2] (map2-left) coordinate[pos=0.5] (map2-right) coordinate[pos=0.5] (dev-b-left) coordinate[pos=0.7] (dev-b-right) coordinate[pos=0.7] (dev-с-left) coordinate[pos=1.0] (dev-с-right);
-    
-    \draw[<->] (dev-a-left) -- (dev-a-right) node[midway, above] {Устр. А};
-    \draw[very thick, <->] (map2-left) -- (map2-right) node[midway, above] (dev-map2) {\bfseries Карта 2};
-    \draw[<->] (dev-b-left) -- (dev-b-right) node[midway, above] {Устр. Б};
-    \draw[<->] (dev-с-left) -- (dev-с-right) node[midway, above] {Устр. В};
-    
-    \path[font=\ttfamily, inner xsep=0pt, yshift=-3.cm] (0,0) -- (10,0) node[pos=0.05, above] (0x0-b) {0x0} node[pos=0.9, above] (0xff) {0xff} node[pos=0.5, above] {\rmfamily Карта 2};
-    
-    \node[draw, fit=(0x0-b) (0xff)] (map2) {};
-    
-    \draw[dotted] (map2-left) -- (map2.north west);
-    \draw[dotted] (map2-right) -- (map2.north east);
-    
-    \path[yshift=-4.cm] (0,0) -- (10,0) coordinate[pos=0] (dev-d-left) coordinate[pos=0.7] (dev-d-right) coordinate[pos=0.7] (dev-e-left) coordinate[pos=1.0] (dev-e-right);
-    
-    \draw[<->] (dev-d-left) -- (dev-d-right) node[midway, above] {Устройство Г};
-    \draw[very thick, <->] (dev-e-left) -- (dev-e-right) node[midway, above] (dev-d) {\bfseries Устр. Д};
-    
-    \draw[>=stealth, ->] (access) -- (map1);
-    \draw[>=stealth, ->] (map1) -- (dev-map2);
-    \draw[>=stealth, ->] (map2) -- (dev-d);
-\end{tikzpicture}
+	\inputpicture{drawings/mapalg}
     \caption[Алгоритм поиска устройства в иерархии карт памяти]{Алгоритм поиска устройства в иерархии карт памяти. Перед передачей транзакции доступа конечному устройству её параметры, например адрес, могут быть изменены}
     \label{fig:mapalg}
 \end{figure}
@@ -328,39 +249,7 @@ f_write(addr, value);
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.9\textwidth]{./reverse-execution-crop}
-\begin{tikzpicture}[>=latex, font=\small]
-    
-    \draw[->] (0,0) -- (10,0) node[pos=0.9, below, font=\scriptsize, text width=1.5cm, align=left] {Симулируемое время};
-    
-    \draw (0,0.25) -- (0,-0.25) node[below] (tgamma) {$t^{\gamma}$};
-    \draw (4,0.25) -- (4,-0.25) node[below] (tstar) {$t^{\star}$} coordinate[pos=0] (tstar-above);
-    \draw[dashed] (8,0.25) -- (8,-0.25);
-    
-    \draw[<->] (0,0.2) -- (4,0.2) node[midway, above] (T) {$T$};
-    
-    \path (7,0) coordinate (currt-coord);
-    \node[draw, single arrow, single arrow head extend = 0.1cm, inner xsep=2pt, inner ysep=0.25cm, shape border rotate=90, below=0cm of currt-coord, anchor=north] (currt) {};
-    \node[below=0cmof currt] (t) {$t$};
-    
-    \path (6.,0) coordinate (newt-coord);
-    \node[draw, single arrow, single arrow head extend = 0.1cm, inner xsep=2pt, inner ysep=0.25cm, shape border rotate=270, above=0cm of newt-coord, anchor=south] (newt) {};
-    % \node[above=0cmof currt] (t) {$t$};
-    
-    \draw (currt-coord) -- ([yshift=1.5cm] currt-coord) coordinate[pos=0.9] (right-stick);
-    \draw (newt-coord) --  ([yshift=1.5cm] newt-coord)  coordinate[pos=0.9] (left-stick);
-    
-    \draw[<->] (left-stick) -- (right-stick) node[midway, above] {$\Delta t$};
-    
-    \draw[->] (currt) .. controls +(-1,-1) and +(0,-1) .. (tstar) node[text width=3cm, align=flush left, midway, below, ] {1. Возвращение к ближайшей точке сохранения};
-    
-    \draw[->] (tstar-above) .. controls +(0.5,0.5) and +(-0.5,0.5) .. (newt) node[text width=2cm, align=flush left, midway, above, ] {2. Прямая симуляция};
-    
-    \node[below=of T, text width=3cm, align=flush center, inner sep=0pt] (comment) {Периодические точки сохранения};
-    \draw[dotted] (tgamma) -- (comment);
-    \draw[dotted] (tstar) -- (comment);
-    
-\end{tikzpicture}
+	\inputpicture{drawings/reverse-execution}
     \caption{Обращённое во времени исполнение}
     \label{fig:reverse-execution}
 \end{figure}

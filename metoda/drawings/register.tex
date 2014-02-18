@@ -1,0 +1,19 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small, node distance=2cm]
+    \node[draw] (reader) {Читающее устройство};
+    \node[draw, right =of reader] (register) {Регистр};
+    \node[draw, right =of reader,  xshift=-0.1cm, inner xsep=1.5cm, inner ysep=0.5cm] (box) {};
+    \draw[<-] (reader.east) -- (register.west) node[midway, above] {32 бит} node[midway] {/} ;
+\end{tikzpicture}
+
+\end{document}

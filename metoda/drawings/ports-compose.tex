@@ -1,0 +1,35 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[node distance=0.2cm, font=\small]
+    \def\dline{\begin{tikzpicture} \draw[|-|] (-0.25,0) -- (0.25,0);\end{tikzpicture}}
+
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}] (f1) {$F_1(x)$};
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, right =of f1] (port1) {\dline};
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right =of port1.east] (f2) {$F_2(x)$};
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, right =of f2] (port2) {\dline};
+    \node[draw, dashed, fit= (f1) (port2) ] (border) {};
+    
+    \node[right=of border.east] (equiv) {$\Leftrightarrow$};
+    
+    \node[draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, right =of equiv] (f2f1) {$F_2\left(F_1(x)\right)$};
+    
+    \node[draw,fill=white, inner xsep= 2pt, inner ysep=0.15cm, xscale=2, right =of f2f1] (port3) {\dline};
+
+    \draw (f1) -- (port1);
+    \draw (port1) -- (f2);
+    \draw (f2) -- (port2);
+    \draw (f2f1) -- (port3);
+    
+\end{tikzpicture}
+
+
+\end{document}

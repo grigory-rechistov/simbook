@@ -1,0 +1,45 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small]
+    
+    \draw[->] (0,0) -- (10,0) node[pos=0.9, below, font=\scriptsize, text width=1.5cm, align=left] {Симулируемое время};
+    
+    \draw (0,0.25) -- (0,-0.25) node[below] (tgamma) {$t^{\gamma}$};
+    \draw (4,0.25) -- (4,-0.25) node[below] (tstar) {$t^{\star}$} coordinate[pos=0] (tstar-above);
+    \draw[dashed] (8,0.25) -- (8,-0.25);
+    
+    \draw[<->] (0,0.2) -- (4,0.2) node[midway, above] (T) {$T$};
+    
+    \path (7,0) coordinate (currt-coord);
+    \node[draw, single arrow, single arrow head extend = 0.1cm, inner xsep=2pt, inner ysep=0.25cm, shape border rotate=90, below=0cm of currt-coord, anchor=north] (currt) {};
+    \node[below=0cmof currt] (t) {$t$};
+    
+    \path (6.,0) coordinate (newt-coord);
+    \node[draw, single arrow, single arrow head extend = 0.1cm, inner xsep=2pt, inner ysep=0.25cm, shape border rotate=270, above=0cm of newt-coord, anchor=south] (newt) {};
+    % \node[above=0cmof currt] (t) {$t$};
+    
+    \draw (currt-coord) -- ([yshift=1.5cm] currt-coord) coordinate[pos=0.9] (right-stick);
+    \draw (newt-coord) --  ([yshift=1.5cm] newt-coord)  coordinate[pos=0.9] (left-stick);
+    
+    \draw[<->] (left-stick) -- (right-stick) node[midway, above] {$\Delta t$};
+    
+    \draw[->] (currt) .. controls +(-1,-1) and +(0,-1) .. (tstar) node[text width=3cm, align=flush left, midway, below, ] {1. Возвращение к ближайшей точке сохранения};
+    
+    \draw[->] (tstar-above) .. controls +(0.5,0.5) and +(-0.5,0.5) .. (newt) node[text width=2cm, align=flush left, midway, above, ] {2. Прямая симуляция};
+    
+    \node[below=of T, text width=3cm, align=flush center, inner sep=0pt] (comment) {Периодические точки сохранения};
+    \draw[dotted] (tgamma) -- (comment);
+    \draw[dotted] (tstar) -- (comment);
+    
+\end{tikzpicture}
+
+\end{document}

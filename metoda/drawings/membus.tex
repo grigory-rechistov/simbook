@@ -1,0 +1,30 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[inner xsep=1pt, inner ysep=0.2cm, node distance=0cm, font=\small,>=latex]
+    \node[draw, text width = 0.8cm                       ] (data1) {};
+    \node[draw, text width = 0.8cm, below =of data1.south] (data2) {};
+    \node[draw, text width = 0.8cm, below =of data2.south] (data3) {};
+    \node[draw, text width = 0.8cm, below =of data3.south] (data4) {};
+    \node[draw, text width = 0.8cm, below =of data4.south] (data5) {};
+    \node[very thick, draw, text width = 0.8cm, below =of data5.south] (data6) {};
+    \node[draw, text width = 0.8cm, below =of data6.south] (data7) {};
+    \node[draw, text width = 0.8cm, below =of data7.south] (data8) {};
+    \node[draw, fit=(data1) (data8), inner sep=0.5cm] (bbox) {};
+    
+    \node[draw, text badly centered, text width = 2cm, node distance=4.5cm, left of=data4, ] (reader) {Читающее устройство};
+    
+    \draw[->] (data6.west) -- +(-2.,-0) node [pos=0.6, above] {32 бит} node[pos=0.6] {/} |- (reader.east)  node[pos=0.5, above] {Результат};
+    \draw[->] (reader.north) |- (bbox.120) node [pos=0.6, above] {8 бит} node[pos=0.6] {/} node[pos=0.8, above] {Адрес};
+    
+\end{tikzpicture}
+
+\end{document}
