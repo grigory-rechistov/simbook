@@ -1,0 +1,50 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, node distance=3cm, font=\small]
+    \node[circle, draw, minimum width=2cm] (invalid) {Invalid};
+    \node[circle, draw, minimum width=2cm, right of=invalid] (exclusive) {Exclusive};
+    \node[circle, draw, minimum width=2cm, below of=invalid] (modified) {Modified};
+    \node[circle, draw, minimum width=2cm, right of=modified] (shared) {Shared};
+    
+\begin{scope}[node distance=0.6cm,font=\footnotesize]
+    \node[right=1.5cm of exclusive.north] (local-read) {Местное чтение};
+    \node[below=of local-read] (local-write) {Местная запись};
+    \node[below=of local-write] (remote-read) {Удалённое чтение};
+    \node[below=of remote-read] (remote-write) {Удалённая запись};
+\end{scope}
+
+\draw[->, dashdotted] ([yshift=-0.25cm] local-read.west) -- ([yshift=-0.25cm] local-read.east);
+\draw[->, ] ([yshift=-0.25cm] local-write.west) -- ([yshift=-0.25cm] local-write.east);
+\draw[->, dotted] ([yshift=-0.25cm] remote-read.west) -- ([yshift=-0.25cm] remote-read.east);
+\draw[->, dashed] ([yshift=-0.25cm] remote-write.west) -- ([yshift=-0.25cm] remote-write.east);
+
+\draw[->, dashdotted] (invalid) -- (exclusive);
+\draw[->, dashdotted] (exclusive.0) .. controls +(1,0) and +(0,1) .. (exclusive.90);
+\draw[->, dashdotted] (modified.180) .. controls +(-1,0) and +(0,-1) .. (modified.270);
+\draw[->, dashdotted] (shared.270) .. controls +(0,-1) and +(1,0) .. (shared.0);
+
+\draw[->] (invalid) -- (modified);
+\draw[->] (exclusive.205) .. controls +(-1,0) and +(1,0) .. (modified.45);
+\draw[->] (shared.205) -- (modified.335);
+\draw[->] (modified.270) .. controls +(0,-2) and +(-2,0) .. (modified.180);
+
+\draw[->, dotted] (exclusive) -- (shared);
+\draw[->, dotted] (modified) -- (shared);
+\draw[->, dotted] (shared.0) .. controls +(2,0) and +(0,-2) .. (shared.270);
+
+\draw[->, dashed] (exclusive.135) -- (invalid.45);
+\draw[->, dashed] (modified.135) -- (invalid.225);
+\draw[->, dashed] (shared.125) .. controls +(-1,0) and +(1,0) .. (invalid.315);
+\end{tikzpicture}
+
+
+\end{document}

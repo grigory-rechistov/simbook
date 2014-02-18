@@ -1,0 +1,25 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small]
+\node[draw, circle, inner sep=1pt] (cpu) {ЦПУ};
+\node[draw, text width = 2cm, align=center, below = 0.5cm of cpu] (l1) {L1};
+\node[draw, text width = 4cm, align=center, below of=l1] (l2) {L2};
+\node[draw, text width = 6cm, align=center, below of=l2] (ram) {ОЗУ};
+
+\draw[<->] (cpu) -- (l1);
+\draw[<->] (l1) -- (l2);
+\draw[<->] (l2) -- (ram);
+
+\end{tikzpicture}
+
+
+\end{document}

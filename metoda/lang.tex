@@ -10,34 +10,7 @@
 % В зависимости от назначения, развитости проекта состав 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=\textwidth]{./breakdown-crop.pdf}
-\begin{tikzpicture}[>=latex, font=\small]
-    \node[] (gui) {\includegraphics[width=2cm]{./gui.png}};
-    \node[above=0.1cm of gui] {Графический интерфейс};
-    
-    \node[right = 1cm of gui]     (device1) {\includegraphics[height=1.5cm]{./device1.png}};
-    \node[right = 0.2cm of device1] (device2) {\includegraphics[height=1.5cm]{./device2.png}};
-    \node[right = 0.2cm of device2] (device3) {\includegraphics[height=1.5cm]{./device3.png}};
-    
-    \node[draw, inner sep= 2pt, fit=(device1) (device3)] (frame) {};
-    
-    \node[below = 2.5cm of gui] (cli) {\includegraphics[height=1.5cm]{./cli.png}};
-    
-    \node[draw, circle, below = 0.7cm of device1] (core) {Ядро};
-    
-    \node[right = 3cm of cli] (python) {\includegraphics[height=1.5cm]{./python.png}};
-    \node[right = 0.2cm of python] (perl) {\includegraphics[height=1.5cm]{./perl.png}};
-    \node[right = 0.2cm of perl] (lua) {\includegraphics[height=1.5cm]{./lua.png}};
-    
-    \node[above=0.1cm of cli] {Командная строка};
-    \node[above=0.1cm of perl] {Язык сценариев};
-    \node[above=0.1cm of device2] {Модели устройств};
-    
-    \draw[<->, shorten >=0.8cm] (core) -- (gui);
-    \draw[<->, shorten >=0.2cm] (core) -- (frame);
-    \draw[<->, shorten >=0.8cm] (core) -- (cli);
-    \draw[<->, shorten >=0.8cm] (core) -- (perl);
-\end{tikzpicture}
+	\inputpicture{drawings/breakdown}
     \caption[Структура и классификация компонент симулятора]{Структура и классификация компонент симулятора. Графический интерфейс и командная строка отвечают за взаимодействие с пользователем. Языки сценариев (скрипты) обеспечивают средства автоматизации и расширения функциональности. Модели устройств используются для конструирования изучаемой системы. Ядро связывает компоненты в единое целое}
     \label{fig:breakdown}
 \end{figure}
@@ -106,53 +79,7 @@ SystemC курируется организацией <<Accelera Systems Initiat
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=\textwidth]{./tmp/systemc-arch.png}
-\begin{tikzpicture}[scale=1.13, >=latex, font=\footnotesize]
-    \coordinate (a01) at (-5 ,0.5);
-    \coordinate (a02) at ( 5 ,0.5);
-    \coordinate (a03) at (-5  ,-1);
-    \coordinate (a04) at (-2.5,-1);
-    \coordinate (a05) at (   0,-1);
-    \coordinate (a06) at ( 2.5,-1);
-    \coordinate (a07) at (   5,-1);
-    \coordinate (a08) at (   0,-2);
-    \coordinate (a09) at (  -5,-3);
-    \coordinate (a10) at (   0,-3);
-    \coordinate (a11) at (   5,-3);
-    \coordinate (a12) at (   5,-3.5);
-    
-    \coordinate (b01) at (-4.5,-0.5);
-    \coordinate (b02) at ( 4.5,  -1);
-    
-    \coordinate (l01) at ( 0,   0);
-    \coordinate (l02) at ( 0,-0.75);
-    \coordinate (l03) at (-2.5,-1.5);
-    \coordinate (l04) at ( 0,-1.5);
-    \coordinate (l05) at (-5, -1);
-    \coordinate (l06) at ( 2.5, -1);
-    \coordinate (l07) at (   0,-3.25);
-    
-    \draw (a01) rectangle (a12);
-    \draw (b01) rectangle (b02);
-    
-    \draw (a03) rectangle (a10);
-    \draw (a04) rectangle (a08);
-    
-    \draw (a05) rectangle (a11);
-    \draw (a08) rectangle (a06);
-    \draw (a09) rectangle (a12);
-    
-    \node at (l01) {Приложение};
-    \node at (l02) {Библиотеки, специфичные для выбранной технологии};
-    \node[align=left, text width=3cm, anchor = west] at (l03) {Каналы: signal, clock, FIFO, mutex, semaphore};
-    \node[align=left, text width=3cm, anchor = west] at (l04) {Утилиты: \\ трассировка, \\ отчёты};
-    
-    \node[align=left, text width=3cm, anchor = north west] at (l05) {Язык: модули, порты, экспорты,\\ процессы,\\ интерфейсы, каналы, события};
-    \node[align=left, text width=3cm, anchor = north west] at (l06) {Типы данных: \\ 4-значная логика, вектора, целые и действительные\\ числа};
-    
-    \node at (l07) {Язык С++} ;
-
-\end{tikzpicture}
+	\inputpicture{drawings/systemc-arch}
     \caption[Архитектура приложения на SystemC]{Архитектура приложения на SystemC}
     \label{fig:systemc-arch}
 \end{figure}
@@ -182,45 +109,7 @@ SC_MODULE(adder) {        // module (class) declaration
 
 \begin{figure}[htb]
     \centering
-% \includegraphics[width=\textwidth]{./tmp/systemc-compilation.png}
-\begin{tikzpicture}[scale=1.0, >=latex, font=\small]
-
-\begin{scope}[text width=1.4cm]
-    \node[draw, rounded corners] (file1-h) {file1.h};
-    \node[draw, rounded corners, below= 0cm of file1-h.south west, anchor=north west] (file1-cpp) {file1.cpp};
-    \node[draw, rounded corners, below= 0cm of file1-cpp.south west, anchor=north west] (fileN-h) {fileN.h};
-    \node[draw, rounded corners, below= 0cm of fileN-h.south west, anchor=north west] (fileN-cpp) {fileN.cpp};
-    \node[draw, rounded corners, below= 0cm of fileN-cpp.south west, anchor=north west] (systemc-h) {systemc.h};
-\end{scope}
-    
-\node[draw, right = 0.5cm of fileN-h, text width=1.8cm, align=center] (compiler) {C++ \\ компилятор};
-
-\begin{scope}[text width=1.cm]
-    \node[draw, rounded corners, right= 3.2cm of file1-cpp] (file1-o) {file1.o};
-    \node[draw, rounded corners, right= 3.2cm of fileN-cpp] (fileN-o) {fileN.o};
-\end{scope}
-
-\node[draw, right = 2.6cm of compiler,] (linker) {Линкер};
-\node[draw, rounded corners, above = of linker, align=center] (libs) {SystemC \\ библиотеки};
-
-\node[draw, rounded corners, right = 0.5cm of linker, align=center, fill=black!10] (exe) {Исполняемый\\файл};
-
-\draw[->] (file1-h.east) -- (compiler);
-\draw[->] (file1-cpp.east) -- (compiler);
-\draw[->] (fileN-h.east) -- (compiler);
-\draw[->] (fileN-cpp.east) -- (compiler);
-\draw[->] (systemc-h.east) -- (compiler);
-    
-\draw[->] (compiler) -- (file1-o);
-\draw[->] (compiler) -- (fileN-o);
-
-\draw[->] (file1-o) -- (linker);
-\draw[->] (fileN-o) -- (linker);
-
-\draw[->] (libs) -- (linker);
-\draw[->] (linker) -- (exe);
-
-\end{tikzpicture}
+	\inputpicture{drawings/systemc-compilation}
     \caption[Сборка модели SystemC]{Последовательность сборки модели SystemC из исходных кодов}
     \label{fig:systemc-compilation}
 \end{figure}
@@ -305,28 +194,7 @@ register lcr {
 
 \begin{figure}[htb]
     \centering
-%     \includegraphics[width=0.5\textwidth]{./lisa-crop.pdf}
-\begin{tikzpicture}[>=latex, font=\small]
-\def\gear{
-    \begin{tikzpicture}
-    \draw[scale=1]
-    \foreach \i in {1,2,...,10} {% draw the gear
-        [rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
-    };
-    \end{tikzpicture}
-}
-    \node[draw, tape] (src) {Исходное описание}
-    [level distance=2cm, sibling distance=2.5cm, edge from parent/.style={draw, ->}]
-    child {node[] {\gear}
-        child {node {Дизассемблер}}
-    }
-    child {node[] {\gear}
-        child {node {Симулятор}}
-    }
-    child {node[] {\gear}
-        child {node {Документация}}
-    };
-\end{tikzpicture}
+	\inputpicture{drawings/lisa}
     \caption{Генерация инструментов разработки из общего описания архитектуры}
     \label{fig:lisa}
 \end{figure}
@@ -340,47 +208,7 @@ register lcr {
 
 \begin{figure}[htb]
     \centering
-%     \includegraphics[width=0.75\textwidth]{./capsules-crop.pdf}
-\begin{tikzpicture}[>=latex, font=\small]
-\def\gear{
-    \begin{tikzpicture}
-    \draw[scale=1]
-    \foreach \i in {1,2,...,10} {% draw the gear
-        [rotate=(\i-1)*36]  (0:0.5)  arc (0:12:0.5) -- (18:0.7)  arc (18:30:0.7) --  (36:0.5)
-    };
-    \end{tikzpicture}
-}
-\node[draw, tape, text width=9cm, align=left, font=\footnotesize\ttfamily] (src){
-NJU(U32 @Curr_IP, U32 @op_size, X128 @ireg_dst)\\
-\{\\
-@UPDATE_Curr_IP(@Curr_IP)\\
-\ \ \ \ movl  \$@op_size,  @glst_arg0_w0(\%ebp)\\
-\ \ \ \ cmpss \$0xffff, (\%esi), @ireg_dst\\
-\}\\
-};
-
-\node[above=0.15cm of src] {Исходное описание};
-
-\node[below=0.5cm of src] (gear) {\gear};
-
-\node[minimum height=1.8cm, inner sep=2pt, below=0.5cm of gear, xshift=-3cm, draw, tape, text width=4cm, align=left, font=\scriptsize\ttfamily] (asm){
-movl  \$0xdeadc0de,  12(\%ebp) \\
-cmpss \$0xffff, (\%esi), \%ebx \\
-};
-
-\node[below=0.15cm of asm] {Ассемблер};
-
-\node[minimum height=1.8cm, inner sep=2pt, below=0.5cm of gear, xshift=3cm, draw, tape, text width=4.5cm, align=left, font=\scriptsize\ttfamily] (emitter){
-\#define NJU\textbackslash\\
-(Curr_IP, op_size, ireg_dst)\textbackslash \\
-...
-};
-\node[below=0.15cm of emitter] {Эмиттер};
-
-\draw[->] (src) -- (gear);
-\draw[->] (gear) -- (asm);
-\draw[->] (gear) -- (emitter);
-\end{tikzpicture}
+	\inputpicture{drawings/capsules}
     \caption[Создание двоичного транслятора из метаассемблера]{Создание двоичного транслятора из метаассемблера. Исходное описание содержит в себе аргументы создаваемой функции и ассемблерные инструкции хозяйской архитектуры. После процесса обработки мы имеем два блока исходного кода --- ассемблерный код, используемый при симуляции, а также код на Си (эмиттер), передающий первому аргументы на этапе трансляции}
     \label{fig:capsules}
 \end{figure}

@@ -1,0 +1,60 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[scale=1.13, >=latex, font=\footnotesize]
+    \coordinate (a01) at (-5 ,0.5);
+    \coordinate (a02) at ( 5 ,0.5);
+    \coordinate (a03) at (-5  ,-1);
+    \coordinate (a04) at (-2.5,-1);
+    \coordinate (a05) at (   0,-1);
+    \coordinate (a06) at ( 2.5,-1);
+    \coordinate (a07) at (   5,-1);
+    \coordinate (a08) at (   0,-2);
+    \coordinate (a09) at (  -5,-3);
+    \coordinate (a10) at (   0,-3);
+    \coordinate (a11) at (   5,-3);
+    \coordinate (a12) at (   5,-3.5);
+    
+    \coordinate (b01) at (-4.5,-0.5);
+    \coordinate (b02) at ( 4.5,  -1);
+    
+    \coordinate (l01) at ( 0,   0);
+    \coordinate (l02) at ( 0,-0.75);
+    \coordinate (l03) at (-2.5,-1.5);
+    \coordinate (l04) at ( 0,-1.5);
+    \coordinate (l05) at (-5, -1);
+    \coordinate (l06) at ( 2.5, -1);
+    \coordinate (l07) at (   0,-3.25);
+    
+    \draw (a01) rectangle (a12);
+    \draw (b01) rectangle (b02);
+    
+    \draw (a03) rectangle (a10);
+    \draw (a04) rectangle (a08);
+    
+    \draw (a05) rectangle (a11);
+    \draw (a08) rectangle (a06);
+    \draw (a09) rectangle (a12);
+    
+    \node at (l01) {Приложение};
+    \node at (l02) {Библиотеки, специфичные для выбранной технологии};
+    \node[align=left, text width=3cm, anchor = west] at (l03) {Каналы: signal, clock, FIFO, mutex, semaphore};
+    \node[align=left, text width=3cm, anchor = west] at (l04) {Утилиты: \\ трассировка, \\ отчёты};
+    
+    \node[align=left, text width=3cm, anchor = north west] at (l05) {Язык: модули, порты, экспорты,\\ процессы,\\ интерфейсы, каналы, события};
+    \node[align=left, text width=3cm, anchor = north west] at (l06) {Типы данных: \\ 4-значная логика, вектора, целые и действительные\\ числа};
+    
+    \node at (l07) {Язык С++} ;
+
+\end{tikzpicture}
+
+
+\end{document}

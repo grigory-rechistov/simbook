@@ -1,0 +1,51 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex]
+    
+\begin{scope} [start chain,every node/.style={, font=\huge\ttfamily, text height=0.9cm}, node distance=0.cm,, inner sep=0cm]
+    \node [on chain] (0x) {0x};
+    \node [on chain] (set) {a};
+    \node [on chain] {b};
+    \node [on chain] {c};
+    \node [on chain] {d};
+    \node [on chain] {e};
+    \node [on chain] {f};
+    \node [on chain] (tag) {1};
+    \node [on chain] {2};
+    \node [on chain] {3};
+    \node [on chain] {4};
+    \node [on chain] {5};
+    \node [on chain] {6};
+    \node [on chain] (offset) {7};
+    \node [on chain] {8};
+    \node [on chain] {9};
+    \node [on chain] (lastbit) {0};
+\end{scope}
+
+\draw (set.north west) -- ([yshift=-2cm] set.north west) coordinate[pos=0.95] (set-left) coordinate[pos=0] (bit63);
+\draw (tag.north west) -- ([yshift=-2cm] tag.north west) coordinate[pos=0.95] (tag-left) coordinate[pos=0] (bit40-39);
+\draw (offset.north west) -- ([yshift=-2cm] offset.north west) coordinate[pos=0.95] (offset-left) coordinate[pos=0] (bit16-15);
+\draw (lastbit.north east) -- ([yshift=-2cm] lastbit.north east) coordinate[pos=0.95] (offset-right) coordinate[pos=0] (bit0);
+    
+\draw[<->] (set-left) -- (tag-left) node[midway, above] {\small номер сета};
+\draw[<->] (tag-left) -- (offset-left) node[midway, above] {\small номер тэга};
+\draw[<->] (offset-left) -- (offset-right) node[midway, above] {\small смещение};
+    
+\node at ([xshift=0.25cm] bit63) {\small 63};    
+\node at (bit40-39) {\small 40 39};    
+\node at (bit16-15) {\small 16 15};    
+\node at ([xshift=-0.25cm] bit0) {\small 0};    
+    
+\end{tikzpicture}
+
+
+\end{document}

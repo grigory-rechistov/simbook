@@ -1,0 +1,19 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[font=\scriptsize, >=latex, shape=signal, signal from=west, text width=2.5cm, minimum height=1.5cm, signal pointer angle=120, inner sep=2pt]
+    \node[draw,] (boot-os) {Загрузка ОС. Кэши отключены. Измерения не производятся.};
+    \node[draw, right=0cm of boot-os] (warmup) {Изучаемое приложение. Кэши включены. Измерения не производятся.};
+    \node[draw, right=0cm of warmup] (measure) {Изучаемое приложение. Кэши включены. \textbf{Проводятся измерения}.};
+\end{tikzpicture}
+
+
+\end{document}

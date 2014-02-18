@@ -1,0 +1,41 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small]
+    % FIXME the whole drawing is done awfully
+    \draw (0,0) rectangle (3,1.5);
+    \node[text width = 3cm, anchor=north west, font=\footnotesize] at (0,1.5)  {Функциональная модель ОЗУ};
+    \path (1.5, 0.25) coordinate (c1) -- (2.0,0.5) coordinate (d1);
+    \node[draw, inner sep=0pt, fit=(c1) (d1)] (func-cell) {};
+    
+    \draw (3.999,0) coordinate (e1) grid[xstep=0.5, ystep=0.25] (7,1.5) coordinate (f1);
+    \path (e1) -- (f1) coordinate[pos=0.5] (cache-middle);
+    \node[fill=white] at (cache-middle) {Модель кэшей};
+    
+    \path (5.5, 0.25) coordinate (w1) -- (6,0.5) coordinate (z1);
+    \node[inner sep=0pt, fit=(w1) (z1)] (time-cell) {};
+    
+    \path (0,-1.8) coordinate (a1) rectangle (7,-1.) coordinate (b2);
+    \node[draw, align=center, inner sep=0pt, fit=(a1) (b2)] (dev) {Процессор};
+    
+    % The coordinates addressing is really stupid here
+    \draw[->] ([xshift=-2.5cm] dev.north) -- ([xshift=-2.5cm, yshift=1cm] dev.north) node[midway, above, sloped, font=\scriptsize] {Адрес};
+    \draw[->] (func-cell.south) -- ([yshift=-1.25cm] func-cell.south) node[yshift=2pt,fill=white, inner sep=0pt, midway, above, sloped, font=\scriptsize] {Данные};
+
+    \draw[->] ([xshift=1.5cm] dev.north) -- ([xshift=1.5cm, yshift=1cm] dev.north) node[midway, above, sloped, font=\scriptsize] {Адрес};
+    
+
+    \draw[->] (time-cell.south) -- ([yshift=-1.25cm] time-cell.south) node[yshift=2pt, fill=white, inner sep=0pt, midway, above, sloped, font=\scriptsize] {Задержка};
+
+\end{tikzpicture}
+
+
+\end{document}

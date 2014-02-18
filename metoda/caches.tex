@@ -8,12 +8,7 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.85\textwidth]{./mem-wall-crop.pdf}
-		\iftoggle{htmlpaper}{
-		\includegraphics{drawings/mem-wall-0}
-	}{
-		\input{drawings/mem-wall}
-	}
+	\inputpicture{drawings/mem-wall}
     \caption[Сравнение темпов роста скоростей памяти и ЦПУ]{Сравнение темпов роста скоростей оперативной памяти (DRAM) и микропроцессоров (CPU)}
     \label{fig:mem-wall}
 \end{figure}
@@ -65,18 +60,7 @@
 % TODO rewrite the figure using bytefield package facilities
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.7\textwidth]{./cache-crop.pdf}
-\begin{tikzpicture}[>=latex, font=\small]
-    \draw[xstep=1cm, ystep=0.5cm] (0,0) grid (4,2);
-    \draw[decorate, decoration={brace, amplitude=6pt}, xshift=-0.2cm]  (0,0) -- (0,2) node[midway, sloped, above=0.2cm] {$N_{sets}$};
-    \draw[decorate, decoration={brace, amplitude=6pt}, yshift=0.2cm]  (0,2) -- (4,2) node[midway, sloped, above=0.2cm] {$N_{ways}$};
-    \draw[very thick] (3,0) rectangle (4, 0.5);
-    \node[draw, inner ysep=0pt, minimum height=.8cm] at (1, -1) (tag) {Тэг};
-    \node[draw, inner ysep=0pt, minimum height=.8cm, right=0cm of tag, anchor=west] (flags) {Флаги};
-    \node[draw, inner ysep=0pt, minimum height=.8cm, right=0cm of flags, anchor=west] (data) {Данные};
-    \draw[dotted] (3,0) -- (tag.north west);
-    \draw[dotted] (4,0) -- (data.north east);
-\end{tikzpicture}
+	\inputpicture{drawings/cache}
     \caption[Организация кэша в линии, сеты, пути]{Организация кэша в линии, сеты $N_{sets}$, пути $N_{ways}$. Ячейка содержит информацию: тэг, флаги и собственно данные линии}
     \label{fig:cache}
 \end{figure}
@@ -93,44 +77,7 @@
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.35\textwidth]{./set-tag-flags-crop.pdf}
-\begin{tikzpicture}[>=latex]
-    
-\begin{scope} [start chain,every node/.style={, font=\huge\ttfamily, text height=0.9cm}, node distance=0.cm,, inner sep=0cm]
-    \node [on chain] (0x) {0x};
-    \node [on chain] (set) {a};
-    \node [on chain] {b};
-    \node [on chain] {c};
-    \node [on chain] {d};
-    \node [on chain] {e};
-    \node [on chain] {f};
-    \node [on chain] (tag) {1};
-    \node [on chain] {2};
-    \node [on chain] {3};
-    \node [on chain] {4};
-    \node [on chain] {5};
-    \node [on chain] {6};
-    \node [on chain] (offset) {7};
-    \node [on chain] {8};
-    \node [on chain] {9};
-    \node [on chain] (lastbit) {0};
-\end{scope}
-
-\draw (set.north west) -- ([yshift=-2cm] set.north west) coordinate[pos=0.95] (set-left) coordinate[pos=0] (bit63);
-\draw (tag.north west) -- ([yshift=-2cm] tag.north west) coordinate[pos=0.95] (tag-left) coordinate[pos=0] (bit40-39);
-\draw (offset.north west) -- ([yshift=-2cm] offset.north west) coordinate[pos=0.95] (offset-left) coordinate[pos=0] (bit16-15);
-\draw (lastbit.north east) -- ([yshift=-2cm] lastbit.north east) coordinate[pos=0.95] (offset-right) coordinate[pos=0] (bit0);
-    
-\draw[<->] (set-left) -- (tag-left) node[midway, above] {\small номер сета};
-\draw[<->] (tag-left) -- (offset-left) node[midway, above] {\small номер тэга};
-\draw[<->] (offset-left) -- (offset-right) node[midway, above] {\small смещение};
-    
-\node at ([xshift=0.25cm] bit63) {\small 63};    
-\node at (bit40-39) {\small 40 39};    
-\node at (bit16-15) {\small 16 15};    
-\node at ([xshift=-0.25cm] bit0) {\small 0};    
-    
-\end{tikzpicture}
+	\inputpicture{drawings/set-tag-flags}
     \caption[Пример выделения значений номера сета, тэга и смещения из адреса]{Пример выделения значений номера сета, тэга и смещения по диапазонам бит из адреса в шестнадцатеричном представлении}
     \label{fig:set-tag-flags}
 \end{figure}
@@ -213,18 +160,7 @@ $$C = S_{line}N_{ways} N_{sets}.$$
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.5\textwidth]{./l1l2-crop.pdf}
-\begin{tikzpicture}[>=latex, font=\small]
-\node[draw, circle, inner sep=1pt] (cpu) {ЦПУ};
-\node[draw, text width = 2cm, align=center, below = 0.5cm of cpu] (l1) {L1};
-\node[draw, text width = 4cm, align=center, below of=l1] (l2) {L2};
-\node[draw, text width = 6cm, align=center, below of=l2] (ram) {ОЗУ};
-
-\draw[<->] (cpu) -- (l1);
-\draw[<->] (l1) -- (l2);
-\draw[<->] (l2) -- (ram);
-
-\end{tikzpicture}
+	\inputpicture{drawings/l1l2}
     \caption{Иерархия памяти, состоящая из двух кэшей и ОЗУ}
     \label{fig:l1l2}
 \end{figure}
@@ -311,44 +247,7 @@ $$C = S_{line}N_{ways} N_{sets}.$$
 
 \begin{figure}[htb]
     \centering
-%     \includegraphics[width=0.7\textwidth]{./mesi-crop.pdf}
-\begin{tikzpicture}[>=latex, node distance=3cm, font=\small]
-    \node[circle, draw, minimum width=2cm] (invalid) {Invalid};
-    \node[circle, draw, minimum width=2cm, right of=invalid] (exclusive) {Exclusive};
-    \node[circle, draw, minimum width=2cm, below of=invalid] (modified) {Modified};
-    \node[circle, draw, minimum width=2cm, right of=modified] (shared) {Shared};
-    
-\begin{scope}[node distance=0.6cm,font=\footnotesize]
-    \node[right=1.5cm of exclusive.north] (local-read) {Местное чтение};
-    \node[below=of local-read] (local-write) {Местная запись};
-    \node[below=of local-write] (remote-read) {Удалённое чтение};
-    \node[below=of remote-read] (remote-write) {Удалённая запись};
-\end{scope}
-
-\draw[->, dashdotted] ([yshift=-0.25cm] local-read.west) -- ([yshift=-0.25cm] local-read.east);
-\draw[->, ] ([yshift=-0.25cm] local-write.west) -- ([yshift=-0.25cm] local-write.east);
-\draw[->, dotted] ([yshift=-0.25cm] remote-read.west) -- ([yshift=-0.25cm] remote-read.east);
-\draw[->, dashed] ([yshift=-0.25cm] remote-write.west) -- ([yshift=-0.25cm] remote-write.east);
-
-\draw[->, dashdotted] (invalid) -- (exclusive);
-\draw[->, dashdotted] (exclusive.0) .. controls +(1,0) and +(0,1) .. (exclusive.90);
-\draw[->, dashdotted] (modified.180) .. controls +(-1,0) and +(0,-1) .. (modified.270);
-\draw[->, dashdotted] (shared.270) .. controls +(0,-1) and +(1,0) .. (shared.0);
-
-\draw[->] (invalid) -- (modified);
-\draw[->] (exclusive.205) .. controls +(-1,0) and +(1,0) .. (modified.45);
-\draw[->] (shared.205) -- (modified.335);
-\draw[->] (modified.270) .. controls +(0,-2) and +(-2,0) .. (modified.180);
-
-\draw[->, dotted] (exclusive) -- (shared);
-\draw[->, dotted] (modified) -- (shared);
-\draw[->, dotted] (shared.0) .. controls +(2,0) and +(0,-2) .. (shared.270);
-
-\draw[->, dashed] (exclusive.135) -- (invalid.45);
-\draw[->, dashed] (modified.135) -- (invalid.225);
-\draw[->, dashed] (shared.125) .. controls +(-1,0) and +(1,0) .. (invalid.315);
-\end{tikzpicture}
-
+	\inputpicture{drawings/mesi}
     \caption[Диаграмма переходов протокола MESI]{Диаграмма переходов протокола MESI. Доступ является местным, если он был инициирован процессором данного кэша, и удалённым, если запрос возник в любом другом}
     \label{fig:mesi}
 \end{figure}
@@ -378,34 +277,7 @@ $$C = S_{line}N_{ways} N_{sets}.$$
 
 \begin{figure}[htb]
     \centering
-%     \includegraphics[width=0.6\textwidth]{./timing-model-crop.pdf}
-\begin{tikzpicture}[>=latex, font=\small]
-    % FIXME the whole drawing is done awfully
-    \draw (0,0) rectangle (3,1.5);
-    \node[text width = 3cm, anchor=north west, font=\footnotesize] at (0,1.5)  {Функциональная модель ОЗУ};
-    \path (1.5, 0.25) coordinate (c1) -- (2.0,0.5) coordinate (d1);
-    \node[draw, inner sep=0pt, fit=(c1) (d1)] (func-cell) {};
-    
-    \draw (3.999,0) coordinate (e1) grid[xstep=0.5, ystep=0.25] (7,1.5) coordinate (f1);
-    \path (e1) -- (f1) coordinate[pos=0.5] (cache-middle);
-    \node[fill=white] at (cache-middle) {Модель кэшей};
-    
-    \path (5.5, 0.25) coordinate (w1) -- (6,0.5) coordinate (z1);
-    \node[inner sep=0pt, fit=(w1) (z1)] (time-cell) {};
-    
-    \path (0,-1.8) coordinate (a1) rectangle (7,-1.) coordinate (b2);
-    \node[draw, align=center, inner sep=0pt, fit=(a1) (b2)] (dev) {Процессор};
-    
-    % The coordinates addressing is really stupid here
-    \draw[->] ([xshift=-2.5cm] dev.north) -- ([xshift=-2.5cm, yshift=1cm] dev.north) node[midway, above, sloped, font=\scriptsize] {Адрес};
-    \draw[->] (func-cell.south) -- ([yshift=-1.25cm] func-cell.south) node[yshift=2pt,fill=white, inner sep=0pt, midway, above, sloped, font=\scriptsize] {Данные};
-
-    \draw[->] ([xshift=1.5cm] dev.north) -- ([xshift=1.5cm, yshift=1cm] dev.north) node[midway, above, sloped, font=\scriptsize] {Адрес};
-    
-
-    \draw[->] (time-cell.south) -- ([yshift=-1.25cm] time-cell.south) node[yshift=2pt, fill=white, inner sep=0pt, midway, above, sloped, font=\scriptsize] {Задержка};
-
-\end{tikzpicture}
+	\inputpicture{drawings/timing-model}
     \caption[Раздельное моделирование функциональности и длительности доступов в~память]{Раздельное моделирование функциональности и длительности доступов в память. По указанному адресу данные возвращаются моделью памяти (кэши при этом не оказывают никакого влияния), задержки независимо вычисляются моделью кэшей}
     \label{fig:timing-model}
 \end{figure}
@@ -418,12 +290,7 @@ $$C = S_{line}N_{ways} N_{sets}.$$
 
 \begin{figure}[htb]
     \centering
-%     \includegraphics[width=0.9\textwidth]{./warm-up-crop.pdf}
-\begin{tikzpicture}[font=\scriptsize, >=latex, shape=signal, signal from=west, text width=2.5cm, minimum height=1.5cm, signal pointer angle=120, inner sep=2pt]
-    \node[draw,] (boot-os) {Загрузка ОС. Кэши отключены. Измерения не производятся.};
-    \node[draw, right=0cm of boot-os] (warmup) {Изучаемое приложение. Кэши включены. Измерения не производятся.};
-    \node[draw, right=0cm of warmup] (measure) {Изучаемое приложение. Кэши включены. \textbf{Проводятся измерения}.};
-\end{tikzpicture}
+	\inputpicture{drawings/warm-up}
     \caption[Разогрев кэшей]{<<Разогрев>> кэшей. Этап симуляции загрузки ОС проводится с помощью быстрой функциональной модели. Затем некоторое время система кэшей подключена и обрабатывает запросы, но статистика и сообщаемые ей задержки не принимаются во внимание. На последнем отрезке собираются результаты моделирования}
     \label{fig:warm-up}
 \end{figure}
