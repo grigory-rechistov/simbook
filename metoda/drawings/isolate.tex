@@ -1,0 +1,39 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small, node distance=0.3cm, inner sep=0pt]
+    
+    \node (tower) {\includegraphics[height=1.5cm]{./tower.png}};
+    \node[above=of tower] (monitor1) {\includegraphics[height=1.2cm]{./monitor1.png}};
+    \node[right =0.2cm of monitor1] (kb1) {\includegraphics[height=.8cm]{./kb1.png}};
+    
+    % Inner border
+    \node[draw, inner sep=0.2cm, fit=(tower) (monitor1) (kb1)] (virt) {};
+    
+    \node[right =2.cm of tower] (folder) {\includegraphics[height=1.cm]{./folder.png}};
+    \node[right =0.2cm of folder] (hdd) {\includegraphics[height=1.cm]{./device3.png}};
+    
+    \node[right=0.7cm of hdd] (stub) {};
+    
+    % The outer border
+    \node[draw, inner sep=0.35cm, fit= (virt) (tower) (monitor1) (kb1)  (hdd) (stub)]  (real) {};
+    
+    \node[right =0.2cm of hdd] (nic) {\includegraphics[height=1.cm]{./nic.png}};
+    \node[right =of kb1, yshift=1cm] (kb2) {\includegraphics[height=1.5cm]{./kb2.png}};
+    \node[right =of kb2] (monitor2) {\includegraphics[height=1.5cm]{./monitor2.png}};   
+    
+    \node[fill=white, font=\scriptsize] at (virt.south) {Граница ВМ};
+    
+    \node[fill=white, font=\scriptsize] at (real.south) {Граница реальной системы};
+\end{tikzpicture}
+
+
+\end{document}
