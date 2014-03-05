@@ -106,16 +106,7 @@ $$(M_1,P_1,R_1,E_1) \overset{i}\mapsto (M_2,P_2,R_2,E_2).$$
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.6\textwidth]{./vm-sufficient-condition-crop}
-\begin{tikzpicture}[font=\small]
-    \fill[draw, fill=black!20] (0,0) circle [x radius=2.5cm, y radius=1.5cm];
-    \fill[draw, fill=black!10] (4.5,0) circle [x radius=2cm, y radius=1.5cm];
-    \node[fill=white, inner sep=1pt] at (0.0,0.75) {Привилегированные};
-    \node[fill=white, inner sep=1pt] at (4.5,0.75) {Безобидные};
-    
-    \fill[draw, fill=white] (0,-0.75) circle [x radius=1.2cm, y radius=0.75cm];
-    \node[fill=white, inner sep=1pt] at (0,-0.75) {Служебные};
-\end{tikzpicture}
+	\inputpicture{drawings/vm-sufficient-condition}
     \caption[Выполнение условия виртуализуемости]{Выполнение условия виртуализуемости. Множество служебных инструкций является подмножеством привилегированных}
     \label{fig:vm-sufficient-condition}
 \end{figure}
@@ -126,19 +117,7 @@ $$(M_1,P_1,R_1,E_1) \overset{i}\mapsto (M_2,P_2,R_2,E_2).$$
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.6\textwidth]{./vm-bad-condition-crop}
-\begin{tikzpicture}[font=\small]
-    \fill[draw, fill=black!5] (0,0) circle [x radius=2.5cm, y radius=1.5cm];
-    \fill[draw, fill=black!10] (4.5,0) circle [x radius=2cm, y radius=1.5cm];
-    \node[fill=white, inner sep=1pt] at (0.0,0.75) {Привилегированные};
-    \node[fill=white, inner sep=1pt] at (4.5,0.75) {Безобидные};
-    \fill[fill=black!20] (1.5,-0.75) circle [x radius=1.2cm, y radius=0.75cm] coordinate (service);
-    \begin{scope}
-        \clip[draw] (1.5,-0.75) circle [x radius=1.2cm, y radius=0.75cm];
-        \fill[draw, fill=white] (0,0) circle [x radius=2.5cm, y radius=1.5cm];
-    \end{scope}
-    \node[fill=white, inner sep=0pt] at (service) {Служебные};
-\end{tikzpicture}
+	\inputpicture{drawings/vm-bad-condition}
     \caption[Невыполнение условия виртуализуемости]{Невыполнение условия виртуализуемости. Служебные, но не привилегированные инструкции требуют реализации сложной логики в мониторе}
     \label{fig:vm-bad-condition}
 \end{figure}
@@ -199,51 +178,7 @@ $$(M_1,P_1,R_1,E_1) \overset{i}\mapsto (M_2,P_2,R_2,E_2).$$
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=0.75\textwidth]{./two-level-translation-crop}
-\begin{tikzpicture}[>=latex, font=\scriptsize, scale=0.8]
-    \foreach \x in {0,1} 
-    {\foreach \y in {0,1,2,3,4,5,8,9,10,11,12,13} { % vertical offsets of two groups
-            \node[draw, minimum width=1.2cm, minimum height=0.4cm, inner sep=0pt] at (\x*3.5cm, -\y * 0.6 cm) (vpage-\x-\y) {};
-      };
-    };
-    
-    \foreach \y in {0,1,2,3,4,5,6,7,8,9,10,11} {
-            \node[draw, minimum width=1.2cm, minimum height=0.4cm, inner sep=0pt] at (7cm, -0.6cm -\y * 0.6 cm) (ppage-\y) {};
-    };
-
-    \node[draw, dashed, inner sep=0pt, fit=(vpage-0-0) (vpage-1-5) ]  (vm1-border) {} ;
-    \node[draw, dashed,  inner sep=0pt, fit=(vpage-0-8) (vpage-1-13) ]  (vm2-border) {} ;
-    \node[fill=white, inner sep=1pt] at (vm1-border.north) {Виртуальная машина 1};
-    \node[fill=white, inner sep=1pt] at (vm2-border.north) {Виртуальная машина 2};
-    
-    \node[text width=3cm, below=0.5cm of vpage-0-13, align=flush left] {Виртуальные адреса приложений};
-    \node[text width=3cm, below=0.5cm of vpage-1-13, align=flush left] {Физические адреса гостевых ОС};
-    \node[text width=3cm, below=1.cm of ppage-11, align=flush left] {Настоящие физические адреса хозяина};
-    
-    \draw[->] (vpage-0-0.east) -- (vpage-1-3.west);
-    \draw[->] (vpage-0-1.east) -- (vpage-1-2.west);
-    \draw[->] (vpage-0-2.east) -- (vpage-1-1.west);
-    \draw[->] (vpage-0-5.east) -- (vpage-1-0.west);
-    \node[fill=white, rotate=90, text width=2.5cm, inner sep=0pt] at (1.75, -2*0.6) {Первый уровень преобразования адресов};
-    
-    \draw[->] (vpage-0-10.east) -- (vpage-1-8.west);
-    \draw[->] (vpage-0-8.east) -- (vpage-1-10.west);
-    \draw[->] (vpage-0-9.east) -- (vpage-1-10.west);
-    \draw[->] (vpage-0-10.east) -- (vpage-1-12.west);
-    \draw[->] (vpage-0-13.east) -- (vpage-1-13.west);
-    \node[fill=white, rotate=90, text width=2.5cm, inner sep=0pt] at (1.75, -10*0.6) {Первый уровень преобразования адресов};
-    
-    \draw[->] (vpage-1-0.east) -- (ppage-9.west);
-    \draw[->] (vpage-1-1.east) -- (ppage-5.west);
-    \draw[->] (vpage-1-2.east) -- (ppage-3.west);
-    \draw[->] (vpage-1-3.east) -- (ppage-1.west);
-    
-    \draw[->] (vpage-1-8.east) -- (ppage-0.west);
-    \draw[->] (vpage-1-9.east) -- (ppage-10.west);
-    \draw[->] (vpage-1-10.east) -- (ppage-11.west);
-    \draw[->] (vpage-1-13.east) -- (ppage-11.west);
-    \node[fill=white, rotate=90, inner sep=0pt] at (5.5, -7*0.6) {Второй уровень преобразования адресов};
-\end{tikzpicture}
+	\inputpicture{drawings/two-level-translation}
     \caption[Двухуровневая трансляция адресов]{Двухуровневая трансляция адресов. Первый уровень контролируется гостевыми ОС, второй --- монитором виртуальных машин}
     \label{fig:two-level-translation}
 \end{figure}
@@ -304,28 +239,7 @@ Intel добавила аппаратную виртуализацию в Itaniu
 
 \begin{figure}[htb]
     \centering
-    % \includegraphics[width=\textwidth]{./arm-vt-trustzone-crop}
-\begin{tikzpicture}[font=\tiny, every node/.style={draw, minimum height=0.6cm, align=center, inner sep=2pt}, node distance=0.2cm]
-    \node[minimum width=1.5cm] (app11) {Приложение 1};
-    \node[right =of app11, minimum width=1.5cm] (app12) {Приложение 2};
-    \node[right =of app12, minimum width=1.5cm] (app21) {Приложение 1};
-    \node[right =of app21, minimum width=1.5cm] (app22) {Приложение 2};
-    
-    \node[right =of app22, minimum width=1.5cm] (trust1) {Доверенное \\приложение 1};
-    \node[right =of trust1, minimum width=1.5cm] (trust2) {Доверенное \\приложение 2};
-    
-    \node[below =of app11.south west, anchor=north west, minimum width=3.2cm] (os1) {Гостевая ОС 1};
-    \node[below =of app21.south west, anchor=north west, minimum width=3.2cm] (os2) {Гостевая ОС 2};
-    \node[below =of trust1.south west, anchor=north west, minimum width=3.2cm] (trust-os) {Доверенная ОС};
-    
-    \node[below =of os1.south west, anchor=north west, minimum width=6.6cm] (vmm) {Монитор виртуальных машин};
-    \node[below =of vmm.south west, anchor=north west, minimum width=10.0cm] (trust-vmm) {Монитор TrustZone};
-    
-    \draw[dashed] ([yshift=0.1cm] trust-vmm.north west) -- ([yshift=0.1cm] trust-vmm.north east);
-    \draw[dashed] ([yshift=0.1cm] vmm.north west) -- ([yshift=0.1cm] vmm.north east);
-    \draw[dashed] ([xshift=0.1cm, yshift=-0.1cm] vmm.south east) -| ([xshift=0.1cm] app22.north east);
-    
-\end{tikzpicture}
+	\inputpicture{drawings/arm-vt-trustzone}
     \caption[Виртуализация ARM]{Виртуализация ARM. Монитор TrustZone обеспечивает изоляцию и криптографическую аутентификацию доверенного <<мира>>. В обычном <<мире>> используется собственный монитор ВМ}
     \label{fig:arm-vt-trustzone}
 \end{figure}
@@ -408,27 +322,7 @@ Sandy Bridge & 1 кв. 2011 & 784 \\\hline
 
 \begin{figure}[htb]
     \centering
-\begin{tikzpicture}[font=\small, >=latex, inner sep=0.2cm]
-    \node[draw] (app) {Приложение};
-    \node[above=0.2cm of app] (vm1-n) {Монитор 1};
-    \node[draw, fit = (app) (vm1-n)] (vm1) {};
-    \node[above=0.2cm of vm1-n] (vm2-n) {Монитор 2};
-    \node[draw, fit = (app) (vm1) (vm2-n)] (vm2) {};
-    \node[above=0.2cm of vm2-n] (vm3-n) {Монитор 3};
-    \node[draw, fit = (app) (vm1) (vm3-n)] (vm3) {};
-    
-    \node[above=0.25cm of vm3, align=center, inner sep=2pt] (int) {Событие \\ в клавиатуре};
-%     \node[right=0.25cm of app, align=center] (trap) {Ловушка};
-    
-    \draw[->] (int.west) to[bend right=80] (vm3-n.west);
-    \draw[->] (vm3-n.west) to[bend right=80] (vm2-n.west);
-    \draw[->] (vm2-n.west) to[bend right=80] (vm1-n.west);
-    
-    \draw[->] (app.east) to[bend right=80] node[sloped, above] {Ловушка} (vm3-n.east);
-    \draw[->] (vm3-n.east) to[bend left=80] (vm2-n.east);
-    \draw[->] (vm2-n.east) to[bend left=80] (vm1-n.east);
-    
-гипер\end{tikzpicture}
+	\inputpicture{drawings/recursive-vm}
     \caption[Рекурсивная виртуализация]{Рекурсивная виртуализация. Все события должны обрабатываться внешним монитором, который спускает их вниз по иерархии, при этом формируется задержка}
     \label{fig:recursive-vm}
 \end{figure}

@@ -1,0 +1,23 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../main-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+
+\begin{tikzpicture}[font=\small]
+    \fill[draw, fill=black!20] (0,0) circle [x radius=2.5cm, y radius=1.5cm];
+    \fill[draw, fill=black!10] (4.5,0) circle [x radius=2cm, y radius=1.5cm];
+    \node[fill=white, inner sep=1pt] at (0.0,0.75) {Привилегированные};
+    \node[fill=white, inner sep=1pt] at (4.5,0.75) {Безобидные};
+    
+    \fill[draw, fill=white] (0,-0.75) circle [x radius=1.2cm, y radius=0.75cm];
+    \node[fill=white, inner sep=1pt] at (0,-0.75) {Служебные};
+\end{tikzpicture}
+
+\end{document}
