@@ -19,7 +19,12 @@
 \input{../setup-web-fonts}
 \input{../setup-packages}
 
+\newfontfamily\titlefont[]{DejaVu Sans ExtraLight}
+\newfontfamily\srcfont[]{DejaVu Sans Mono}
+
 \begin{document}
+
+% The front cover
 \centering
 \begin{tikzpicture}[inner sep=0pt]
 % The page border clipping
@@ -27,11 +32,12 @@
     
 \begin{scope}
 % The source code on the left
-\clip[draw] (current page.north west) -- (current page.south west) -- (current page.south) -- cycle;
+% Source adopted from file: bochs-20140303/cpu/fetchdecode.cc:1281
+\clip[] (current page.north west) -- (current page.south west) -- (current page.south) -- cycle;
 \node[
         align=left, 
         text=black!50,
-        font=\ttfamily\normalsize, 
+        font=\Large\srcfont, 
         anchor = north west,         
     ] at (current page.north west) {
 \#define SSE_PREFIX_NONE 0\\
@@ -55,58 +61,110 @@
   i->init(/*os32*/ is_32,  /*as32*/ is_32,\\
           /*os64*/     0,  /*as64*/     0);\\
 \\
-fetch_b1:\\
-  b1 = *iptr++;\\
-  remain-{}-;\\
-  switch (b1) \{\\
-    case 0x0f: // 2-byte escape\\
-      if (remain != 0) \{\\
-        remain-{}-;\\
-        b1 = 0x100 | *iptr++;\\
-        break;\\
-      \}\\
-      return(-1);\\
-    case 0x66: // OpSize\\
-      os_32 = !is_32;\\
-      if(!sse_prefix) sse_prefix = SSE_PREFIX_66;\\
-      i->setOs32B(os_32);\\
-      if (remain != 0) \{\\
-        goto fetch_b1;\\
-      \}\\
-      return(-1);\\
-    case 0x67: // AddrSize\\
-      i->setAs32B(!is_32);\\
-      if (remain != 0) \{\\
-        goto fetch_b1;\\
-      \}\\
-      return(-1);\\
-    case 0xf2: // REPNE/REPNZ\\
-    case 0xf3: // REP/REPE/REPZ\\
-      sse_prefix = (b1 \& 3) \^ 1;\\
-      i->setLockRepUsed(b1 \& 3);\\
-      if (remain != 0) \{\\
-        goto fetch_b1;\\
-      \}\\
-      return(-1);\\
+
+% This chunk is from the same file, line 1980
+  \#if BX_SUPPORT_EVEX \\
+  if ((op_flags \& BX_PREPARE_EVEX) != 0 \&\& i->getEvexb()) \{\\
+\ \   if (mod_mem) \{\\
+\ \ \ \   if ((op_flags \& BX_PREPARE_EVEX_NO_BROADCAST) == BX_PREPARE_EVEX_NO_BROADCAST) \{\\
+\ \ \ \   BX_DEBUG(("\%s: broadcast is not supported for this instruction", i->getIaOpcodeNameShort()));\\
+\ \ \ \   i->execute1 = \&BX_CPU_C::BxError;\\
+\ \   \}\\
+    \}\\
+     else \{\\
+\ \       if ((op_flags \& BX_PREPARE_EVEX_NO_SAE) == BX_PREPARE_EVEX_NO_SAE) \{\\
+\ \ \ \   BX_DEBUG(("\%s: EVEX.b in reg form is not allowed for instructions which cannot cause floating point exception", i->getIaOpcodeNameShort()));\\
+\ \ \ \   i->execute1 = \&BX_CPU_C::BxError;\\
+\ \   \}\\
+    \} \\
+  \}\\
 }; % node
 \end{scope}
 
 \begin{scope}
-% The PCB on the right
-% Source adopted from file: bochs-20140303/cpu/fetchdecode.cc:1281
-\clip[draw] (current page.north) -- (current page.south east) -- (current page.north east) -- cycle;
+% The PCB on the right. Image credit: myself.
+\clip[] (current page.north) -- (current page.south east) -- (current page.north east) -- cycle;
 \node[anchor = north west] at (current page.north) {\includegraphics[height=21cm]{rpi.jpg}};
 \end{scope}
 
 % The book title
-\node[draw,
+\node[
       align = flush left, 
       anchor=center,
+      yshift=1cm,
 %       fill = white,
-      font=\scshape\Huge] at (current page.center) {Программное \\моделирование\\ вычислительных\\ систем};
-
-
+      font=\Huge\titlefont] at (current page.center) { Программное \\моделирование\\ вычислительных\\ систем};
 \end{tikzpicture}
     
+\clearpage
+
+% The back cover
+\centering
+\begin{tikzpicture}[inner sep=0pt]
+% The page border clipping
+\clip[] (current page.north west) -- (current page.south west) -- (current page.south east) -- (current page.north east) -- cycle;
     
+\begin{scope}
+% The disassembly code on the left
+% The objdump is taken from dosbox 0.74 built for linux64 
+\clip[] (current page.north west) -- (current page.south west) -- (current page.south) -- cycle;
+\node[
+        align=left, 
+        text=black!50,
+        font=\Large\srcfont, 
+        anchor = north west,         
+    ] at (current page.north west) {
+bf 01 00 00 00          mov    \$0x1,\%edi
+\\c7 05 e7 29 45 00 00    movl   \$0x0,0x4529e7(\%rip)        \# 85bf60 <_ZTTSt14basic_ifstreamIcSt11char_traitsIcEE+0x60>
+\\00 00 00 
+\\e8 e2 d9 ff ff          callq  406f60 <SDL_Delay@plt>
+\\e8 5d dd ff ff          callq  4072e0 <SDL_GetTicks@plt>
+\\03 1d af 29 45 00       add    0x4529af(\%rip),\%ebx        \# 85bf38 <_ZTTSt14basic_ifstreamIcSt11char_traitsIcEE+0x38>
+\\31 c9                   xor    \%ecx,\%ecx
+\\29 c3                   sub    \%eax,\%ebx
+\\85 db                   test   \%ebx,\%ebx
+\\89 1d a3 29 45 00       mov    \%ebx,0x4529a3(\%rip)        \# 85bf38 <_ZTTSt14basic_ifstreamIcSt11char_traitsIcEE+0x38>
+\\0f 89 cd fe ff ff       jns    409468 <_ZNSt15basic_streambufIcSt11char_traitsIcEED2Ev@plt+0x1658>
+\\c1 fa 0c                sar    \$0xc,\%edx
+\\44 29 c2                sub    \%r8d,\%edx
+\\41 89 f0                mov    \%esi,\%r8d
+\\0f af d6                imul   \%esi,\%edx
+\\89 d0                   mov    \%edx,\%eax
+\\31 d2                   xor    \%edx,\%edx
+\\f7 f1                   div    \%ecx
+\\8b 15 1d 95 42 00       mov    0x42951d(\%rip),\%edx        \# 832b04 <_fini+0x25d618>
+\\48 63 ca                movslq \%edx,\%rcx
+\\4c 0f af c1             imul   \%rcx,\%r8
+\\4d 85 c0                test   \%r8,\%r8
+\\7e 75                   jle    409668 <_ZNSt15basic_streambufIcSt11char_traitsIcEED2Ev@plt+0x1858>
+\\f2 49 0f 2a c8          cvtsi2sd \%r8,\%xmm1
+\\f2 48 0f 2a 05 37 32    cvtsi2sdq 0x453237(\%rip),\%xmm0        \# 85c838 <_ZTTSt14basic_ifstreamIcSt11char_traitsIcEE+0x938>
+\\45 00 
+\\f2 0f 5e c1             divsd  \%xmm1,\%xmm0
+\\f2 0f 10 0d 1b d8 1c    movsd  0x1cd81b(\%rip),\%xmm1        \# 5d6e28 <_fini+0x193c>
+\\00 
+\\66 0f 2e c8             ucomisd \%xmm0,\%xmm1
+\\76 55                   jbe    409668 <_ZNSt15basic_streambufIcSt11char_traitsIcEED2Ev@plt+0x1858>
+\\f2 0f 2a d0             cvtsi2sd \%eax,\%xmm2
+\\f2 0f 5c c8             subsd  \%xmm0,\%xmm1
+\\81 fe f9 00 00 00       cmp    \$0xf9,\%esi
+\\f2 0f 59 d1             mulsd  \%xmm1,\%xmm2
+\\f2 0f 2c c2             cvttsd2si \%xmm2,\%eax
+\\0f 86 a5 00 00 00       jbe    4096d4 <_ZNSt15basic_streambufIcSt11char_traitsIcEED2Ev@plt+0x18c4>
+\\3d 00 50 00 00          cmp    \$0x5000,\%eax
+\\0f 8e 9a 00 00 00       jle    4096d4 <_ZNSt15basic_streambufIcSt11char_traitsIcEED2Ev@plt+0x18c4>
+\\83 ff 09                cmp    \$0x9,\%edi
+\\0f 8f 91 00 00 00       jg     4096d4 <_ZNSt15basic_streambufIcSt11char_traitsIcEED2Ev@plt+0x18c4>
+
+}; % node
+\end{scope}
+
+\begin{scope}
+% The schematics on the right. Image credit: myself
+\clip[] (current page.north) -- (current page.south east) -- (current page.north east) -- cycle;
+\node[anchor = north west] at (current page.north) {\includegraphics[height=21cm]{schematic.jpg}};
+\end{scope}
+
+\end{tikzpicture}
+
 \end{document}
