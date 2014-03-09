@@ -1,0 +1,112 @@
+% A cover page design attempt
+% Author: 2014 Grigory Rechistov
+% Build with XeLaTeX 2013, updated to March 2014 or later
+
+\documentclass[a5paper,11pt,oneside ]{article}
+
+% A switch to change between document rendering options
+\usepackage{etoolbox}
+
+\newtoggle{webpaper}
+\toggletrue{webpaper} % Must be true for Web-PDF
+
+\newtoggle{inappendix} % we are now in appendix
+\togglefalse{inappendix} % ... but not yet
+
+\usepackage[top=0.0cm, bottom=0.0cm, left=0cm, right=0.0cm, footskip=0cm]{geometry}
+\pagestyle{empty} % no headers, page numbers in footers
+
+\input{../setup-web-fonts}
+\input{../setup-packages}
+
+\begin{document}
+\centering
+\begin{tikzpicture}[inner sep=0pt]
+% The page border clipping
+\clip[] (current page.north west) -- (current page.south west) -- (current page.south east) -- (current page.north east) -- cycle;
+    
+\begin{scope}
+% The source code on the left
+\clip[draw] (current page.north west) -- (current page.south west) -- (current page.south) -- cycle;
+\node[
+        align=left, 
+        text=black!50,
+        font=\ttfamily\normalsize, 
+        anchor = north west,         
+    ] at (current page.north west) {
+\#define SSE_PREFIX_NONE 0\\
+\#define SSE_PREFIX_66   1\\
+\#define SSE_PREFIX_F3   2\\
+\#define SSE_PREFIX_F2   3\\
+  unsigned sse_prefix = SSE_PREFIX_NONE;\\
+\\
+  bx_bool vex_w = 0;\\
+\#if BX_SUPPORT_AVX\\
+  int had_vex_xop = 0, vvv = -1;\\
+  bx_bool use_vvv = 0;\\
+\#endif\\
+\#if BX_SUPPORT_EVEX\\
+\  bx_bool displ8 = 0;\\
+\#endif\\
+\\
+  os_32 = is_32 = fetchModeMask \& BX_FETCH_MODE_IS32_MASK;\\
+\\
+  i->ResolveModrm = 0;\\
+  i->init(/*os32*/ is_32,  /*as32*/ is_32,\\
+          /*os64*/     0,  /*as64*/     0);\\
+\\
+fetch_b1:\\
+  b1 = *iptr++;\\
+  remain-{}-;\\
+  switch (b1) \{\\
+    case 0x0f: // 2-byte escape\\
+      if (remain != 0) \{\\
+        remain-{}-;\\
+        b1 = 0x100 | *iptr++;\\
+        break;\\
+      \}\\
+      return(-1);\\
+    case 0x66: // OpSize\\
+      os_32 = !is_32;\\
+      if(!sse_prefix) sse_prefix = SSE_PREFIX_66;\\
+      i->setOs32B(os_32);\\
+      if (remain != 0) \{\\
+        goto fetch_b1;\\
+      \}\\
+      return(-1);\\
+    case 0x67: // AddrSize\\
+      i->setAs32B(!is_32);\\
+      if (remain != 0) \{\\
+        goto fetch_b1;\\
+      \}\\
+      return(-1);\\
+    case 0xf2: // REPNE/REPNZ\\
+    case 0xf3: // REP/REPE/REPZ\\
+      sse_prefix = (b1 \& 3) \^ 1;\\
+      i->setLockRepUsed(b1 \& 3);\\
+      if (remain != 0) \{\\
+        goto fetch_b1;\\
+      \}\\
+      return(-1);\\
+}; % node
+\end{scope}
+
+\begin{scope}
+% The PCB on the right
+% Source adopted from file: bochs-20140303/cpu/fetchdecode.cc:1281
+\clip[draw] (current page.north) -- (current page.south east) -- (current page.north east) -- cycle;
+\node[anchor = north west] at (current page.north) {\includegraphics[height=21cm]{rpi.jpg}};
+\end{scope}
+
+% The book title
+\node[draw,
+      align = flush left, 
+      anchor=center,
+%       fill = white,
+      font=\scshape\Huge] at (current page.center) {Программное \\моделирование\\ вычислительных\\ систем};
+
+
+\end{tikzpicture}
+    
+    
+\end{document}
