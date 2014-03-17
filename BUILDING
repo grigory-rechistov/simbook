@@ -14,7 +14,7 @@ The build of web version takes a lot of memory. To increase TeX internal limits:
 * Find a texmf.cnf configuration file with 'kpsewhich texmf.cnf' command
 * Edit texmf.cnf file to include the line:
 	main_memory = 9000000 
-* Generate configuration by running 'fmtutil-sys --all' (may be as root)
+* Generate configuration by running 'fmtutil-sys --all' (may be as root) and 'fmtutil --all' as regular user.
 
 == Build sequence ==
 Choose a <version> to build. The top file for it is main-<version>.tex.
