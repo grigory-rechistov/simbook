@@ -1,0 +1,41 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=300,size=1200,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, node distance=0.25cm]
+
+    \node[draw, text height = 1.5cm, text width = 1cm, inner sep=0pt,] (cpu-state) {};
+    \node[align=center, font=\tiny] {Активное \\состояние};
+    \coordinate[right = 3cm of cpu-state] (vmcs-center);
+    \coordinate[above = 0.2 cm of cpu-state] (extra-state);
+    \node[draw=green, above = of vmcs-center, text height = 1.5cm, text width = 1cm, inner sep=0pt] (host-state) {};
+    \node[draw=blue,  below = of vmcs-center, text height = 1.5cm, text width = 1cm, inner sep=0pt] (guest-state) {};
+    \node[draw,       above = of host-state, text height = 0.25cm, text width = 1cm, inner sep=0pt] (entry-exit) {};
+    \node[draw,       above = of entry-exit, text height = 0.25cm, text width = 1cm, inner sep=0pt] (header) {};
+
+    \node[draw, thin, fit=(header) (guest-state) (entry-exit) (host-state)] (vmcs-border) {};
+    \node[draw, thin, fit=(cpu-state) (extra-state) ] (cpu-border) {};
+    \node[above = 0.05cm of vmcs-border] {VMCS};
+    \node[above = 0.05cm of cpu-border] {ЦПУ};
+
+    \node[right = of header] {Заголовок};
+    \node[right = of entry-exit] {Параметры входа и выхода};
+    \node[right = of host-state] {Состояние хозяина};
+    \node[right = of guest-state] {Состояние гостя};
+
+    \draw[draw=magenta, fill=magenta, ->] (cpu-state.45) -- (host-state.135) node [midway, above, sloped] {\tiny{}};
+    \draw[draw=magenta, fill=magenta, <-] (cpu-state) -- (guest-state) node[midway, above, text=magenta, font=\tiny] () {VM-Entry};
+
+    \draw[draw=orange, fill=orange, ->] (cpu-state.315) -- (guest-state.225) node[midway, below, text=orange, font=\tiny] () {VM-Exit};
+    \draw[draw=orange, fill=orange, <-] (cpu-state) -- (host-state);
+\end{tikzpicture}
+
+
+\end{document}
