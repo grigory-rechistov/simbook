@@ -1,0 +1,41 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=300,size=1200,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex]
+
+
+\draw (4,0) rectangle (10,1) node[midway] {эффективный};
+\draw(0,0) rectangle (4,1) node[midway] {селектор};
+
+\draw(0, -3) rectangle (10,-2) node[midway] {линейный};
+
+
+\draw(0, -6) rectangle (10,-5) node[midway] {гостевой физический};
+
+\draw(0, -9) rectangle (10,-8) node[midway] {физический};
+
+\coordinate (e) at (10, 0.5) ;
+\coordinate (l) at (10, -2.5);
+
+\node[right=0.25cm of e] {= логический};
+\node[right=0.25cm of l] {= виртуальный};
+
+\draw[->] (5, 0) -- (5, -2) node[midway, right] {Сегментация};
+
+\draw[->] (5, -3) -- (5, -5) node[midway, right] {Страничное преобразование};
+
+\draw[->] (5, -6) -- (5, -8) node[midway, right] {EPT-преобразование};
+
+\end{tikzpicture}
+
+
+\end{document}
+
