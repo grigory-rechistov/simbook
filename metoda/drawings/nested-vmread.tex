@@ -1,0 +1,53 @@
+
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small, node distance=0.2cm]
+
+\draw[->] (0,-0.5) -- (10,-0.5) node [pos=0.9, below] {Время};
+
+\draw (0,0) rectangle (3, 1);
+\draw (0,1.2) rectangle (3, 2.2);
+
+\draw (4,0) rectangle (10, 1);
+\draw (4,1.2) rectangle (10, 2.2);
+\draw (4,2.4) rectangle (10, 3.4);
+
+\begin{scope}[font=\tiny, text height=0.12cm, every node/.style={fill=white}, inner xsep=0pt]
+    \draw[->] (0.3, 1.7) -- +(0.1, -1.2) node[pos=0, above] {vmexit} coordinate[pos=1] (v1);
+    \draw[->] (2.6, 0.5) -- +(0.1, 1.2) node[pos=0, below] {vmresume} coordinate[pos=0] (v2);
+    \path (v1) -- (v2) node[pos=0.33] {vmread} node[pos=0.67] {vmwrite};
+
+    \draw[->] (4.3, 3.0) -- +(0.1, -2.5) node[pos=0, above] {vmexit} coordinate[pos=1] (v3);
+    \draw[->] (9.5, 0.5) -- +(0.1, 2.5) node[pos=0, below] {vmresume} coordinate[pos=0] (v4);
+
+    \draw[->] (4.5, 0.5) -- +(0.1, 1.2) coordinate[pos=1] (v5);
+    \draw[->] (9.3, 1.7) -- +(0.1, -1.2) coordinate[pos=0] (v6);
+    \draw[->] (5.0, 1.7) -- +(0.1, -1.2);
+    \draw[->] (6.4, 0.5) -- +(0.1, +1.2);
+    \draw[->] (7.4, 1.7) -- +(0.1, -1.2);
+    \draw[->] (8.4, 0.5) -- +(0.1, +1.2);
+
+    \path (v5) -- (v6) node[pos=0.1] {vmread} node[pos=0.6] {vmwrite} node[pos=0.95] {vmresume};
+    
+    \path (v3) -- (v4) node[pos=0.25] {vmread} node[pos=0.4] {vmresume} node[pos=0.7] {vmwrite} node[pos=0.85] {vmresume};
+\end{scope}
+
+\node[align=center] at (1.5, 4) {Один уровень виртуализации};
+\node[align=center] at (7, 4) {Два уровня виртуализации};
+
+\node[] at (-0.5, 0.5) {L0};
+\node[] at (-0.5, 1.7) {L1};
+\node[] at (-0.5, 2.8) {L2};
+\end{tikzpicture}
+
+
+\end{document}
