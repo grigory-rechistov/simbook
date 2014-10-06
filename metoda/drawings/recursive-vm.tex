@@ -17,7 +17,7 @@
     \node[above=0.2cm of vm1-n] (vm2-n) {Монитор 2};
     \node[draw, fit = (app) (vm1) (vm2-n)] (vm2) {};
     \node[above=0.2cm of vm2-n] (vm3-n) {Монитор 3};
-    \node[draw, fit = (app) (vm1) (vm3-n)] (vm3) {};
+    \node[draw, fit = (app) (vm1) (vm2) (vm3-n)] (vm3) {};
     
     \node[above=0.25cm of vm3, align=center, inner sep=2pt] (int) {Событие \\ в клавиатуре};
 %     \node[right=0.25cm of app, align=center] (trap) {Ловушка};
