@@ -1,0 +1,27 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex, font=\small]
+
+\draw (0,0) rectangle +(0.5,-5) node[rotate=90, midway] {IF/ID};
+\draw (3,0) rectangle +(0.5,-5) node[rotate=90, midway] {ID/EX};
+\draw (6,0) rectangle +(0.5,-5) node[rotate=90, midway] {EX/MEM};
+\draw (9,0) rectangle +(0.5,-5) node[rotate=90, midway] {MEM/WB};
+
+\node[draw] (pc) at (-3, -2.5) {PC} ;
+\node[draw, right=0.5 of pc] (memory1) {Memory};
+
+\node[draw, align=left] (reg-file) at (2,-2) {Register\\File};
+    
+\end{tikzpicture}
+
+
+\end{document}

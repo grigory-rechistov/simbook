@@ -1,0 +1,45 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+
+\begin{tikzpicture}[>=latex]
+\coordinate (center) at (0,0);
+\node[draw, text width = 2cm, above = 0.5 cmof center] (reference) {\texttt{reference}};
+\node[draw, text width = 2cm, below = 0.5cm of center] (counter) {\texttt{counter}};
+\node[draw, text width = 0.4cm, right = 2cm of center, shape = isosceles triangle, inner sep=1dd] (comparator) {=?};
+\node[right = of comparator] (int) {\#INT};
+\node[above = of reference] (reset) {\#RESET};
+\node[below = of counter] (enable) {\#ENABLE};
+\node[left = 1.5cm of reference] (ref-input) {REF};
+\node[left = 0.25cm of counter.north west] (clk) {\small{CLK}};
+
+% draw a quartz
+\coordinate (quartz) at ([xshift = -2cm]counter.west);
+ \node[]  at (quartz) {\small{F}};
+\draw (quartz) ++(-0.25,0.25) rectangle ++(0.5,-0.5);
+\draw (quartz) ++(-0.25,0.35) -- ++ (0.5,0);
+\draw (quartz) ++(-0.25,-0.35) -- ++ (0.5,0);
+\draw (reset) -- (reference);
+\draw (enable) -- (counter);
+
+% draw wires
+\draw (reference.east) -| ([xshift = -0.2cm]comparator.160) -- (comparator.160);
+\draw (counter.east) -| ([xshift = -0.2cm]comparator.200) -- (comparator.200);
+\draw (ref-input) -- (reference) node[midway] {\tiny{/}} node[midway, above] {16};
+\draw (quartz) ++(0.25,0) -- (counter);
+\draw[->] (comparator) -- (int);
+\node[draw, dashed, fit = (reference) (counter) (comparator)] {};
+
+\end{tikzpicture}
+
+
+
+\end{document}

@@ -1,0 +1,67 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+
+\begin{tikzpicture}[>=latex, font=\small, node distance = 0.4cm]
+
+
+\begin{scope}[minimum height=0.8cm]
+    \node[draw, ] (cpu) {CPU};
+    \node[draw, below=of cpu] (mmu) {MMU};
+    \node[draw, right=3cm of cpu, ] (pic) {PIC};
+    \node[draw, left=of cpu, ] (caches) {L\$};
+
+    \node[draw, below=of mmu, text width=3cm, align = center, ] (dram) {DRAM};
+    \node[draw, left=of dram, ] (pmu) {PMU};
+    \node[draw, right=of dram, ] (rom) {ROM};
+    \node[draw, right=of rom, ] (dev-A) {\footnotesize Bridge A};
+
+    \node[draw, right=of dev-A, ] (dev-B) {\footnotesize Bridge B};
+    \node[draw, right=of dev-B, ] (pit) {PIT};
+
+    \node[draw, below=of dev-A, ] (video) {Video};
+    \node[draw, below=of video, ] (monitor) {Monitor};
+
+    \node[draw, below=of dev-B, ] (usb-1) {\tiny USB Dev 1};
+    \node[draw, below=of dev-B, xshift=1.5cm] (usb-2) {\tiny USB Dev 2};
+\end{scope}
+
+\draw[<->] (cpu) -- (mmu);
+\draw[<->] (cpu) -- (caches);
+\draw[<->] (mmu) -- (dram);
+
+\draw[<->] (mmu) -| (rom);
+\draw[<->] (mmu) -| (pmu);
+\draw[<->] (mmu) -| (dev-A);
+\draw[<->] (mmu) -| (dev-B);
+\draw[<->] (mmu) -| (pit);
+
+\draw[->, dashed] (pic) -- (cpu);
+\draw[->, dashed] (pit) -- (pic);
+\draw[->, dashed] (dev-A) -- (pic);
+\draw[->, dashed] (dev-B) -- (pic);
+
+\draw[<->] (dev-A) -- (video);
+\draw[<->] (video) -- (monitor);
+
+\draw[<->] (dev-B) -- (usb-1);
+\draw[<->] (dev-B) -- (usb-2);
+
+\path[->, draw, dotted] (pmu.west) -- ([xshift=-0.3cm]pmu.west) |- ([yshift=0.3cm]cpu.north) -- (cpu.north);
+\path[->, draw, dotted] (pmu.south) -- ([yshift=-0.25cm]pmu.south) -| (dram.235);
+\path[->, draw, dotted] (pmu.south) -- ([yshift=-0.25cm]pmu.south) -| (dev-A.235);
+\path[->, draw, dotted] (pmu.south) -- ([yshift=-0.25cm]pmu.south) -| (dev-B.235);
+
+
+\end{tikzpicture}
+
+
+\end{document}
