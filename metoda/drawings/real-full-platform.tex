@@ -10,8 +10,7 @@
 % The actual drawing follows
 \begin{document}
 
-\begin{tikzpicture}[>=latex, font=\small, node distance = 0.4cm]
-
+\begin{tikzpicture}[>=latex, font=\small, node distance = 0.3cm, inner sep=1pt]
 
 \begin{scope}[minimum height=0.8cm]
     \node[draw, ] (cpu) {CPU};
@@ -19,7 +18,7 @@
     \node[draw, right=3cm of cpu, ] (pic) {PIC};
     \node[draw, left=of cpu, ] (caches) {L\$};
 
-    \node[draw, below=of mmu, text width=3cm, align = center, ] (dram) {DRAM};
+    \node[draw, below=of mmu, text width=2.5cm, align = center, ] (dram) {DRAM};
     \node[draw, left=of dram, ] (pmu) {PMU};
     \node[draw, right=of dram, ] (rom) {ROM};
     \node[draw, right=of rom, ] (dev-A) {\footnotesize Bridge A};
