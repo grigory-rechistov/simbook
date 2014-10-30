@@ -10,25 +10,25 @@
 % The actual drawing follows
 \begin{document}
 
-\begin{tikzpicture}[>=latex, font=\small, node distance = 0.4cm]
+\begin{tikzpicture}[>=latex, font=\small, node distance = 0.5cm]
 
 \begin{scope}[minimum height=0.8cm]
     \node[draw, ] (cpu) {CPU};
     \node[draw, below=of cpu] (mmu) {MMU};
     \node[draw, right=2cm of cpu, ] (pic) {PIC};
 
-    \node[draw, below=of mmu, text width=3cm, align = center, ] (dram) {DRAM};
+    \node[draw, below=of mmu, text width=2.5cm, align = center, ] (dram) {RAM};
     \node[draw, right=of pic, ] (pit) {PIT};
 
 \end{scope}
 
-\draw[<->] (cpu) -- (mmu);
+\draw[<->] (cpu) -- (mmu); // node[midway] {/};
 \draw[<->] (mmu) -- (dram);
 
 \draw[<->] (mmu) -| (pit);
 
-\draw[->, dashed] (pic) -- (cpu);
-\draw[->, dashed] (pit) -- (pic);
+\draw[->, ] (pic) -- (cpu);
+\draw[->, ] (pit) -- (pic);
 
 \end{tikzpicture}
 

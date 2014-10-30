@@ -19,8 +19,27 @@
 \node[draw] (pc) at (-3, -2.5) {PC} ;
 \node[draw, right=0.5 of pc] (memory1) {Memory};
 
-\node[draw, align=left] (reg-file) at (2,-2) {Register\\File};
-    
+\node[draw, align=left] (reg-file) at (1.75,-2) {Register\\File};
+
+\node[draw, above= of memory1, chamfered rectangle , chamfered rectangle corners={south west, south east}, rotate=90] (adder) {Adder};
+
+\node[draw, below=of reg-file, align=left] (sign) {Sign\\Extend};
+
+\node[draw, right=2.5 of sign, chamfered rectangle , chamfered rectangle corners={south west, south east}, rotate=90] (alu) {ALU};
+
+\node[draw, above=2 of alu] (zero) {zero?};
+
+\node[draw, left=0.5 of alu.north west, anchor=center, chamfered rectangle , chamfered rectangle corners={south west, south east}, rotate=90, inner sep=1pt] (mux1) {\tiny MUX};
+
+\node[draw, left=0.5 of alu.north east, anchor=center, chamfered rectangle , chamfered rectangle corners={south west, south east}, rotate=90, inner sep=1pt] (mux2) {\tiny MUX};
+
+\node[draw, right=2 of alu.south] (memory2) {Memory};
+
+\node[draw, left=0.5 of alu.north east, anchor=center, chamfered rectangle , chamfered rectangle corners={south west, south east}, rotate=90, inner sep=1pt] (mux3) {\tiny MUX};
+
+\node[draw, right=1.5 of memory2, anchor=center, chamfered rectangle , chamfered rectangle corners={south west, south east}, rotate=90, inner sep=1pt] (mux4) {\tiny MUX};
+
+
 \end{tikzpicture}
 
 
