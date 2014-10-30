@@ -15,29 +15,34 @@
 \node[draw, text width = 2cm, above = 0.5 cmof center] (reference) {\texttt{reference}};
 \node[draw, text width = 2cm, below = 0.5cm of center] (counter) {\texttt{counter}};
 \node[draw, text width = 0.4cm, right = 2cm of center, shape = isosceles triangle, inner sep=1dd] (comparator) {=?};
+\node[draw, left= 0.25cm of counter] (and) {\&};
 \node[right = of comparator] (int) {\#INT};
-\node[above = of reference] (reset) {\#RESET};
-\node[below = of counter] (enable) {\#ENABLE};
-\node[left = 1.5cm of reference] (ref-input) {REF};
-\node[left = 0.25cm of counter.north west] (clk) {\small{CLK}};
+\node[left = 2.5cm of reference] (ref-input) {REF};
+\coordinate[below = 0.25cm of counter] (reset-point);
+\coordinate[right=0.25cm of comparator.east] (comparator-exit);
+\node[below =0.1cm of reset-point, inner sep=0pt] (reset) {\tiny{RESET}};
 
 % draw a quartz
-\coordinate (quartz) at ([xshift = -2cm]counter.west);
- \node[]  at (quartz) {\small{F}};
+\coordinate (quartz) at ([xshift = -2cm]and.west);
+\node[]  at (quartz) {\small{F}};
 \draw (quartz) ++(-0.25,0.25) rectangle ++(0.5,-0.5);
 \draw (quartz) ++(-0.25,0.35) -- ++ (0.5,0);
 \draw (quartz) ++(-0.25,-0.35) -- ++ (0.5,0);
-\draw (reset) -- (reference);
-\draw (enable) -- (counter);
+\draw (quartz) ++(0.25,0) |- (and.155) node[pos=0.75, above] (clk) {\small{CLK}};
+\node[below = of clk] (enable) {\#ENABLE};
+\draw (enable) |- (and.205);
 
 % draw wires
+\draw (and) -- (counter);
 \draw (reference.east) -| ([xshift = -0.2cm]comparator.160) -- (comparator.160);
 \draw (counter.east) -| ([xshift = -0.2cm]comparator.200) -- (comparator.200);
-\draw (ref-input) -- (reference) node[midway] {\tiny{/}} node[midway, above] {16};
-\draw (quartz) ++(0.25,0) -- (counter);
-\draw[->] (comparator) -- (int);
-\node[draw, dashed, fit = (reference) (counter) (comparator)] {};
+\draw (ref-input) -- (reference) node[pos=0.25] {\tiny{/}} node[pos=0.25, above] {16};
 
+\draw[->] (comparator) -- (int);
+\draw[->] (comparator-exit) |- (reset-point) -- (counter);
+
+% draw a border
+\node[draw, dashed, fit = (comparator-exit) (reset) (and) (reference) (counter) (comparator)] {};
 \end{tikzpicture}
 
 
