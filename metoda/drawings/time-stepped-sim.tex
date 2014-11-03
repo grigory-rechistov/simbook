@@ -1,0 +1,34 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+
+\begin{tikzpicture}[>=latex, font=\small, node distance = 0.125cm]
+
+\node (sim) {Симулятор};
+\node[below = of sim] (tsim) {$T_{sim}$};
+\node[draw, fit = (sim) (tsim)] (sim-border) {};
+
+\node[right = 3cm of sim] (dev2) {device2};
+\node[below = of dev2] (dev2-onclk) {\texttt{on_clk()}};
+\node[draw, fit = (dev2) (dev2-onclk)] {};
+
+\node[above = 2cm of dev2] (dev1) {device1};
+\node[below = of dev1] (dev1-onclk) {\texttt{on_clk()}};
+\node[draw, fit = (dev1) (dev1-onclk)] {};
+
+\node[below = 2cm of dev2] (dev3) {device3};
+\node[below = of dev3] (dev3-onclk) {\texttt{on_clk()}};
+\node[draw, fit = (dev3) (dev3-onclk)] {};
+
+\draw[->] (sim-border.east) -- ([xshift=+1cm]sim-border.east) |- (dev1-onclk) ;
+
+\end{tikzpicture}
+\end{document}
