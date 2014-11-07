@@ -1,0 +1,49 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+\begin{tikzpicture}[>=latex]
+% set clock and #INT time lines
+\draw[->] (0,-1) -- +(10,0) node[pos=0.95, below] {CLK};
+\path[-] (0,0) -- (10,0) node[pos=0.0, above] {\texttt{counter}};
+
+\foreach \x in { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19} {
+    \draw (\x/2,-1.15) -- (\x/2,-0.85)  {};
+    \coordinate (tick\x) at (\x/2, 0);
+};
+
+\draw[fill=black] (tick3) circle (0.1cm);
+\node[below = 0.15cm of tick3] (event-enable) {\tiny{ENABLE=1}};
+
+\draw[fill=black] (tick10) circle (0.1cm);
+\node[below = 0.15cm of tick10] {\tiny{RESET}};
+\draw[fill=black] (tick17) circle (0.1cm);
+\node[below = 0.15cm of tick17] {\tiny{RESET}};
+
+\draw[] (0, 3.5) -- (10, 3.5) node[pos=0.0, above] {\texttt{reference}};
+
+% The actual counter plot
+\foreach \x in { 0, 1, 2, 3, 4, 5, 6} {
+    \draw[thick] (\x/2 + 1.5, \x/2) -| +(0.5, 0.5);
+    \draw[thick] (\x/2 + 5.0, \x/2) -| +(0.5, 0.5);
+}
+\foreach \x in { 0, 1} {
+    \draw[thick] (\x/2 + 8.5, \x/2) -| +(0.5, 0.5);
+}
+
+% Final touches
+\draw[thick] (0,0) -- +(1.5, 0);
+\draw[thick] (5, 3.5) -- +(0, -3.5);
+\draw[thick] (8.5, 3.5) -- +(0, -3.5);
+
+\end{tikzpicture}
+
+
+\end{document}

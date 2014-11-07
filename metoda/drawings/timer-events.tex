@@ -1,0 +1,36 @@
+% This file allows to produce either a separate PDF/PNG image
+% See standalone documentation to understand underlying magic
+
+\documentclass[tikz,convert={density=150,size=600,outext=.png}]{standalone}
+\usetikzlibrary{shapes, calc, arrows, fit, positioning, decorations, patterns, decorations.pathreplacing, chains, snakes}
+\input{../setup-web-fonts}
+\input{../setup-packages}
+\graphicspath{{../pictures/}} % path to pictures, trailing slash is mandatory.
+
+% The actual drawing follows
+\begin{document}
+
+\begin{tikzpicture}[>=latex]
+% set clock and #INT time lines
+\draw[->] (0,1) -- (10,1) node[pos=0.0, above] {\#INT} node[pos=0.95, below] {t\textsubscript{sim}};
+
+\foreach \x in { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19} {
+    \coordinate (tick\x) at (\x/2, 1);
+};
+
+\draw[fill=black] (tick3) circle (0.1cm);
+
+\draw[fill=black] (tick10) circle (0.1cm);
+\draw[fill=black] (tick17) circle (0.1cm);
+\draw (tick3)  -- ++(0, 1);
+\draw (tick10) -- ++(0, 1);
+\draw (tick17) -- ++(0, 1);
+\draw[<->] ([yshift=0.8cm]tick3) -- ([yshift=0.8cm]tick10) node[midway, above] {reference};
+\draw[<->] ([yshift=0.8cm]tick10) -- ([yshift=0.8cm]tick17) node[midway, above] {reference};
+
+% The actual #CLK plot
+\draw[thick] (tick1) -- (tick10) -- ++(0, 0.5) -- ++(0, -0.5) --
+            (tick11) -- (tick17) -- ++(0, 0.5) -- ++(0, -0.5) -- (tick18) -- (tick19);
+
+\end{tikzpicture}
+\end{document}
