@@ -13,7 +13,7 @@
     \matrix[column sep=1cm, row sep=0.1cm]{
         \node (bt) {Двоичная трансляция}; & \node (sim) {Симуляция}; \\[1.cm]
         \node[draw] (translation) {Создание/удаление кода}; & \node[draw] (execution) {Исполнение кода}; \\[0.25cm]
-        \node[draw, rounded corners,text width=4cm] (storage) {Хранилище транслированного кода}; & \node[draw, rounded corners] (current-page) {Текущая секция кода}; \\
+        \node[draw, rounded corners,text width=4cm, align=left] (storage) {Хранение\\транслированного кода}; & \node[draw, rounded corners] (current-page) {Текущая секция кода}; \\
     };
     \draw[->] (bt) to [bend right] (sim);
     \draw[->] (sim) to [bend right] (bt);
