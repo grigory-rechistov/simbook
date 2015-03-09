@@ -11,21 +11,21 @@
 \begin{document}
     \begin{tikzpicture}[>=latex, font=\small, align=center, inner sep=2pt]
 
-    \node[draw, text width = 2.5cm, minimum height = 1.2cm] (interp) {Интерпретатор};
+    \node[minimum height = 1.cm] (interp) {Интерпретатор};
     
-    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of interp] (bt) {Двоичный транслятор};
+    \node[minimum height = 1.cm, right = of interp] (bt) {Двоичный\\транслятор};
     
-    \node[draw, text width = 2.5cm, minimum height = 1.2cm, right = of bt] (dex) {Прямое исполнение};
+    \node[minimum height = 1.cm, right = of bt] (dex) {Прямое\\исполнение};
     
-    \begin{scope}[auto, text width = 3cm]
-    \draw[->] (interp.north) to[bend left] node {Горячий код} ([xshift=-0.2cm] bt.north);
-    \draw[->] (bt.north) to[bend left] node {Горячий код + возможность DEX} (dex.north);
+    \begin{scope}[auto, font=\footnotesize,  text width = 3cm]
+    \draw[->] (interp.north) to[bend left] node {Горячий код} ([xshift=-0.1cm] bt.north);
+    \draw[->] (bt.north) to[bend left] node {Возможность\\прямого исполнения} (dex.north);
     
-    \draw[->] ([xshift=-0.2cm] bt.south) to[bend left] node {SMC} (interp.south);
-    \draw[->] (dex.south) to[bend left] node {Частые выходы в монитор} (bt.south);
+    \draw[->] ([xshift=-0.1cm] bt.south) to[bend left] node {Самомодифици-рующийся код} (interp.south);
+    \draw[->] (dex.south) to[bend left] node {Частые выходы\\в монитор} (bt.south);
     
     \end{scope}
-    \draw[->] ([xshift=0.75cm] dex.south) to[bend left=60] node[auto] {Неподдерживаемый режим/инструкции} ([xshift=-0.75cm] interp.south);
+    \draw[->] ([xshift=0.75cm] dex.south) to[bend left=60] node[auto] {\footnotesize Неподдерживаемые режим или инструкции} ([xshift=-0.75cm] interp.south);
     
     \end{tikzpicture}
 
