@@ -16,10 +16,10 @@
     ]
     \node[choice]       (is-decoded)   {\scriptsize Инструкция декодирована?};
     \node[action, below=0.5cm of is-decoded] (fetch-instr)      {Извлечь инструкцию};
-    \node[action, below=0.5cm  of fetch-instr] (decode)      {Декодировать};
+    \node[action, below=0.5cm  of fetch-instr, text width=2.5cm] (decode)      {Декодировать};
     \node[complexaction, matrix, below=0.5cm  of decode, row sep=0.1cm, text width=4cm]   (cache-decode) {
         \node{Сохранить декодированное представление}; \\
-        \node[complexaction] {Управление хранилищем кода}; \\
+        \node[complexaction] {Хранение кода}; \\
         };
     \node[action, below=0.5cm of cache-decode] (execute)   {Исполнить};
     
