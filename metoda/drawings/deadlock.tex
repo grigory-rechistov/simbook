@@ -10,21 +10,21 @@
 % The actual drawing follows
 \begin{document}
     \begin{tikzpicture}[>=latex, font=\scriptsize]
-    \draw[->] (0,0) -- (10,0) node[pos=0.9, below] (sim-time1) {Время} node[pos=0., below] {Поток 1};
+    \draw[->] (0,0) -- (10,0) node[pos=0.95, below] (sim-time1) {Время} node[pos=0., below] {Поток 1};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-0.15) -- (\x,0.15) node (tick\x) {};
     };
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (1, -1) {$T_1$};
     \node[shape=dart, draw, shape border rotate=270 ] at (1, 0.5)  (ev11) {};
     
-    \draw[->] (0,-2) -- (10,-2) node[pos=0.9, below] (sim-time2) {Время} node[pos=0., below] {Поток 2};
+    \draw[->] (0,-2) -- (10,-2) node[pos=0.95, below] (sim-time2) {Время} node[pos=0., below] {Поток 2};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-2.15) -- (\x,-1.85) node (tick\x) {};
     };
     \node[draw, arrow box, arrow box arrows={north:.7cm}] at (3, -3) {$T_2$};
     \node[shape=dart, draw, shape border rotate=270 ] at (3, -1.5)  (ev21) {};
    
-    \draw[->] (0,-4) -- (10,-4) node[pos=0.9, below] (sim-time3) {Время} node[pos=0., below] {Поток 3};
+    \draw[->] (0,-4) -- (10,-4) node[pos=0.95, below] (sim-time3) {Время} node[pos=0., below] {Поток 3};
     \foreach \x in { 1, 2, 3, 4, 5, 6, 7, 8, 9} { 
         \draw (\x,-4.15) -- (\x,-3.85) node (tick\x) {};
     };
