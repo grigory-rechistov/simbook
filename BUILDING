@@ -5,15 +5,15 @@
 
 ==Build variants==
 Several variants of builds for the book are avaialble:
-* web - a PDF formatted for reading from screen;
-* print - a PDf prepared for print, with publisher output data;
-* html - a HTML for online viewing. Note that this version is experimental.
+* web - a PDF formatted for reading from screen, currently developed kind.
+* print - a PDF prepared for print, with publisher output data. This is actual only during preparation for a physical paper edition.
+* html - a HTML for online viewing. Note that this version is experimental and most likely broken.
 
 ==Memory consumption note==
 The build of web version takes a lot of memory. To increase TeX internal limits:
 * Find a texmf.cnf configuration file with 'kpsewhich texmf.cnf' command
 * Edit texmf.cnf file to include the line:
-	main_memory = 9000000 
+    main_memory = 9000000 
 * Generate configuration by running 'fmtutil-sys --all' (may be as root) and 'fmtutil --all' as regular user.
 
 == Build sequence ==
