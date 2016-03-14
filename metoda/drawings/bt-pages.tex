@@ -14,7 +14,7 @@
     \node {\tiny Адреса гостевых страниц}; & \node{\tiny Гостевой код};          &[2cm] \node{\tiny Сгенерированный код}; \\
     \node {0x1000}; & \draw[rounded corners] node (1000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \draw node (1000t) {} (-0.5,-0.4) rectangle (0.5,0.4); \\
     \node {0x2000}; & \draw[rounded corners] node (2000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \draw node (2000t) {} (-0.5,-0.4) [dashed] rectangle (0.5,0.4); \\
-    \node {0x3000}; & \draw[rounded corners] node (3000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \node[text width=2cm] (3000t) {Трансляция отсутствует}; \\
+    \node {0x3000}; & \draw[rounded corners] node (3000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \node[text width=2cm] (3000t) {\small Трансляция отсутствует}; \\
     \node {0x4000}; & \draw[rounded corners] node (4000) {} (-0.5,-0.4) rectangle (0.5,0.4); &[2cm] \draw node (4000t) {} (-0.5,-0.4) rectangle (0.5,0.4); \\
     };
     \path[->] (1000) edge (1000t);
