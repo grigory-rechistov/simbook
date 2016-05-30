@@ -1,32 +1,16 @@
-# The Makefile to automate building different versions of the book
+# Build the book
+# A single PDf target is preserved
 
-all: web
+all: main-web.pdf
 
-really-all: web print html
-
-web: main-web.tex
+main-web.pdf: main-web.tex
 	xelatex main-web.tex
 	biber main-web
 	xelatex main-web.tex
 	xelatex main-web.tex
 
-print: main-print.tex
-	xelatex main-print.tex
-	biber main-print
-	xelatex main-print.tex
-	xelatex main-print.tex
-	
-html: png-drawings
-	echo Not implemented
-	echo FIXME xelatex -shell-escape
-
-png-drawings:
-	make -C drawings all
-	
-	
-
 clean:
-	rm -rf *.aux *.log *.fot *.blg *.bcf *.run.xml *.synctex.gz
+	rm -rf *.aux *.log *.fot *.blg *.bcf *.run.xml *.synctex.gz *.bbl *.backup *.out
 
 clobber: clean
 	rm -rf main-*.pdf

@@ -1,9 +1,8 @@
 % \usepackage[duplicate]{chapterbib}
 % A hack to mimic biblatex macro for bibtex
-% \newcommand{\printbibliography}[1][none]{\bibliographystyle{ugost2008s}{}\bibliography{./../phd,./../mine,../collection}}
+% \newcommand{\printbibliography}[1][none]{\bibliographystyle{ugost2008s}{}\bibliography{./../mine,./../collection}}
 
 \usepackage[language=auto, bibencoding=inputenc, style=gost-numeric, backend=biber, maxnames=4, refsection=chapter, isbn=true, ]{biblatex}
-\addbibresource{./../phd.bib}
 \addbibresource{./../mine.bib}
 \addbibresource{./../collection.bib}
 \renewcommand*{\multicitedelim}{\addcomma\space} % grouped cites separated by commas not semicolons
