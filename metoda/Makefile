@@ -3,7 +3,7 @@
 
 all: main-web.pdf
 
-main-web.pdf: main-web.tex
+main-web.pdf: main-web.tex *.tex
 	xelatex main-web.tex
 	biber main-web
 	xelatex main-web.tex
@@ -14,4 +14,3 @@ clean:
 
 clobber: clean
 	rm -rf main-*.pdf
-

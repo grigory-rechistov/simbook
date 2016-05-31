@@ -54,28 +54,15 @@
 
 В результате этого этапа проектирования создаётся иерархическая структура — дерево доменов, — размещённая на плоскости кристалла. На рис.~\ref{fig:htree} приведена фрактальная структура, именуемая \textit{H-дерево}. Геометрические свойства отдельных его ветвей делают его удобным для построения деревьев задержек.
 
-% H-tree fractal for TiKZ/PGF.
-% Taken from http://pbelmans.wordpress.com/2010/12/27/an-h-tree-in-tikz/
-% Author: Pieter Belmans
-\pgfdeclaredecoration{H-tree}{init}
-{
-  \state{init}[width=\pgfdecoratedinputsegmentremainingdistance]
-  {
-    \pgfpathmoveto{\pgfpoint{0pt}{0.35355\pgfdecoratedinputsegmentremainingdistance}}
-    \pgfpathlineto{\pgfpoint{0pt}{-0.35355\pgfdecoratedinputsegmentremainingdistance}}
-    \pgfpathmoveto{\pgfpoint{0pt}{0pt}}
-    \pgfpathlineto{\pgfpoint{\pgfdecoratedinputsegmentremainingdistance}{0pt}}
-    \pgfpathmoveto{\pgfpoint{\pgfdecoratedinputsegmentremainingdistance}{0.35355\pgfdecoratedinputsegmentremainingdistance}}
-    \pgfpathlineto{\pgfpoint{\pgfdecoratedinputsegmentremainingdistance}{-0.35355\pgfdecoratedinputsegmentremainingdistance}}
-    \pgfpathmoveto{\pgfpoint{\pgfdecoratedinputsegmentremainingdistance}{0pt}}
-  }
-}
-\begin{figure}
-\centering
-\begin{tikzpicture}[decoration=H-tree]
-  \draw decorate{decorate{decorate{decorate{decorate{decorate{ (0,0) -- (5,0) }}}}}};
-\end{tikzpicture}
-    \caption{H-дерево, первые 6 уровней}
+% The actual tree build requires huge amount of stack memory for the TeX VM.
+% To save space, time and effort, a pre-rendered version may be used.
+\begin{figure}[htbp]
+    \centering
+    % The TikZ drawing
+    %\inputpicture{drawings/h-tree}
+    % The pre-rendered image
+    \includegraphics[width=0.8\textwidth]{./h-tree}
+    \caption{H-дерево, несколько первых уровней}
     \label{fig:htree}
 \end{figure}
 
@@ -107,9 +94,9 @@
 
 Проверка физических параметров проектируемого кристалла (размеры, плотность расположения соединений и элементов и т.п.) на пригодность для производства на конкретной фабрике.
 
-\subsection{Верификация путей трассировки}
+\section{Верификация путей трассировки}
 
-Дполнительная проверка на соответствие полученной схемы расположения и связей между элементами предполагаемым размерам кристалла.
+Дополнительная проверка на соответствие полученной схемы расположения и связей между элементами предполагаемым размерам кристалла.
 
 %\subsection[Проверка компоновочной схемы]{Проверка компоновочной схемы на~соответствие принципиальной схеме}
 
