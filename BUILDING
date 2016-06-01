@@ -1,29 +1,10 @@
 == Build requirements ==
 
-1) TeXLive 2013 installed with support of Russian language, XeLaTeX, Tikz, biblatex, biber.
-2) Both Windows and Linux hosts should be able to build
+* TeXLive 2015 distribution: https://www.tug.org/texlive/
+* The list of required TeX packages include Cyrillic language support, XeLaTeX, Tikz, Biblatex, Biber
+* GNU `make`
 
-==Build variants==
-Several variants of builds for the book are avaialble:
-* web - a PDF formatted for reading from screen, currently developed kind.
-* print - a PDF prepared for print, with publisher output data. This is actual only during preparation for a physical paper edition.
-* html - a HTML for online viewing. Note that this version is experimental and most likely broken.
+== Build instructions ==
 
-==Memory consumption note==
-The build of web version takes a lot of memory. To increase TeX internal limits:
-* Find a texmf.cnf configuration file with 'kpsewhich texmf.cnf' command
-* Edit texmf.cnf file to include the line:
-    main_memory = 9000000 
-* Generate configuration by running 'fmtutil-sys --all' (may be as root) and 'fmtutil --all' as regular user.
-
-== Build sequence ==
-Choose a <version> to build. The top file for it is main-<version>.tex.
-
-1) cd metoda
-2) xelatex main-<version>.tex
-3) biber main-<version>
-4) xelatex main-<version>.tex
-5) xelatex main-<version>.tex
-
-The result is in main-<version>.pdf.
+To build the Web version, run `make` inside the `metoda` directory. The final document is called `main-web.pdf`.
 
