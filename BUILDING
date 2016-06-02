@@ -1,7 +1,7 @@
 == Build requirements ==
 
 * TeXLive 2015 distribution: https://www.tug.org/texlive/
-* The list of required TeX packages include Cyrillic language support, XeLaTeX, Tikz, Biblatex, Biber
+* The list of required TeX packages include Cyrillic language support, XeLaTeX, Tikz, Biblatex, Biber, biblatex-gost
 * GNU `make`
 
 == Build instructions ==
