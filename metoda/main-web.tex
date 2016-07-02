@@ -6,8 +6,6 @@
 % Can be compied with XelaTeX:
 % * TL 2015 or later
 
-% TODO check italic and bold usage
-
 \documentclass[a5paper,11pt,oneside,titlepage, numbers=endperiod]{scrbook}
 
 \input{setup-version}
@@ -31,19 +29,14 @@
 \pagestyle{plain} % no headers, page numbers in footers
 
 \input{setup-web-fonts}
+\input{setup-biblio}
 \input{setup-packages}
 \input{setup-appendix}
-\input{setup-biblio}
 \input{setup-hacks}
 
 \input{examp-dummy}
 
 \begin{document}
-
-% \include{fullplatform}
-% \include{interpretation}
-% 
-% \end{document}
 
 \makeatletter\renewcommand\@biblabel[1]{#1.}\makeatother
 
@@ -53,6 +46,7 @@
 \include{contrib}
 
 \include{overview}
+
 
 \include{applications}
 
