@@ -2,14 +2,7 @@
 % This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 Worldwide.
 % To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
 
-% Use bibtex instead of biblatex/biber now, since in TeXLive 2015 produces broken bibliography for initials.
-
 \usepackage[]{chapterbib}
+\usepackage{natbib}
 % A hack to mimic biblatex macro for bibtex
-\newcommand{\printbibliography}[1][none]{\bibliographystyle{ugost2008s}{}\bibliography{./../mine,./../collection}}
-
-% Uncomment lines below and comment lines above to switch to biber
-%\usepackage[language=auto, bibencoding=inputenc, style=gost-numeric, backend=biber, maxnames=4, refsection=chapter, isbn=true, ]{biblatex}
-%\addbibresource{./../mine.bib}
-%\addbibresource{./../collection.bib}
-%\renewcommand*{\multicitedelim}{\addcomma\space} % grouped cites separated by commas not semicolons
+\newcommand{\printbibliography}[1][none]{\bibliographystyle{plainnat}{}\bibliography{./../mine,./../collection}}
